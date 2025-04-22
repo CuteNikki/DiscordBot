@@ -7,6 +7,7 @@ import { t, use } from 'i18next';
 import I18NextFsBackend from 'i18next-fs-backend';
 
 import { KEYS } from 'utility/keys';
+import logger from 'utility/logger';
 
 export async function initializeI18N(defaultNameSpace?: string) {
   await use(I18NextFsBackend).init({
@@ -22,6 +23,7 @@ export async function initializeI18N(defaultNameSpace?: string) {
       loadPath: './src/locales/{{lng}}/{{ns}}.json',
     },
   });
+  logger.info(`i18next initialized! Languages loaded: ${KEYS.SUPPORTED_LANGS.join(', ')}`);
 }
 
 function translateLocalizationPath(commandName: string, pathParts: (string | number)[]): string {
