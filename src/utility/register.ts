@@ -14,14 +14,14 @@ logger.info('Loading command files');
 const startTime = performance.now();
 
 const commands = [];
-const { cmdFiles } = getCommandFiles();
+const filePaths = await getCommandFiles();
 
-for (const filePath of cmdFiles) {
+for (const filePath of filePaths) {
   const command = (await import(filePath)).default as Command;
 
   if ('builder' in command.options && 'execute' in command.options) {
     commands.push(command.options.builder.toJSON());
-    logger.info(`Loaded command file ${filePath}`);
+    logger.info(`Loaded command file ${filePath.split('/').slice(-2).join('/')} (${command.options.builder.name})`);
   } else {
     logger.warn(`Command file ${filePath} is missing data or execute`);
   }
@@ -29,7 +29,7 @@ for (const filePath of cmdFiles) {
 
 const endTime = performance.now();
 logger.info(
-  `Loaded ${cmdFiles.length} command${cmdFiles.length > 1 || cmdFiles.length === 0 ? 's' : ''} in ${Math.floor(endTime - startTime)}ms`,
+  `Loaded ${filePaths.length} command${filePaths.length > 1 || filePaths.length === 0 ? 's' : ''} in ${Math.floor(endTime - startTime)}ms`,
 );
 
 const rest = new REST().setToken(KEYS.DISCORD_BOT_TOKEN);
