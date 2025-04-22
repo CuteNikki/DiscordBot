@@ -1,8 +1,9 @@
 import { ActivityType, Events, PresenceUpdateStatus, type PresenceStatusData } from 'discord.js';
+import figlet from 'figlet';
 
 import { Event } from 'classes/base/event';
 
-import { logger } from 'utility/logger';
+import { logger, table } from 'utility/logger';
 
 export default new Event({
   name: Events.ClientReady,
@@ -18,23 +19,28 @@ export default new Event({
     const presences: { status: PresenceStatusData; name: string; type: ActivityType; url?: string }[] = [
       {
         status: PresenceUpdateStatus.Online,
-        name: `${readyClient.guilds.cache.size} servers`,
+        name: /* Watching */ `${readyClient.guilds.cache.size} servers`,
         type: ActivityType.Watching,
       },
       {
         status: PresenceUpdateStatus.Online,
-        name: 'your messages',
+        name: /* Listening to */ 'your commands',
         type: ActivityType.Listening,
       },
       {
-        status: PresenceUpdateStatus.DoNotDisturb,
-        name: 'the bot wars!',
+        status: PresenceUpdateStatus.Idle,
+        name: /* Competing in */ 'the bot wars!',
         type: ActivityType.Competing,
       },
       {
         status: PresenceUpdateStatus.Idle,
-        name: 'my creators',
+        name: /* Listening to */ 'my creators',
         type: ActivityType.Listening,
+      },
+      {
+        status: PresenceUpdateStatus.Online,
+        name: /* Playing */ 'with users',
+        type: ActivityType.Playing,
       },
     ];
 
@@ -75,6 +81,27 @@ export default new Event({
       });
     }, 60_000);
 
-    logger.info(`Logged in as ${readyClient.user.tag}`);
+    figlet(readyClient.user.displayName, { font: 'Big', horizontalLayout: 'fitted', verticalLayout: 'default' }, (err, data) => {
+      if (err || !data) {
+        logger.error('Error generating ASCII art');
+        return;
+      }
+
+      logger.info(
+        [
+          'Logged in as:',
+          data,
+          table([
+            {
+              username: readyClient.user.tag,
+              id: readyClient.user.id,
+              guilds: readyClient.guilds.cache.size,
+              users: readyClient.users.cache.size,
+              channels: readyClient.channels.cache.size,
+            },
+          ]),
+        ].join('\n'),
+      );
+    });
   },
 });
