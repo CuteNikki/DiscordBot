@@ -4,13 +4,14 @@ import type { ExtendedClient } from 'classes/base/client';
 import type { Event } from 'classes/base/event';
 
 import { getEventFiles } from 'utility/files';
-import logger from 'utility/logger';
+import logger, { table } from 'utility/logger';
 
 export async function loadEvents(client: ExtendedClient) {
   logger.debug('Loading event files');
 
   client.removeAllListeners();
 
+  const tableData: { file: string; name: string; valid: string }[] = [];
   const startTime = performance.now();
   const filePaths = await getEventFiles();
 
@@ -23,8 +24,18 @@ export async function loadEvents(client: ExtendedClient) {
 
         client[event.options.once ? 'once' : 'on'](event.options.name, handler);
 
+        tableData.push({
+          file: filePath.split('/').slice(-2).join('/'),
+          name: event.options.name,
+          valid: '✅',
+        });
         logger.debug(`Loaded event file ${filePath.split('/').slice(-2).join('/')} (${event.options.name})`);
       } else {
+        tableData.push({
+          file: filePath.split('/').slice(-2).join('/'),
+          name: event?.options?.name || 'undefined',
+          valid: '❌',
+        });
         logger.warn(`Event file ${filePath} is missing name or execute`);
       }
     }),
@@ -32,7 +43,7 @@ export async function loadEvents(client: ExtendedClient) {
 
   const endTime = performance.now();
   logger.info(
-    `Loaded ${filePaths.length} event${filePaths.length > 1 || filePaths.length === 0 ? 's' : ''} in ${Math.floor(endTime - startTime)}ms`,
+    `Loaded ${filePaths.length} event${filePaths.length > 1 || filePaths.length === 0 ? 's' : ''} in ${Math.floor(endTime - startTime)}ms\n${table(tableData)}`,
   );
 }
 
