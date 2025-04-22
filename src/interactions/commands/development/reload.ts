@@ -17,7 +17,7 @@ export default new Command({
       option
         .setName('type')
         .setDescription('Type of file to reload')
-        .setRequired(false)
+        .setRequired(true)
         .setChoices(
           { name: 'Commands', value: 'command' },
           { name: 'Buttons', value: 'button' },
