@@ -4,7 +4,7 @@ import type { ExtendedClient } from 'classes/base/client';
 import type { SelectMenu } from 'classes/base/select';
 
 import { getSelectFiles } from 'utility/files';
-import logger, { table } from 'utility/logger';
+import { logger, table } from 'utility/logger';
 
 export async function loadSelectMenus(client: ExtendedClient) {
   client.selectMenus.clear();

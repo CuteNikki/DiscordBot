@@ -4,7 +4,7 @@ import type { ExtendedClient } from 'classes/base/client';
 import type { Modal } from 'classes/base/modal';
 
 import { getModalFiles } from 'utility/files';
-import logger, { table } from 'utility/logger';
+import { logger, table } from 'utility/logger';
 
 export async function loadModals(client: ExtendedClient) {
   client.modals.clear();

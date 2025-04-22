@@ -4,7 +4,7 @@ import type { ExtendedClient } from 'classes/base/client';
 import type { Command } from 'classes/base/command';
 
 import { getCommandFiles } from 'utility/files';
-import logger, { table } from 'utility/logger';
+import { logger, table } from 'utility/logger';
 
 export async function loadCommands(client: ExtendedClient) {
   client.commands.clear();

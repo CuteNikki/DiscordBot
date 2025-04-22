@@ -4,7 +4,7 @@ import type { ExtendedClient } from 'classes/base/client';
 import type { Event } from 'classes/base/event';
 
 import { getEventFiles } from 'utility/files';
-import logger, { table } from 'utility/logger';
+import { logger, table } from 'utility/logger';
 
 export async function loadEvents(client: ExtendedClient) {
   client.removeAllListeners();

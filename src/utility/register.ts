@@ -11,7 +11,7 @@ import type { Command } from 'classes/base/command';
 
 import { getCommandFiles } from 'utility/files';
 import { KEYS } from 'utility/keys';
-import logger, { table } from 'utility/logger';
+import { logger, table } from 'utility/logger';
 import { initializeI18N, translateCommand } from 'utility/translation';
 
 await initializeI18N('commands');

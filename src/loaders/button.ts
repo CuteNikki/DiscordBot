@@ -4,7 +4,7 @@ import type { Button } from 'classes/base/button';
 import type { ExtendedClient } from 'classes/base/client';
 
 import { getButtonFiles } from 'utility/files';
-import logger, { table } from 'utility/logger';
+import { logger, table } from 'utility/logger';
 
 export async function loadButtons(client: ExtendedClient) {
   client.buttons.clear();
