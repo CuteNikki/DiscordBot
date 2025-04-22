@@ -32,6 +32,7 @@
     "canvacord": "^6.0.2",
     "canvas": "^3.1.0",
     "discord.js": "^15.0.0-dev.1744589645-5c0b71455",
+    "globby": "^14.1.0",
     "he": "^1.2.0",
     "i18next": "^25.0.0",
     "i18next-fs-backend": "^2.6.0",

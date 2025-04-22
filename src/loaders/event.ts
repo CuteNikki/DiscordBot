@@ -8,29 +8,42 @@ import logger from 'utility/logger';
 
 export async function loadEvents(client: ExtendedClient) {
   logger.debug('Loading event files');
+  
   const startTime = performance.now();
+  const filePaths = await getEventFiles();
 
-  const { eventFiles } = getEventFiles();
+  await Promise.all(
+    filePaths.map(async (filePath) => {
+      const event = (await import(filePath)).default;
 
-  for (const filePath of eventFiles) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const event = (await import(filePath)).default as Event<any>;
+      if (isValidEvent(event)) {
+        if (event.options.once) {
+          client.once(event.options.name, (...args: unknown[]) => event.options.execute(client, ...args));
+        } else {
+          client.on(event.options.name, (...args: unknown[]) => event.options.execute(client, ...args));
+        }
 
-    if ('name' in event.options && 'execute' in event.options) {
-      if (event.options.once) {
-        client.once(event.options.name, (...args: unknown[]) => event.options.execute(client, ...args));
+        logger.debug(`Loaded event file ${filePath.split('/').slice(-2).join('/')} (${event.options.name})`);
       } else {
-        client.on(event.options.name, (...args: unknown[]) => event.options.execute(client, ...args));
+        logger.warn(`Event file ${filePath} is missing name or execute`);
       }
-
-      logger.debug(`Loaded event file ${filePath}`);
-    } else {
-      logger.warn(`Event file ${filePath} is missing name or execute`);
-    }
-  }
+    }),
+  );
 
   const endTime = performance.now();
   logger.info(
-    `Loaded ${eventFiles.length} event${eventFiles.length > 1 || eventFiles.length === 0 ? 's' : ''} in ${Math.floor(endTime - startTime)}ms`,
+    `Loaded ${filePaths.length} event${filePaths.length > 1 || filePaths.length === 0 ? 's' : ''} in ${Math.floor(endTime - startTime)}ms`,
+  );
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isValidEvent(event: Event<any>): event is Event<any> {
+  return (
+    typeof event === 'object' &&
+    event !== null &&
+    typeof event.options === 'object' &&
+    event.options !== null &&
+    'name' in event.options &&
+    'execute' in event.options
   );
 }

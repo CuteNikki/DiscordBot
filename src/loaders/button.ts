@@ -1,5 +1,6 @@
 import { performance } from 'perf_hooks';
 
+import type { Button } from 'classes/base/button';
 import type { ExtendedClient } from 'classes/base/client';
 
 import { getButtonFiles } from 'utility/files';
@@ -9,24 +10,35 @@ export async function loadButtons(client: ExtendedClient) {
   logger.debug('Loading button files');
 
   const startTime = performance.now();
+  const filePaths = await getButtonFiles();
 
-  const { buttonFiles } = getButtonFiles();
+  await Promise.all(
+    filePaths.map(async (filePath) => {
+      const button = (await import(filePath)).default;
 
-  for (const filePath of buttonFiles) {
-    const button = (await import(filePath)).default;
-
-    if ('options' in button && 'execute' in button.options) {
-      client.buttons.set(button.options.customId, button);
-
-      logger.debug(`Loaded button file ${filePath}`);
-    } else {
-      logger.warn(`Button file ${filePath} is missing data or execute`);
-    }
-  }
+      if (isValidButton(button)) {
+        client.buttons.set(button.options.customId, button);
+        logger.debug(`Loaded button file ${filePath.split('/').slice(-2).join('/')} (${button.options.customId})`);
+      } else {
+        logger.warn(`Button file ${filePath} is missing data or execute`);
+      }
+    }),
+  );
 
   const endTime = performance.now();
 
   logger.info(
-    `Loaded ${buttonFiles.length} button${buttonFiles.length > 1 || buttonFiles.length === 0 ? 's' : ''} in ${Math.floor(endTime - startTime)}ms`,
+    `Loaded ${filePaths.length} button${filePaths.length > 1 || filePaths.length === 0 ? 's' : ''} in ${Math.floor(endTime - startTime)}ms`,
+  );
+}
+
+function isValidButton(button: Button): button is Button {
+  return (
+    typeof button === 'object' &&
+    button !== null &&
+    typeof button.options === 'object' &&
+    button.options !== null &&
+    'customId' in button.options &&
+    'execute' in button.options
   );
 }
