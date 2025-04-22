@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { REST } from 'discord.js';
 
 import { KEYS } from 'utility/keys';
-import logger from 'utility/logger';
+import { logger } from 'utility/logger';
 
 export const discordRestClient = new REST({ version: '10' }).setToken(KEYS.DISCORD_BOT_TOKEN);
 

@@ -7,7 +7,8 @@ import { prisma } from 'database/index';
 
 import { startCron } from 'utility/cron';
 import { KEYS } from 'utility/keys';
-import logger from 'utility/logger';
+import { logger } from 'utility/logger';
+
 import { initializeI18N } from 'utility/translation';
 
 import { loadButtons } from 'loaders/button';

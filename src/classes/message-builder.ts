@@ -15,7 +15,7 @@ import {
 } from 'discord.js';
 import events from 'events';
 
-import logger from 'utility/logger';
+import { logger } from 'utility/logger';
 
 /**
  * The custom ids for the message builder

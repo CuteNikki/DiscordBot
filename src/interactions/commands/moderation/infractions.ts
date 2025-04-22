@@ -16,7 +16,7 @@ import { Command } from 'classes/base/command';
 import { deleteInfraction, getInfractionById, getInfractionsByGuildId, getInfractionsByUserIdAndGuildId } from 'database/infraction';
 
 import { buildInfractionOverview } from 'utility/infraction';
-import logger from 'utility/logger';
+import { logger } from 'utility/logger';
 
 export default new Command({
   builder: new SlashCommandBuilder()

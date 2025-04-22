@@ -4,7 +4,7 @@ import type { Guild } from '@prisma/client';
 
 import { createGuild, getGuild } from 'database/guild';
 
-import logger from 'utility/logger';
+import { logger } from 'utility/logger';
 
 const guildId = '741742952979890276';
 

@@ -2,7 +2,7 @@
 
 import { getInfractionsByGuildId, getInfractionsByModeratorIdAndGuildId, getInfractionsByUserId } from 'database/infraction';
 
-import logger from 'utility/logger';
+import { logger } from 'utility/logger';
 
 const userId = '303142922780672013';
 const guildId = '741742952979890276';

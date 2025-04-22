@@ -7,7 +7,7 @@ import { t, use } from 'i18next';
 import I18NextFsBackend from 'i18next-fs-backend';
 
 import { KEYS } from 'utility/keys';
-import logger from 'utility/logger';
+import { logger } from 'utility/logger';
 
 export async function initializeI18N(defaultNameSpace?: string) {
   await use(I18NextFsBackend).init({

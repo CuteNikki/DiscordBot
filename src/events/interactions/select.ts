@@ -2,7 +2,7 @@ import { Collection, Colors, EmbedBuilder, Events, MessageFlags } from 'discord.
 
 import { Event } from 'classes/base/event';
 import { getBlacklist } from 'database/blacklist';
-import logger from 'utility/logger';
+import { logger } from 'utility/logger';
 
 export default new Event({
   name: Events.InteractionCreate,

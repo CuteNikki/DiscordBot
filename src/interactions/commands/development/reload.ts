@@ -3,7 +3,7 @@ import { MessageFlags, PermissionFlagsBits, SlashCommandBuilder } from 'discord.
 import type { ExtendedClient } from 'classes/base/client';
 import { Command } from 'classes/base/command';
 
-import logger from 'utility/logger';
+import { logger } from 'utility/logger';
 
 import { reloadableTypes, typeLabelMap, type ReloadType } from 'types/reload';
 

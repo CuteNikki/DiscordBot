@@ -4,7 +4,7 @@ import type { APIUser } from 'discord.js';
 import { discordRestClient, prisma } from 'database/index';
 
 import { KEYS } from 'utility/keys';
-import logger from 'utility/logger';
+import { logger } from 'utility/logger';
 
 export const blacklistUser = async (userId: string, blacklist: Omit<Blacklist, 'userId' | 'createdAt'>) => {
   const result = await prisma.blacklist.upsert({

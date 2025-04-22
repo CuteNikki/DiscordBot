@@ -6,7 +6,7 @@ import type { ExtendedClient } from 'classes/base/client';
 import { getInfractionsByUserIdAndGuildId } from 'database/infraction';
 
 import { buildInfractionOverview } from 'utility/infraction';
-import logger from 'utility/logger';
+import { logger } from 'utility/logger';
 
 export default new Button({
   customId: 'infractions-next',

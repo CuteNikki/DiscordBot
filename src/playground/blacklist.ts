@@ -3,7 +3,7 @@
 import { blacklistUser, getBlacklistByModeratorId, getEntireBlacklist, unblacklistUser } from 'database/blacklist';
 import { getUser, getUserOrCreate } from 'database/user';
 
-import logger from 'utility/logger';
+import { logger } from 'utility/logger';
 
 const userId = '303142922780672013';
 

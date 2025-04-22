@@ -15,7 +15,7 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
 import type { ExtendedClient } from 'classes/base/client';
 
-import logger from 'utility/logger';
+import { logger } from 'utility/logger';
 
 import { TriviaDifficulty, type TriviaProps, TriviaType } from 'types/trivia';
 

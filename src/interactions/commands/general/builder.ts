@@ -13,7 +13,7 @@ import { deleteMessageBuilder, getMessageBuilder, getMessageBuilders, updateOrCr
 import { Command } from 'classes/base/command';
 import { MessageBuilder, type EmbedStructure, type MessageStructure } from 'classes/message-builder';
 
-import logger from 'utility/logger';
+import { logger } from 'utility/logger';
 
 const safeEditReply = async (interaction: ChatInputCommandInteraction, content: string) => {
   await interaction

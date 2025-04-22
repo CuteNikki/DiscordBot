@@ -13,7 +13,7 @@ import { Command } from 'classes/base/command';
 import { OpenTriviaAPI } from 'classes/trivia-api';
 import { TriviaBuilder } from 'classes/trivia-builder';
 
-import logger from 'utility/logger';
+import { logger } from 'utility/logger';
 
 import { TriviaCategory, TriviaDifficulty, TriviaType } from 'types/trivia';
 

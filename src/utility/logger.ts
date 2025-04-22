@@ -6,7 +6,7 @@ import pino from 'pino';
  * The log level can be set to 'debug' or 'info' based on the command line argument.
  * @module logger
  */
-export default pino(
+export const logger = pino(
   {
     level: process.argv.includes('--debug') ? 'debug' : 'info',
   },

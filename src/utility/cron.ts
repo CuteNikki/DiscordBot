@@ -1,7 +1,7 @@
 import { schedule } from 'node-cron';
 import { performance } from 'perf_hooks';
 
-import logger from 'utility/logger';
+import { logger } from 'utility/logger';
 
 import { deleteExpiredBlacklist } from 'database/blacklist';
 import { handleExpiredInfractions } from 'database/infraction';

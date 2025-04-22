@@ -12,7 +12,7 @@ import {
 
 import type { PaginationButtonProps, PaginationButtons, PaginationProps } from 'types/pagination';
 
-import logger from 'utility/logger';
+import { logger } from 'utility/logger';
 
 /**
  * A class to handle paginated messages
