@@ -1,4 +1,4 @@
-import { Button } from 'classes/button';
+import { Button } from 'classes/base/button';
 
 export default new Button({
   customId: 'test',

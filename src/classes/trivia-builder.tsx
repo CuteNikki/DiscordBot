@@ -13,7 +13,7 @@
 import { Builder, Font, FontFactory, JSX } from 'canvacord';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
-import type { ExtendedClient } from 'classes/client';
+import type { ExtendedClient } from 'classes/base/client';
 
 import logger from 'utility/logger';
 

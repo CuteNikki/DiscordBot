@@ -1,7 +1,7 @@
 import type { Infraction, InfractionType } from '@prisma/client';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder } from 'discord.js';
 
-import type { ExtendedClient } from 'classes/client';
+import type { ExtendedClient } from 'classes/base/client';
 
 interface OverviewOptions {
   client: ExtendedClient;

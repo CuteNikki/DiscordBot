@@ -1,6 +1,6 @@
 import { ActivityType, Events, PresenceUpdateStatus, type PresenceStatusData } from 'discord.js';
 
-import { Event } from 'classes/event';
+import { Event } from 'classes/base/event';
 
 import logger from 'utility/logger';
 

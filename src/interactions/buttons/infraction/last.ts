@@ -1,7 +1,7 @@
 import { MessageFlags } from 'discord.js';
 
-import { Button } from 'classes/button';
-import type { ExtendedClient } from 'classes/client';
+import { Button } from 'classes/base/button';
+import type { ExtendedClient } from 'classes/base/client';
 
 import { getInfractionsByUserIdAndGuildId } from 'database/infraction';
 

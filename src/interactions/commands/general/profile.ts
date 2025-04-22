@@ -1,6 +1,6 @@
 import { MessageFlags, SlashCommandBuilder } from 'discord.js';
 
-import { Command } from 'classes/command';
+import { Command } from 'classes/base/command';
 import { ProfileBuilder } from 'classes/profile-builder';
 
 export default new Command({

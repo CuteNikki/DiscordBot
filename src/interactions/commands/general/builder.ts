@@ -10,7 +10,7 @@ import {
 
 import { deleteMessageBuilder, getMessageBuilder, getMessageBuilders, updateOrCreateMessageBuilder } from 'database/message-builder';
 
-import { Command } from 'classes/command';
+import { Command } from 'classes/base/command';
 import { MessageBuilder, type EmbedStructure, type MessageStructure } from 'classes/message-builder';
 
 import logger from 'utility/logger';

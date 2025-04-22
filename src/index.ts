@@ -1,6 +1,6 @@
 import { GatewayIntentBits, Partials } from 'discord.js';
 
-import { ExtendedClient } from 'classes/client';
+import { ExtendedClient } from 'classes/base/client';
 
 import { prisma } from 'database/index';
 

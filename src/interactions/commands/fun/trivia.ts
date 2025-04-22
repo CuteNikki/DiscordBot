@@ -8,8 +8,8 @@ import {
 } from 'discord.js';
 import { decode } from 'he';
 
-import type { ExtendedClient } from 'classes/client';
-import { Command } from 'classes/command';
+import type { ExtendedClient } from 'classes/base/client';
+import { Command } from 'classes/base/command';
 import { OpenTriviaAPI } from 'classes/trivia-api';
 import { TriviaBuilder } from 'classes/trivia-builder';
 

@@ -1,7 +1,7 @@
 import { performance } from 'perf_hooks';
 
-import type { ExtendedClient } from 'classes/client';
-import type { Event } from 'classes/event';
+import type { ExtendedClient } from 'classes/base/client';
+import type { Event } from 'classes/base/event';
 
 import { getEventFiles } from 'utility/files';
 import logger from 'utility/logger';

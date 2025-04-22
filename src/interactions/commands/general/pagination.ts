@@ -12,7 +12,7 @@ import {
   TextInputStyle,
 } from 'discord.js';
 
-import { Command } from 'classes/command';
+import { Command } from 'classes/base/command';
 import { Pagination } from 'classes/pagination';
 
 import logger from 'utility/logger';

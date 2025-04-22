@@ -1,7 +1,7 @@
 import { performance } from 'perf_hooks';
 
-import type { ExtendedClient } from 'classes/client';
-import type { Command } from 'classes/command';
+import type { ExtendedClient } from 'classes/base/client';
+import type { Command } from 'classes/base/command';
 
 import { getCommandFiles } from 'utility/files';
 import logger from 'utility/logger';

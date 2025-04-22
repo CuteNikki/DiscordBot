@@ -1,7 +1,7 @@
 import { REST, Routes } from 'discord.js';
 import { performance } from 'perf_hooks';
 
-import type { Command } from 'classes/command';
+import type { Command } from 'classes/base/command';
 
 import { getCommandFiles } from 'utility/files';
 import { KEYS } from 'utility/keys';

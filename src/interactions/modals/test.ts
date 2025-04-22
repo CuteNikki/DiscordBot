@@ -1,4 +1,4 @@
-import { Modal } from 'classes/modal';
+import { Modal } from 'classes/base/modal';
 
 export default new Modal({
   customId: 'test',

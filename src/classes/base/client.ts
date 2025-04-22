@@ -1,9 +1,9 @@
 import { ApplicationEmoji, Client, Collection } from 'discord.js';
 
-import type { Button } from 'classes/button';
-import type { Command } from 'classes/command';
-import type { Modal } from 'classes/modal';
-import type { SelectMenu } from 'classes/select';
+import type { Button } from 'classes/base/button';
+import type { Command } from 'classes/base/command';
+import type { Modal } from 'classes/base/modal';
+import type { SelectMenu } from 'classes/base/select';
 
 /**
  * ExtendedClient class that extends the Discord.js Client class.

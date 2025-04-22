@@ -7,7 +7,7 @@ import {
   StringSelectMenuOptionBuilder,
 } from 'discord.js';
 
-import { Command } from 'classes/command';
+import { Command } from 'classes/base/command';
 
 export default new Command({
   builder: new SlashCommandBuilder()

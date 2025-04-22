@@ -1,4 +1,4 @@
-import { SelectMenu } from 'classes/select';
+import { SelectMenu } from 'classes/base/select';
 
 export default new SelectMenu({
   customId: 'select',

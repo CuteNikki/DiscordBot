@@ -1,4 +1,4 @@
-import type { ExtendedClient } from "classes/client";
+import type { ExtendedClient } from 'classes/base/client';
 
 export enum TriviaCategory {
   AnyCategory = 0,

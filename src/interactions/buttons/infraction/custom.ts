@@ -1,6 +1,6 @@
 import { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } from 'discord.js';
 
-import { Button } from 'classes/button';
+import { Button } from 'classes/base/button';
 
 export default new Button({
   customId: 'infractions-custom',

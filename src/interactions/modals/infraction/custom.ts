@@ -1,7 +1,7 @@
 import { MessageFlags } from 'discord.js';
 
-import type { ExtendedClient } from 'classes/client';
-import { Modal } from 'classes/modal';
+import type { ExtendedClient } from 'classes/base/client';
+import { Modal } from 'classes/base/modal';
 
 import { getInfractionsByUserIdAndGuildId } from 'database/infraction';
 import { buildInfractionOverview } from 'utility/infraction';

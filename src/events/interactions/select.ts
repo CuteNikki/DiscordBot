@@ -1,6 +1,6 @@
 import { Collection, Colors, EmbedBuilder, Events, MessageFlags } from 'discord.js';
 
-import { Event } from 'classes/event';
+import { Event } from 'classes/base/event';
 import { getBlacklist } from 'database/blacklist';
 import logger from 'utility/logger';
 

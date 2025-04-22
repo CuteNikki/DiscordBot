@@ -10,8 +10,8 @@ import {
   userMention,
 } from 'discord.js';
 
-import type { ExtendedClient } from 'classes/client';
-import { Command } from 'classes/command';
+import type { ExtendedClient } from 'classes/base/client';
+import { Command } from 'classes/base/command';
 
 import { deleteInfraction, getInfractionById, getInfractionsByGuildId, getInfractionsByUserIdAndGuildId } from 'database/infraction';
 
