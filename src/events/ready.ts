@@ -79,7 +79,7 @@ export default new Event({
           },
         ],
       });
-    }, 60_000);
+    }, 60_000 * 60); // update every hour
 
     figlet(readyClient.user.displayName, { font: 'Big', horizontalLayout: 'fitted', verticalLayout: 'default' }, (err, data) => {
       if (err || !data) {
