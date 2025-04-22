@@ -9,12 +9,14 @@ import logger from 'utility/logger';
 export async function loadCommands(client: ExtendedClient) {
   logger.debug('Loading command files');
 
+  client.commands.clear();
+
   const startTime = performance.now();
   const filePaths = await getCommandFiles();
 
   await Promise.all(
     filePaths.map(async (filePath) => {
-      const command = (await import(filePath)).default;
+      const command = (await import(`${filePath}?update=${Date.now()}`)).default;
 
       if (isValidCommand(command)) {
         client.commands.set(command.options.builder.name, command);

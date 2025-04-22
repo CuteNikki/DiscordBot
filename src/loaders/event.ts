@@ -8,20 +8,20 @@ import logger from 'utility/logger';
 
 export async function loadEvents(client: ExtendedClient) {
   logger.debug('Loading event files');
-  
+
+  client.removeAllListeners();
+
   const startTime = performance.now();
   const filePaths = await getEventFiles();
 
   await Promise.all(
     filePaths.map(async (filePath) => {
-      const event = (await import(filePath)).default;
+      const event = (await import(`${filePath}?update=${Date.now()}`)).default;
 
       if (isValidEvent(event)) {
-        if (event.options.once) {
-          client.once(event.options.name, (...args: unknown[]) => event.options.execute(client, ...args));
-        } else {
-          client.on(event.options.name, (...args: unknown[]) => event.options.execute(client, ...args));
-        }
+        const handler = (...args: unknown[]) => event.options.execute(client, ...args);
+
+        client[event.options.once ? 'once' : 'on'](event.options.name, handler);
 
         logger.debug(`Loaded event file ${filePath.split('/').slice(-2).join('/')} (${event.options.name})`);
       } else {

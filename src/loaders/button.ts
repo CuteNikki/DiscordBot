@@ -9,12 +9,14 @@ import logger from 'utility/logger';
 export async function loadButtons(client: ExtendedClient) {
   logger.debug('Loading button files');
 
+  client.buttons.clear();
+
   const startTime = performance.now();
   const filePaths = await getButtonFiles();
 
   await Promise.all(
     filePaths.map(async (filePath) => {
-      const button = (await import(filePath)).default;
+      const button = (await import(`${filePath}?update=${Date.now()}`)).default;
 
       if (isValidButton(button)) {
         client.buttons.set(button.options.customId, button);

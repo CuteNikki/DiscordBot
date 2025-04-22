@@ -9,12 +9,14 @@ import logger from 'utility/logger';
 export async function loadSelectMenus(client: ExtendedClient) {
   logger.debug('Loading select menu files');
 
+  client.selectMenus.clear();
+
   const startTime = performance.now();
   const files = await getSelectFiles();
 
   await Promise.all(
     files.map(async (filePath) => {
-      const selectMenu = (await import(filePath)).default as SelectMenu;
+      const selectMenu = (await import(`${filePath}?update=${Date.now()}`)).default;
 
       if (isValidSelectMenu(selectMenu)) {
         client.selectMenus.set(selectMenu.options.customId, selectMenu);

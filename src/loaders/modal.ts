@@ -9,12 +9,14 @@ import logger from 'utility/logger';
 export async function loadModals(client: ExtendedClient) {
   logger.debug('Loading modal files');
 
+  client.modals.clear();
+
   const startTime = performance.now();
   const filePaths = await getModalFiles();
 
   await Promise.all(
     filePaths.map(async (filePath) => {
-      const modal = (await import(filePath)).default;
+      const modal = (await import(`${filePath}?update=${Date.now()}`)).default;
 
       if (isValidModal(modal)) {
         client.modals.set(modal.options.customId, modal);
