@@ -9,12 +9,34 @@ import { loadEvents } from 'loaders/event';
 import { loadModals } from 'loaders/modal';
 import { loadSelectMenus } from 'loaders/select';
 
+import logger from 'utility/logger';
+
+const reloadableTypes = {
+  command: loadCommands,
+  button: loadButtons,
+  modal: loadModals,
+  select: loadSelectMenus,
+  event: loadEvents,
+} as const;
+
+const typeLabelMap = {
+  command: 'commands',
+  button: 'buttons',
+  modal: 'modals',
+  select: 'select menus',
+  event: 'events',
+  interaction: 'interactions',
+  all: 'everything',
+} as const;
+
+type ReloadType = keyof typeof typeLabelMap;
+
 export default new Command({
   isDevelopment: true,
   builder: new SlashCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .setName('reload')
-    .setDescription('Reloads all commands, buttons, modals, and select menus')
+    .setDescription('Reloads interactions and event handlers')
     .addStringOption((option) =>
       option
         .setName('type')
@@ -36,40 +58,36 @@ export default new Command({
     const type = interaction.options.getString('type') ?? 'all';
     const client = interaction.client as ExtendedClient;
 
-    const validTypes = ['command', 'button', 'modal', 'select', 'event', 'interaction', 'all'];
-
-    if (!validTypes.includes(type)) {
+    if (!(type in typeLabelMap)) {
       return await interaction.editReply({
         content: `❌ Invalid type: \`${type}\``,
       });
     }
 
-    if (type === 'command' || type === 'all' || type === 'interaction') {
-      await loadCommands(client);
+    const toReload = new Set<ReloadType>();
+
+    if (type === 'all' || type === 'interaction') {
+      toReload.add('command').add('button').add('modal').add('select');
     }
-    if (type === 'button' || type === 'all' || type === 'interaction') {
-      await loadButtons(client);
+    if (type !== 'interaction' && type !== 'all') {
+      toReload.add(type as ReloadType);
     }
-    if (type === 'modal' || type === 'all' || type === 'interaction') {
-      await loadModals(client);
-    }
-    if (type === 'select' || type === 'all' || type === 'interaction') {
-      await loadSelectMenus(client);
-    }
-    if (type === 'event' || type === 'all') {
-      await loadEvents(client);
+    if (type === 'all') {
+      toReload.add('event');
     }
 
-    const typeLabelMap = {
-      command: 'commands',
-      button: 'buttons',
-      modal: 'modals',
-      select: 'select menus',
-      event: 'events',
-      interaction: 'interactions',
-      all: 'everything',
-    };
+    try {
+      for (const reloadType of toReload) {
+        const loader = reloadableTypes[reloadType as keyof typeof reloadableTypes];
+        if (loader) await loader(client);
+      }
 
-    await interaction.editReply({ content: `✅ Reloaded ${typeLabelMap[type as keyof typeof typeLabelMap]}.` });
+      await interaction.editReply({ content: `✅ Reloaded ${typeLabelMap[type as ReloadType]}.` });
+    } catch (err) {
+      await interaction.editReply({
+        content: `❌ Failed to reload ${typeLabelMap[type as ReloadType]}. Check the logs for more details.`,
+      });
+      logger.error({ err }, `Failed to reload ${typeLabelMap[type as ReloadType]}`);
+    }
   },
 });
