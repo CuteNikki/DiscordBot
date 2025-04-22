@@ -7,8 +7,6 @@ import { getButtonFiles } from 'utility/files';
 import logger, { table } from 'utility/logger';
 
 export async function loadButtons(client: ExtendedClient) {
-  logger.debug('Loading button files');
-
   client.buttons.clear();
 
   const tableData: { file: string; customId: string; valid: string }[] = [];

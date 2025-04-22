@@ -7,8 +7,6 @@ import { getCommandFiles } from 'utility/files';
 import logger, { table } from 'utility/logger';
 
 export async function loadCommands(client: ExtendedClient) {
-  logger.debug('Loading command files');
-
   client.commands.clear();
 
   const tableData: { file: string; name: string; valid: string }[] = [];

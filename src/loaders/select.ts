@@ -7,8 +7,6 @@ import { getSelectFiles } from 'utility/files';
 import logger, { table } from 'utility/logger';
 
 export async function loadSelectMenus(client: ExtendedClient) {
-  logger.debug('Loading select menu files');
-
   client.selectMenus.clear();
 
   const tableData: { file: string; customId: string; valid: string }[] = [];

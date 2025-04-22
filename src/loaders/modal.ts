@@ -7,8 +7,6 @@ import { getModalFiles } from 'utility/files';
 import logger, { table } from 'utility/logger';
 
 export async function loadModals(client: ExtendedClient) {
-  logger.debug('Loading modal files');
-
   client.modals.clear();
 
   const tableData: { file: string; customId: string; valid: string }[] = [];

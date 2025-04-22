@@ -7,8 +7,6 @@ import { getEventFiles } from 'utility/files';
 import logger, { table } from 'utility/logger';
 
 export async function loadEvents(client: ExtendedClient) {
-  logger.debug('Loading event files');
-
   client.removeAllListeners();
 
   const tableData: { file: string; name: string; valid: string }[] = [];
