@@ -3,33 +3,9 @@ import { MessageFlags, PermissionFlagsBits, SlashCommandBuilder } from 'discord.
 import type { ExtendedClient } from 'classes/base/client';
 import { Command } from 'classes/base/command';
 
-import { loadButtons } from 'loaders/button';
-import { loadCommands } from 'loaders/command';
-import { loadEvents } from 'loaders/event';
-import { loadModals } from 'loaders/modal';
-import { loadSelectMenus } from 'loaders/select';
-
 import logger from 'utility/logger';
 
-const reloadableTypes = {
-  command: loadCommands,
-  button: loadButtons,
-  modal: loadModals,
-  select: loadSelectMenus,
-  event: loadEvents,
-} as const;
-
-const typeLabelMap = {
-  command: 'commands',
-  button: 'buttons',
-  modal: 'modals',
-  select: 'select menus',
-  event: 'events',
-  interaction: 'interactions',
-  all: 'everything',
-} as const;
-
-type ReloadType = keyof typeof typeLabelMap;
+import { reloadableTypes, typeLabelMap, type ReloadType } from 'types/reload';
 
 export default new Command({
   isDevelopment: true,
