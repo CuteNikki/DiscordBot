@@ -28,17 +28,17 @@
     "options": [
       {
         "name": "schwierigkeit",
-        "description": "Die Schwierigkeit der Trivia -Frage",
-        "choices": ["einfach", "normal", "schwierig"]
+        "description": "Die Schwierigkeit der Trivia-Frage",
+        "choices": ["Einfach", "Normal", "Schwierig"]
       },
       {
         "name": "typ",
         "description": "Die Art der Trivia -Frage",
-        "choices": ["Mehrfach Auswahl", "Einzelauswahl"]
+        "choices": ["Mehrfachauswahl", "Einzelauswahl"]
       },
       {
         "name": "kategorie",
-        "description": "Die Kategorie der Trivia -Frage"
+        "description": "Die Kategorie der Trivia-Frage"
       }
     ]
   },
