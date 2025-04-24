@@ -1,4 +1,5 @@
 import { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } from 'discord.js';
+import { t } from 'i18next';
 
 import { Button } from 'classes/base/button';
 
@@ -18,7 +19,7 @@ export default new Button({
           new ActionRowBuilder<TextInputBuilder>().addComponents(
             new TextInputBuilder()
               .setCustomId('page')
-              .setLabel('Enter a page number')
+              .setLabel(t('infractions.custom-page-label', { lng: interaction.locale }))
               .setStyle(TextInputStyle.Short)
               .setPlaceholder('1')
               .setRequired(true),

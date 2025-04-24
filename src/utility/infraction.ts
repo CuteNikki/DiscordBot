@@ -1,7 +1,8 @@
-import type { Infraction, InfractionType } from '@prisma/client';
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder } from 'discord.js';
+import { InfractionType, type Infraction } from '@prisma/client';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, EmbedBuilder, userMention } from 'discord.js';
 
 import type { ExtendedClient } from 'classes/base/client';
+import { t } from 'i18next';
 
 interface OverviewOptions {
   client: ExtendedClient;
@@ -11,11 +12,12 @@ interface OverviewOptions {
     displayName: string;
     displayAvatarURL: () => string;
   };
+  locale: string;
   page: number;
   itemsPerPage: number;
 }
 
-export function buildInfractionOverview({ infractions, targetUser, page, itemsPerPage, client }: OverviewOptions) {
+export function buildInfractionOverview({ infractions, targetUser, page, itemsPerPage, client, locale }: OverviewOptions) {
   const staffEmoji = client.customEmojis.staff;
   const dateEmoji = client.customEmojis.date;
   const calendarEmoji = client.customEmojis.calendar;
@@ -41,30 +43,32 @@ export function buildInfractionOverview({ infractions, targetUser, page, itemsPe
     .setAuthor({ name: `${targetUser.displayName} - Overview`, iconURL: targetUser.displayAvatarURL() })
     .setDescription(
       [
-        `${infinityEmoji} Total: ${infractions.length}`,
-        `${banEmoji} Bans: ${countByType('Ban')}`,
-        `${calendarEmoji} Tempbans: ${countByType('Tempban')}`,
-        `${hammerEmoji} Kicks: ${countByType('Kick')}`,
-        `${exclamationEmoji} Warns: ${countByType('Warn')}`,
-        `${clockEmoji} Timeouts: ${countByType('Timeout')}`,
+        `${infinityEmoji} ${t('infractions.embed.total', { lng: locale, total: infractions.length })}`,
+        `${banEmoji} ${t('infractions.embed.bans', { lng: locale, bans: countByType(InfractionType.Ban) })}`,
+        `${calendarEmoji} ${t('infractions.embed.temp-bans', { lng: locale, tempBans: countByType(InfractionType.Tempban) })}`,
+        `${hammerEmoji} ${t('infractions.embed.kicks', { lng: locale, kicks: countByType(InfractionType.Kick) })}`,
+        `${exclamationEmoji} ${t('infractions.embed.warns', { lng: locale, warns: countByType(InfractionType.Warn) })}`,
+        `${clockEmoji} ${t('infractions.embed.timeouts', { lng: locale, timeouts: countByType(InfractionType.Timeout) })}`,
       ].join('\n'),
     );
 
   const infractionEmbeds = paged.map((infraction) => {
     const lines = [
       `**${infraction.id}**`,
-      `${receiptEmoji} Type: ${infraction.type}`,
-      `${pencilEmoji} Reason: ${infraction.reason}`,
-      `${staffEmoji} Moderator: <@${infraction.moderatorId}>`,
+      `${receiptEmoji} ${t('infractions.embed.type', { lng: locale, type: infraction.type })}`,
+      `${pencilEmoji} ${t('infractions.embed.reason', { lng: locale, reason: infraction.reason })}`,
+      `${staffEmoji} ${t('infractions.embed.moderator', { lng: locale, moderator: userMention(infraction.moderatorId) })}`,
     ];
 
     if (infraction.expiresAt) {
       lines.push(
-        `${calendarEmoji} ${infraction.isActive ? 'Expires' : 'Expired'}: <t:${Math.floor(infraction.expiresAt.getTime() / 1000)}:R>`,
+        `${calendarEmoji} ${infraction.isActive ? t('infractions.embed.expires', { lng: locale, expires: `<t:${Math.floor(infraction.expiresAt.getTime() / 1000)}:R>` }) : t('infractions.embed.expired', { lng: locale, expired: `<t:${Math.floor(infraction.expiresAt.getTime() / 1000)}:R>` })}`,
       );
     }
 
-    lines.push(`${dateEmoji} Date: <t:${Math.floor(infraction.createdAt.getTime() / 1000)}:R>`);
+    lines.push(
+      `${dateEmoji} ${t('infractions.embed.date', { lng: locale, date: `<t:${Math.floor(infraction.createdAt.getTime() / 1000)}:R>` })}`,
+    );
 
     return new EmbedBuilder().setColor(Colors.White).setDescription(lines.join('\n'));
   });

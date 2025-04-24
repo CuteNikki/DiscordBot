@@ -1,4 +1,5 @@
 import { MessageFlags } from 'discord.js';
+import { t } from 'i18next';
 
 import type { ExtendedClient } from 'classes/base/client';
 import { Modal } from 'classes/base/modal';
@@ -32,7 +33,10 @@ export default new Modal({
 
     if (isNaN(newPageIndex) || newPageIndex < 0 || newPageIndex > totalPages - 1) {
       await interaction.reply({
-        content: `Invalid page number. Please enter a valid number between 1 and ${totalPages}.`,
+        content: t('infractions.invalid-page', {
+          lng: interaction.locale,
+          totalPages,
+        }),
         flags: [MessageFlags.Ephemeral],
       });
       return;
@@ -48,6 +52,7 @@ export default new Modal({
         infractions,
         targetUser,
         itemsPerPage,
+        locale: interaction.locale,
         page: newPageIndex,
       }),
     );

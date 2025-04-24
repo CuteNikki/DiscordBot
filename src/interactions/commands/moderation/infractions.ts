@@ -15,6 +15,7 @@ import { Command } from 'classes/base/command';
 
 import { deleteInfraction, getInfractionById, getInfractionsByGuildId, getInfractionsByUserIdAndGuildId } from 'database/infraction';
 
+import { t } from 'i18next';
 import { buildInfractionOverview } from 'utility/infraction';
 import { logger } from 'utility/logger';
 
@@ -64,7 +65,7 @@ export default new Command({
   async execute(interaction) {
     if (!interaction.inCachedGuild()) {
       return await interaction.reply({
-        content: 'This command can only be used in a server.',
+        content: t('interactions.guild-only', { lng: interaction.locale }),
         flags: [MessageFlags.Ephemeral],
       });
     }
@@ -79,9 +80,7 @@ export default new Command({
       default:
         return await interaction.reply({
           embeds: [
-            new EmbedBuilder()
-              .setColor(Colors.Red)
-              .setDescription('Invalid subcommand. Please use `/infractions history` or `/infractions delete`.'),
+            new EmbedBuilder().setColor(Colors.Red).setDescription(t('infractions.invalid-subcommand', { lng: interaction.locale })),
           ],
           flags: [MessageFlags.Ephemeral],
         });
@@ -103,7 +102,9 @@ export default new Command({
         logger.debug({ infractionId, guildId: interaction.guild.id }, 'Infraction not found or does not belong to the guild');
 
         return await interaction.editReply({
-          embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(`No infraction found with ID \`${infractionId}\`.`)],
+          embeds: [
+            new EmbedBuilder().setColor(Colors.Red).setDescription(t('infractions.not-found', { lng: interaction.locale, infractionId })),
+          ],
         });
       }
 
@@ -117,8 +118,12 @@ export default new Command({
           isDeleted
             ? new EmbedBuilder()
                 .setColor(Colors.Green)
-                .setDescription(`Successfully deleted infraction \`${infractionId}\` of ${userMention(isDeleted.userId)}.`)
-            : new EmbedBuilder().setColor(Colors.Red).setDescription(`Failed to delete infraction \`${infractionId}\`.`),
+                .setDescription(
+                  t('infractions.deleted', { lng: interaction.locale, infractionId, targetUser: userMention(isDeleted.userId) }),
+                )
+            : new EmbedBuilder()
+                .setColor(Colors.Red)
+                .setDescription(t('infractions.delete-failed', { lng: interaction.locale, infractionId })),
         ],
       });
     }
@@ -134,9 +139,7 @@ export default new Command({
 
       if (targetUser.bot) {
         return await interaction.editReply({
-          embeds: [
-            new EmbedBuilder().setColor(Colors.Red).setDescription(`You cannot view infractions for bots because they are not tracked.`),
-          ],
+          embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(t('infractions.bot-user', { lng: interaction.locale }))],
         });
       }
 
@@ -145,7 +148,11 @@ export default new Command({
       );
       if (!infractions || infractions.length === 0) {
         return await interaction.editReply({
-          embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(`No infractions found for ${targetUser}.`)],
+          embeds: [
+            new EmbedBuilder()
+              .setColor(Colors.Red)
+              .setDescription(t('infractions.no-infractions', { lng: interaction.locale, targetUser })),
+          ],
         });
       }
 
@@ -157,6 +164,7 @@ export default new Command({
           infractions,
           targetUser,
           itemsPerPage,
+          locale: interaction.locale,
           page: 0,
         }),
       );

@@ -1,4 +1,33 @@
 {
+  "interactions": {
+    "guild-only": "❌ Dieser Befehl kann nur in einem Server verwendet werden!"
+  },
+  "infractions": {
+    "not-found": "❌ Es wurden keine Verstöße mit der ID `{{infractionId}}` gefunden!",
+    "bot-user": "❌ Du kannst keine Verstöße für Bots verwalten!",
+    "invalid-user": "❌ Ungültiger Benutzer!",
+    "invalid-subcommand": "❌ Ungültiger Unterbefehl!",
+    "invalid-page": "❌ Ungültige Seitenzahl! Es muss eine Zahl zwischen 1 und {{totalPages}} sein.",
+    "none": "❌ Keine Verstöße für `{{targetUser}}` gefunden!",
+    "custom-page-label": "Gib eine Seitenzahl ein",
+    "deleted": "✅ Der Verstoß mit der ID `{{infractionId}}` von {{targetUser}} wurde gelöscht!",
+    "delete-failed": "❌ Fehler beim Löschen des Verstoßes mit der ID `{{infractionId}}`!",
+    "embed": {
+      "title": "{{user}} - Übersicht",
+      "total": "Gesamt: {{total}}",
+      "bans": "Bans: {{bans}}",
+      "temp-bans": "Temporäre Bans: {{tempBans}}",
+      "kicks": "Kicks: {{kicks}}",
+      "warns": "Warnungen: {{warns}}",
+      "timeouts": "Timeouts: {{timeouts}}",
+      "type": "Typ: {{type}}",
+      "reason": "Grund: {{reason}}",
+      "moderator": "Moderator: {{moderator}}",
+      "expires": "Läuft ab: {{expires}}",
+      "expired": "Abgelaufen: {{expired}}",
+      "date": "Datum: {{date}}"
+    }
+  },
   "eval": {
     "no-message": "❌ Keine Nachricht oder Code gefunden!",
     "invalid-depth": "❌ Die Tiefe muss eine gültige Zahl zwischen 0 und 99 sein!",

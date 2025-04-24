@@ -1,4 +1,5 @@
 import { MessageFlags } from 'discord.js';
+import { t } from 'i18next';
 
 import { Button } from 'classes/base/button';
 import type { ExtendedClient } from 'classes/base/client';
@@ -19,7 +20,7 @@ export default new Button({
 
     if (!targetUser) {
       await interaction.reply({
-        content: 'User not found.',
+        content: t('infractions.invalid-user', { lng: interaction.locale }),
         flags: [MessageFlags.Ephemeral],
       });
       return;
@@ -41,6 +42,7 @@ export default new Button({
         infractions,
         targetUser,
         itemsPerPage,
+        locale: interaction.locale,
         page: 0,
       }),
     );
