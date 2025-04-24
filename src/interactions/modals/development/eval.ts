@@ -1,3 +1,5 @@
+import { t } from 'i18next';
+
 import { Modal } from 'classes/base/modal';
 
 import { evaluateCode } from 'utility/eval';
@@ -14,7 +16,7 @@ export default new Modal({
 
     if (isNaN(depth)) {
       await interaction.editReply({
-        content: '❌ Depth must be a number',
+        content: t('eval.invalid-depth', { lng: interaction.locale }),
       });
       return;
     }

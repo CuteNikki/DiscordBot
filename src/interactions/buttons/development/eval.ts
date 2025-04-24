@@ -1,5 +1,8 @@
-import { Button } from 'classes/base/button';
 import { MessageFlags } from 'discord.js';
+import { t } from 'i18next';
+
+import { Button } from 'classes/base/button';
+
 import { getEvalModal } from 'utility/eval';
 
 export default new Button({
@@ -11,7 +14,7 @@ export default new Button({
 
     if (!message) {
       await interaction.reply({
-        content: '❌ Message not found',
+        content: t('eval.no-message', { lng: interaction.locale }),
         flags: [MessageFlags.Ephemeral],
       });
       return;
@@ -21,7 +24,7 @@ export default new Button({
 
     if (!code) {
       await interaction.reply({
-        content: '❌ Code not found',
+        content: t('eval.no-message', { lng: interaction.locale }),
         flags: [MessageFlags.Ephemeral],
       });
       return;
@@ -29,6 +32,6 @@ export default new Button({
 
     const depth = message.embeds[0]?.fields[3]?.value?.replaceAll('`', '');
 
-    await interaction.showModal(getEvalModal(depth, code));
+    await interaction.showModal(getEvalModal(interaction.locale, depth, code));
   },
 });

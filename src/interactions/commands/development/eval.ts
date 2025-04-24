@@ -19,7 +19,7 @@ export default new Command({
     const depth = interaction.options.getNumber('depth') || 0;
 
     if (!code) {
-      await interaction.showModal(getEvalModal(depth));
+      await interaction.showModal(getEvalModal(interaction.locale, depth));
       return;
     }
 

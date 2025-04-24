@@ -1,4 +1,18 @@
 {
+  "eval": {
+    "name": "eval",
+    "description": "Evaluate JavaScript code",
+    "options": [
+      {
+        "name": "code",
+        "description": "The code to evaluate"
+      },
+      {
+        "name": "depth",
+        "description": "The depth of inspection"
+      }
+    ]
+  },
   "test": {
     "name": "test",
     "description": "test command",

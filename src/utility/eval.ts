@@ -9,6 +9,7 @@ import {
   TextInputStyle,
   type BaseInteraction,
 } from 'discord.js';
+import { t } from 'i18next';
 import { performance } from 'node:perf_hooks';
 import util from 'node:util';
 import vm from 'node:vm';
@@ -68,14 +69,14 @@ export async function evaluateCode(interaction: BaseInteraction, code: string, d
       embeds: [
         new EmbedBuilder()
           .setColor(Colors.Green)
-          .setTitle('✅ Success')
-          .setDescription('Code executed successfully!')
+          .setTitle(t('eval.embed.success-title', { lng: interaction.locale }))
+          .setDescription(t('eval.embed.success-message', { lng: interaction.locale }))
           .addFields(
-            { name: 'Input 📥', value: `\`\`\`js\n${code}\n\`\`\`` },
-            { name: 'Output 📤', value: `\`\`\`${truncatedResult || 'No output'}\`\`\`` },
-            { name: 'Console 📝', value: `\`\`\`${truncatedLogs || 'No console output'}\`\`\`` },
-            { name: 'Inspect Depth 🔎', value: `\`${depth}\`` },
-            { name: 'Execution Time ⏱️', value: `\`${Math.floor(endTime - startTime)}ms\`` },
+            { name: t('eval.embed.input', { lng: interaction.locale }), value: `\`\`\`js\n${code}\n\`\`\`` },
+            { name: t('eval.embed.output', { lng: interaction.locale }), value: `\`\`\`${truncatedResult || 'No output'}\`\`\`` },
+            { name: t('eval.embed.console', { lng: interaction.locale }), value: `\`\`\`${truncatedLogs || 'No console output'}\`\`\`` },
+            { name: t('eval.embed.inspect-depth', { lng: interaction.locale }), value: `\`${depth}\`` },
+            { name: t('eval.embed.execution-time', { lng: interaction.locale }), value: `\`${Math.floor(endTime - startTime)}ms\`` },
           ),
       ],
       components: [
@@ -99,13 +100,13 @@ export async function evaluateCode(interaction: BaseInteraction, code: string, d
       embeds: [
         new EmbedBuilder()
           .setColor(Colors.Red)
-          .setTitle('❌ Error')
-          .setDescription('An error occurred while executing the code.')
+          .setTitle(t('eval.embed.error-title', { lng: interaction.locale }))
+          .setDescription(t('eval.embed.error-message', { lng: interaction.locale }))
           .addFields(
-            { name: 'Input 📥', value: `\`\`\`js\n${code}\n\`\`\`` },
-            { name: 'Output 📤', value: `\`${truncatedError}\`` },
-            { name: 'Execution Time ⏱️', value: `\`${Math.floor(endTime - startTime)}ms\`` },
-            { name: 'Inspect Depth 🔎', value: `\`${depth}\`` },
+            { name: t('eval.embed.input', { lng: interaction.locale }), value: `\`\`\`js\n${code}\n\`\`\`` },
+            { name: t('eval.embed.output', { lng: interaction.locale }), value: `\`${truncatedError}\`` },
+            { name: t('eval.embed.execution-time', { lng: interaction.locale }), value: `\`${Math.floor(endTime - startTime)}ms\`` },
+            { name: t('eval.embed.inspect-depth', { lng: interaction.locale }), value: `\`${depth}\`` },
           ),
       ],
       components: [
@@ -117,16 +118,16 @@ export async function evaluateCode(interaction: BaseInteraction, code: string, d
   }
 }
 
-export function getEvalModal(depth: string | number, code?: string) {
+export function getEvalModal(locale: string, depth: string | number, code?: string) {
   return new ModalBuilder()
     .setCustomId('eval')
-    .setTitle('Eval')
+    .setTitle(t('eval.modal.title', { lng: locale }))
     .setComponents(
       new ActionRowBuilder<TextInputBuilder>().addComponents(
         new TextInputBuilder()
           .setCustomId('code')
-          .setLabel('Code')
-          .setPlaceholder('console.log("Hello, world!");\nreturn 1+1;')
+          .setLabel(t('eval.modal.code', { lng: locale }))
+          .setPlaceholder(t('eval.modal.code-placeholder', { lng: locale }))
           .setValue(code || '')
           .setStyle(TextInputStyle.Paragraph)
           .setRequired(true)
@@ -135,7 +136,7 @@ export function getEvalModal(depth: string | number, code?: string) {
       new ActionRowBuilder<TextInputBuilder>().addComponents(
         new TextInputBuilder()
           .setCustomId('depth')
-          .setLabel('Inspect Depth')
+          .setLabel(t('eval.modal.inspect-depth', { lng: locale }))
           .setPlaceholder('0')
           .setValue(depth.toString())
           .setStyle(TextInputStyle.Short)

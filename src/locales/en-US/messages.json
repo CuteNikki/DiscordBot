@@ -1,1 +1,23 @@
-{}
+{
+  "eval": {
+    "no-message": "❌ No message or code was found!",
+    "invalid-depth": "❌ The depth must be a valid number between 0 and 99!",
+    "embed": {
+      "success-title": "✅ Success",
+      "success-message": "The code was executed successfully!",
+      "error-title": "❌ Error",
+      "error-message": "An error occurred while executing the code!",
+      "input": "📥 Input",
+      "output": "📤 Output",
+      "console": "📝 Console",
+      "inspect-depth": "🔍 Inspect Depth",
+      "execution-time": "⏱️ Execution Time"
+    },
+    "modal": {
+      "title": "Eval",
+      "code": "📝 Code",
+      "code-placeholder": "console.log(\"Hello, world!\");\nreturn 1+1;",
+      "inspect-depth": "🔍 Inspect Depth"
+    }
+  }
+}

@@ -1,4 +1,18 @@
 {
+  "eval": {
+    "name": "eval",
+    "description": "JavaScript-Code auswerten",
+    "options": [
+      {
+        "name": "code",
+        "description": "Der auszuwertende Code"
+      },
+      {
+        "name": "tiefe",
+        "description": "Die Tiefe der Inspektion"
+      }
+    ]
+  },
   "test": {
     "name": "test",
     "description": "Testbefehl",
