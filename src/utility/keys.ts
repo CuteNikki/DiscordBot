@@ -5,7 +5,7 @@ if (!process.env.DISCORD_BOT_TOKEN) {
   throw new Error('DISCORD_BOT_TOKEN is not defined in the environment variables');
 }
 if (!process.env.DISCORD_BOT_ID) {
-  throw new Error('DISCORD_CLIENT_ID is not defined in the environment variables');
+  throw new Error('DISCORD_BOT_ID is not defined in the environment variables');
 }
 
 export const KEYS = {
