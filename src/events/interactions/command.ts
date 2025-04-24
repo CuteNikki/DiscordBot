@@ -4,6 +4,7 @@ import { Event } from 'classes/base/event';
 
 import { getBlacklist } from 'database/blacklist';
 
+import { KEYS } from 'utility/keys';
 import { logger } from 'utility/logger';
 
 export default new Event({
@@ -35,6 +36,20 @@ export default new Event({
           content: blacklist.expiresAt
             ? `You are blacklisted from using this bot until <t:${Math.floor(blacklist.expiresAt.getTime() / 1_000)}>!`
             : 'You are blacklisted from using this bot!',
+          flags: [MessageFlags.Ephemeral],
+        })
+        .catch((err) => logger.debug({ err }, 'Error while replying to interaction'));
+      return;
+    }
+
+    /**
+     * Handling isDevelopment
+     */
+
+    if (command.options.isDevelopment && KEYS.DISCORD_DEV_OWNER_ID !== interaction.user.id) {
+      await interaction
+        .reply({
+          content: 'This command is only available to the bot owner.',
           flags: [MessageFlags.Ephemeral],
         })
         .catch((err) => logger.debug({ err }, 'Error while replying to interaction'));

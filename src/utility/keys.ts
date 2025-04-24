@@ -14,6 +14,7 @@ export const KEYS = {
   DISCORD_BOT_TOKEN: process.env.DISCORD_BOT_TOKEN,
   DISCORD_BOT_ID: process.env.DISCORD_BOT_ID,
   DISCORD_DEV_GUILD_ID: process.env.DISCORD_DEV_GUILD_ID, // Optional
+  DISCORD_DEV_OWNER_ID: process.env.DISCORD_DEV_OWNER_ID, // Optional
 
   WEBHOOK_BLACKLIST: process.env.WEBHOOK_BLACKLIST, // Optional
 

@@ -1,7 +1,10 @@
 import { Collection, Colors, EmbedBuilder, Events, MessageFlags } from 'discord.js';
 
 import { Event } from 'classes/base/event';
+
 import { getBlacklist } from 'database/blacklist';
+
+import { KEYS } from 'utility/keys';
 import { logger } from 'utility/logger';
 
 export default new Event({
@@ -38,6 +41,20 @@ export default new Event({
           flags: [MessageFlags.Ephemeral],
         })
         .catch((e) => console.error('Error while replying to interaction', e));
+      return;
+    }
+
+    /**
+     * Handling isDevelopment
+     */
+
+    if (selectMenu.options.isDevelopment && KEYS.DISCORD_DEV_OWNER_ID !== interaction.user.id) {
+      await interaction
+        .reply({
+          content: 'This select menu is only available to the bot owner.',
+          flags: [MessageFlags.Ephemeral],
+        })
+        .catch((err) => logger.debug({ err }, 'Error while replying to interaction'));
       return;
     }
 
