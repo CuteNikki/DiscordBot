@@ -3,7 +3,7 @@ import type { PermissionsString, SelectMenuInteraction } from 'discord.js';
 export class SelectMenu {
   /**
    * Creates an instance of the select menu with the specified options.
-   * 
+   *
    * @param options - The options for the select menu.
    * @param options.userPermissions - The permissions required by the user.
    * @param options.botPermissions - The permissions required by the bot.
@@ -11,7 +11,7 @@ export class SelectMenu {
    * @param options.cooldown - The cooldown period in milliseconds for this select menu.
    * @param options.customId - The custom ID for the select menu.
    * @param options.includeCustomId - If true, the custom ID can be included; if false, it must be an exact match.
-   * @param options.execute - The function to execute when the select menu is used. 
+   * @param options.execute - The function to execute when the select menu is used.
    */
   constructor(
     public options: {
