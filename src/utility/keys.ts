@@ -19,4 +19,4 @@ export const KEYS = {
 
   SUPPORTED_LANGS: ['en-GB', 'en-US', 'de'], // Supported languages
   FALLBACK_LANG: 'en-GB', // Fallback language
-};
+} as const;
