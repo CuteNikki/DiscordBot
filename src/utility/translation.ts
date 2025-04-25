@@ -14,8 +14,8 @@ export async function initializeI18N(defaultNameSpace?: string) {
     debug: process.argv.includes('--debug-lang'),
     defaultNS: defaultNameSpace ?? 'messages',
     ns: ['messages', 'commands'],
-    preload: KEYS.SUPPORTED_LANGS,
-    fallbackLng: KEYS.FALLBACK_LANG,
+    preload: KEYS.LOCALES_SUPPORTED,
+    fallbackLng: KEYS.LOCALES_FALLBACK,
     interpolation: {
       escapeValue: false,
     },
@@ -23,7 +23,7 @@ export async function initializeI18N(defaultNameSpace?: string) {
       loadPath: './src/locales/{{lng}}/{{ns}}.json',
     },
   });
-  logger.info(`i18next initialized! Languages loaded: ${KEYS.SUPPORTED_LANGS.join(', ')}`);
+  logger.info(`i18next initialized! Languages loaded: ${KEYS.LOCALES_SUPPORTED.join(', ')}`);
 }
 
 function translateLocalizationPath(commandName: string, pathParts: (string | number)[]): string {
@@ -42,7 +42,7 @@ export function translateCommand(
   }
 
   const setLocalization = (key: string): Record<string, string> => {
-    return KEYS.SUPPORTED_LANGS.reduce(
+    return KEYS.LOCALES_SUPPORTED.reduce(
       (acc, locale) => {
         acc[locale] = t(`${key}`, { lng: locale });
         return acc;

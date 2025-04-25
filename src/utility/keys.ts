@@ -22,7 +22,7 @@ export const KEYS = {
   //
   DISCORD_BOT_TOKEN: process.env.DISCORD_BOT_TOKEN,
   DISCORD_BOT_ID: process.env.DISCORD_BOT_ID,
-  // Optional discord developer settings
+  // Optional developer settings
   DISCORD_DEV_GUILD_ID: process.env.DISCORD_DEV_GUILD_ID, // Optional
   DISCORD_DEV_OWNER_ID: process.env.DISCORD_DEV_OWNER_ID, // Optional
 
@@ -35,9 +35,9 @@ export const KEYS = {
   // Localization settings
   //
   // Supported languages: https://discord.com/developers/docs/reference#locales
-  SUPPORTED_LANGS: ['en-GB', 'en-US', 'de'] satisfies string[],
+  LOCALES_SUPPORTED: ['en-GB', 'en-US', 'de'] satisfies string[],
   // This is the default language that will be used if the users language is not supported
-  FALLBACK_LANG: 'en-GB' satisfies string,
+  LOCALES_FALLBACK: 'en-GB' satisfies string,
 
   //
   // Presence settings
