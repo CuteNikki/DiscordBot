@@ -47,6 +47,7 @@ WEBHOOK_BLACKLIST="123123123123123123/abc123abc123abc123" # Optional (notificati
 DISCORD_BOT_TOKEN="abc123abc123abc123" # Required (bot & cmd registration)
 DISCORD_BOT_ID="123123123123123123" # Required (cmd registration)
 DISCORD_DEV_GUILD_ID="123123123123123123" # Optional (dev cmd registration)
+DISCORD_DEV_OWNER_ID="123123123123123123" # Optional (dev cmd usage)
 ```
 
 4. Run the bot:
