@@ -4,6 +4,7 @@ import type { Button } from 'classes/base/button';
 import type { Command } from 'classes/base/command';
 import type { Modal } from 'classes/base/modal';
 import type { SelectMenu } from 'classes/base/select';
+import { ClusterClient } from 'discord-hybrid-sharding';
 
 /**
  * ExtendedClient class that extends the Discord.js Client class.
@@ -12,6 +13,10 @@ import type { SelectMenu } from 'classes/base/select';
  * @extends {Client}
  */
 export class ExtendedClient extends Client {
+  /**
+   * Cluster client.
+   */
+  cluster = new ClusterClient(this);
   /**
    * Collection of commands.
    * Collection<commandName, Command>

@@ -16,34 +16,6 @@ export default new Event({
       extendedClient.customEmojis[emoji.name as keyof typeof extendedClient.customEmojis] = emoji;
     }
 
-    const presences: { status: PresenceStatusData; name: string; type: ActivityType; url?: string }[] = [
-      {
-        status: PresenceUpdateStatus.Online,
-        name: /* Watching */ `${readyClient.guilds.cache.size} servers`,
-        type: ActivityType.Watching,
-      },
-      {
-        status: PresenceUpdateStatus.Online,
-        name: /* Listening to */ 'your commands',
-        type: ActivityType.Listening,
-      },
-      {
-        status: PresenceUpdateStatus.Idle,
-        name: /* Competing in */ 'the bot wars!',
-        type: ActivityType.Competing,
-      },
-      {
-        status: PresenceUpdateStatus.Idle,
-        name: /* Listening to */ 'my creators',
-        type: ActivityType.Listening,
-      },
-      {
-        status: PresenceUpdateStatus.Online,
-        name: /* Playing */ 'with users',
-        type: ActivityType.Playing,
-      },
-    ];
-
     // Set the initial presence
     readyClient.user.setPresence({
       status: PresenceUpdateStatus.DoNotDisturb,
@@ -57,7 +29,46 @@ export default new Event({
 
     let lastPresenceIndex: number | null = null;
     // Set a new presence every minute
-    setInterval(() => {
+    setInterval(async () => {
+      const infos = await extendedClient.cluster.broadcastEval((client) => ({
+        guildCount: client.guilds.cache.size,
+        userCount: client.users.cache.size,
+        channelCount: client.channels.cache.size,
+      }));
+
+      const presences: { status: PresenceStatusData; name: string; type: ActivityType; url?: string }[] = [
+        {
+          status: PresenceUpdateStatus.Online,
+          name: /* Playing */ `in ${infos.reduce((total, info) => total + info.guildCount, 0)} guilds`,
+          type: ActivityType.Playing,
+        },
+        {
+          status: PresenceUpdateStatus.Online,
+          name: /* Watching */ `${infos.reduce((total, info) => total + info.channelCount, 0)} channels`,
+          type: ActivityType.Watching,
+        },
+        {
+          status: PresenceUpdateStatus.Online,
+          name: /* Playing */ `with ${infos.reduce((total, info) => total + info.userCount, 0)} users`,
+          type: ActivityType.Playing,
+        },
+        {
+          status: PresenceUpdateStatus.Online,
+          name: /* Listening to */ 'your commands',
+          type: ActivityType.Listening,
+        },
+        {
+          status: PresenceUpdateStatus.Idle,
+          name: /* Competing in */ 'the bot wars!',
+          type: ActivityType.Competing,
+        },
+        {
+          status: PresenceUpdateStatus.Idle,
+          name: /* Listening to */ 'my creators',
+          type: ActivityType.Listening,
+        },
+      ];
+
       // Get a random presence from the array
       let presenceIndex = Math.floor(Math.random() * presences.length);
       // Ensure the presence is different from the last one

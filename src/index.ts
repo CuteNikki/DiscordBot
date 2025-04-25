@@ -1,39 +1,26 @@
-import { GatewayIntentBits, Partials } from 'discord.js';
-import { performance } from 'perf_hooks';
+import { ClusterManager, HeartbeatManager } from 'discord-hybrid-sharding';
 
-import { ExtendedClient } from 'classes/base/client';
-
-import { prisma } from 'database/index';
-
-import { startCron } from 'utility/cron';
 import { KEYS } from 'utility/keys';
 import { logger } from 'utility/logger';
-import { initializeI18N } from 'utility/translation';
 
-import { loadButtons } from 'loaders/button';
-import { loadCommands } from 'loaders/command';
-import { loadEvents } from 'loaders/event';
-import { loadModals } from 'loaders/modal';
-import { loadSelectMenus } from 'loaders/select';
-
-const client = new ExtendedClient({
-  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
-  partials: [Partials.Message],
+const manager = new ClusterManager('src/bot.ts', {
+  totalShards: 'auto',
+  shardsPerClusters: 10,
+  execArgv: [...process.execArgv],
+  shardArgs: process.argv,
+  mode: 'process',
+  token: KEYS.DISCORD_BOT_TOKEN,
 });
 
-const startTime = performance.now();
-// Running all of this in parallel
-await Promise.all([
-  prisma.$connect(),
-  initializeI18N(),
-  startCron(),
-  loadCommands(client),
-  loadEvents(client),
-  loadButtons(client),
-  loadModals(client),
-  loadSelectMenus(client),
-]);
-const endTime = performance.now();
-logger.info(`Loaded everything in ${Math.floor(endTime - startTime)}ms!`);
+manager.extend(
+  new HeartbeatManager({
+    // If shard is not responding for 60 seconds
+    interval: 10000,
+    maxMissedHeartbeats: 6,
+  }),
+);
 
-client.login(KEYS.DISCORD_BOT_TOKEN);
+manager.on('clusterCreate', (cluster) => logger.info(`Launched Cluster: ${cluster.id}`));
+manager.on('clusterReady', (cluster) => logger.info(`Cluster Ready: ${cluster.id}`));
+
+manager.spawn({ timeout: -1 });
