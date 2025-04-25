@@ -133,6 +133,10 @@
             "description": "The ID of the infraction to delete"
           }
         ]
+      },
+      {
+        "name": "all",
+        "description": "View all infractions in the guild"
       }
     ]
   }

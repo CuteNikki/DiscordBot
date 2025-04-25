@@ -133,6 +133,10 @@
             "description": "Die ID des Verstoßes zum Löschen"
           }
         ]
+      },
+      {
+        "name": "alle",
+        "description": "Alle Verstöße des Servers anzeigen"
       }
     ]
   }

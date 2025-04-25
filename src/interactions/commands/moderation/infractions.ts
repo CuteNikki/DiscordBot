@@ -14,15 +14,21 @@ import { t } from 'i18next';
 import type { ExtendedClient } from 'classes/base/client';
 import { Command } from 'classes/base/command';
 
-import { deleteInfraction, getInfractionById, getInfractionsByGuildId, getInfractionsByUserIdAndGuildId } from 'database/infraction';
+import {
+  deleteInfraction,
+  getInfractionById,
+  getInfractionsByGuildId,
+  getInfractionsByUserId,
+  getInfractionsByUserIdAndGuildId,
+} from 'database/infraction';
 
 import { buildInfractionOverview } from 'utility/infraction';
 import { logger } from 'utility/logger';
 
 export default new Command({
   builder: new SlashCommandBuilder()
-    .setContexts(InteractionContextType.Guild)
-    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setContexts(InteractionContextType.Guild, InteractionContextType.PrivateChannel, InteractionContextType.BotDM)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
     .setName('infractions')
     .setDescription('Manage infractions in the guild')
@@ -30,7 +36,7 @@ export default new Command({
       subcommand
         .setName('history')
         .setDescription("View a user's infractions")
-        .addUserOption((option) => option.setName('user').setDescription('The user to view infractions for').setRequired(true)),
+        .addUserOption((option) => option.setName('user').setDescription('The user to view infractions for').setRequired(false)),
     )
     .addSubcommand((subcommand) =>
       subcommand
@@ -39,7 +45,8 @@ export default new Command({
         .addStringOption((option) =>
           option.setName('id').setDescription('The ID of the infraction to delete').setAutocomplete(true).setRequired(true),
         ),
-    ),
+    )
+    .addSubcommand((cmd) => cmd.setName('all').setDescription('View all infractions in the guild')),
   async autocomplete(interaction) {
     const focused = interaction.options.getFocused();
 
@@ -63,19 +70,26 @@ export default new Command({
     }
   },
   async execute(interaction) {
-    if (!interaction.inCachedGuild()) {
-      return await interaction.reply({
-        content: t('interactions.guild-only', { lng: interaction.locale }),
-        flags: [MessageFlags.Ephemeral],
-      });
-    }
-
     const client = interaction.client as ExtendedClient;
 
     switch (interaction.options.getSubcommand()) {
+      case 'all':
+        if (!interaction.inCachedGuild()) {
+          return await interaction.reply({
+            content: t('interactions.guild-only', { lng: interaction.locale }),
+            flags: [MessageFlags.Ephemeral],
+          });
+        }
+        return await handleAll(interaction);
       case 'history':
         return await handleHistory(interaction);
       case 'delete':
+        if (!interaction.inCachedGuild()) {
+          return await interaction.reply({
+            content: t('interactions.guild-only', { lng: interaction.locale }),
+            flags: [MessageFlags.Ephemeral],
+          });
+        }
         return await handleDelete(interaction);
       default:
         return await interaction.reply({
@@ -84,6 +98,47 @@ export default new Command({
           ],
           flags: [MessageFlags.Ephemeral],
         });
+    }
+
+    /**
+     * Handles the all subcommand
+     * @param interaction The interaction object
+     */
+    async function handleAll(interaction: ChatInputCommandInteraction<'cached'>) {
+      await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
+
+      const guildId = interaction.guild.id;
+
+      const infractions = await getInfractionsByGuildId(guildId).catch((err) =>
+        logger.error({ err, guildId }, 'Failed to get infractions'),
+      );
+
+      if (!infractions || infractions.length === 0) {
+        return await interaction.editReply({
+          embeds: [
+            new EmbedBuilder()
+              .setColor(Colors.Red)
+              .setDescription(t('infractions.no-infractions', { lng: interaction.locale, targetUser: interaction.user })),
+          ],
+        });
+      }
+
+      const itemsPerPage = 3;
+
+      return interaction.editReply(
+        buildInfractionOverview({
+          client,
+          infractions,
+          target: {
+            id: interaction.guild.id,
+            displayName: interaction.guild.name,
+            imageURL: () => interaction.guild.iconURL() ?? undefined,
+          },
+          itemsPerPage,
+          locale: interaction.locale,
+          page: 0,
+        }),
+      );
     }
 
     /**
@@ -132,10 +187,16 @@ export default new Command({
      * Handles the history subcommand
      * @param interaction The interaction object
      */
-    async function handleHistory(interaction: ChatInputCommandInteraction<'cached'>) {
+    async function handleHistory(interaction: ChatInputCommandInteraction) {
       await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
-      const targetUser = interaction.options.getUser('user', true);
+      const targetUser = interaction.options.getUser('user') || interaction.user;
+
+      if (!interaction.inCachedGuild() && targetUser.id !== interaction.user.id) {
+        return await interaction.editReply({
+          content: t('interactions.guild-only', { lng: interaction.locale }),
+        });
+      }
 
       if (targetUser.bot) {
         return await interaction.editReply({
@@ -143,9 +204,17 @@ export default new Command({
         });
       }
 
-      const infractions = await getInfractionsByUserIdAndGuildId(targetUser.id, interaction.guild.id).catch((err) =>
-        logger.error({ err, targetUser: targetUser.id, guild: interaction.guild.id }, 'Failed to get infractions'),
-      );
+      let infractions;
+      if (!interaction.inCachedGuild()) {
+        infractions = await getInfractionsByUserId(targetUser.id).catch((err) =>
+          logger.error({ err, targetUser: targetUser.id }, 'Failed to get infractions'),
+        );
+      } else {
+        infractions = await getInfractionsByUserIdAndGuildId(targetUser.id, interaction.guild.id).catch((err) =>
+          logger.error({ err, targetUser: targetUser.id, guild: interaction.guild.id }, 'Failed to get infractions'),
+        );
+      }
+
       if (!infractions || infractions.length === 0) {
         return await interaction.editReply({
           embeds: [
@@ -162,8 +231,8 @@ export default new Command({
         buildInfractionOverview({
           client,
           infractions,
-          targetUser,
           itemsPerPage,
+          target: { id: targetUser.id, displayName: targetUser.username, imageURL: () => targetUser.displayAvatarURL() },
           locale: interaction.locale,
           page: 0,
         }),

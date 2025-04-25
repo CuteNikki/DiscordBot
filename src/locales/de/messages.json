@@ -25,7 +25,9 @@
       "moderator": "Moderator: {{moderator}}",
       "expires": "Läuft ab: {{expires}}",
       "expired": "Abgelaufen: {{expired}}",
-      "date": "Datum: {{date}}"
+      "date": "Datum: {{date}}",
+      "user": "User: {{user}}",
+      "guild": "Server: {{guild}}"
     }
   },
   "eval": {

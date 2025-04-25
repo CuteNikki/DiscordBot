@@ -7,17 +7,17 @@ import { t } from 'i18next';
 interface OverviewOptions {
   client: ExtendedClient;
   infractions: Infraction[];
-  targetUser: {
+  target: {
     id: string;
     displayName: string;
-    displayAvatarURL: () => string;
+    imageURL: () => string | undefined;
   };
   locale: string;
   page: number;
   itemsPerPage: number;
 }
 
-export function buildInfractionOverview({ infractions, targetUser, page, itemsPerPage, client, locale }: OverviewOptions) {
+export function buildInfractionOverview({ infractions, target: targetUser, page, itemsPerPage, client, locale }: OverviewOptions) {
   const staffEmoji = client.customEmojis.staff;
   const dateEmoji = client.customEmojis.date;
   const calendarEmoji = client.customEmojis.calendar;
@@ -32,6 +32,8 @@ export function buildInfractionOverview({ infractions, targetUser, page, itemsPe
   const forwardsEmoji = client.customEmojis.forwards;
   const nextEmoji = client.customEmojis.forwardstep;
   const previousEmoji = client.customEmojis.backwardstep;
+  const userEmoji = client.customEmojis.user;
+  const serverEmoji = client.customEmojis.server;
 
   const totalPages = Math.ceil(infractions.length / itemsPerPage);
   const paged = infractions.slice(page * itemsPerPage, (page + 1) * itemsPerPage);
@@ -40,7 +42,7 @@ export function buildInfractionOverview({ infractions, targetUser, page, itemsPe
 
   const overviewEmbed = new EmbedBuilder()
     .setColor(Colors.White)
-    .setAuthor({ name: `${targetUser.displayName} - Overview`, iconURL: targetUser.displayAvatarURL() })
+    .setAuthor({ name: `${targetUser.displayName} - Overview`, iconURL: targetUser.imageURL() })
     .setDescription(
       [
         `${infinityEmoji} ${t('infractions.embed.total', { lng: locale, total: infractions.length })}`,
@@ -53,8 +55,11 @@ export function buildInfractionOverview({ infractions, targetUser, page, itemsPe
     );
 
   const infractionEmbeds = paged.map((infraction) => {
+    const guild = client.guilds.cache.get(infraction.guildId);
     const lines = [
       `**${infraction.id}**`,
+      `${userEmoji} ${t('infractions.embed.user', { lng: locale, user: userMention(infraction.userId) })}`,
+      `${serverEmoji} ${t('infractions.embed.guild', { lng: locale, guild: guild ? guild.name + ` (${infraction.guildId})` : infraction.guildId })}`,
       `${receiptEmoji} ${t('infractions.embed.type', { lng: locale, type: infraction.type })}`,
       `${pencilEmoji} ${t('infractions.embed.reason', { lng: locale, reason: infraction.reason })}`,
       `${staffEmoji} ${t('infractions.embed.moderator', { lng: locale, moderator: userMention(infraction.moderatorId) })}`,

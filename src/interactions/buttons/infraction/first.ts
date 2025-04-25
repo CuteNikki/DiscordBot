@@ -1,10 +1,11 @@
+import type { Infraction } from '@prisma/client';
 import { MessageFlags } from 'discord.js';
 import { t } from 'i18next';
 
 import { Button } from 'classes/base/button';
 import type { ExtendedClient } from 'classes/base/client';
 
-import { getInfractionsByUserIdAndGuildId } from 'database/infraction';
+import { getInfractionsByGuildId, getInfractionsByUserId, getInfractionsByUserIdAndGuildId } from 'database/infraction';
 
 import { buildInfractionOverview } from 'utility/infraction';
 import { logger } from 'utility/logger';
@@ -13,12 +14,85 @@ export default new Button({
   customId: 'infractions-first',
   includeCustomId: true,
   async execute(interaction) {
-    if (!interaction.inCachedGuild()) return;
+    const targetId = interaction.customId.split('_')[1];
 
-    const targetUserId = interaction.customId.split('_')[1];
-    const targetUser = await interaction.client.users.fetch(targetUserId).catch(() => null);
+    const client = interaction.client as ExtendedClient;
+    const itemsPerPage = 3;
 
-    if (!targetUser) {
+    // Helper function to fetch infractions and target data
+    const fetchInfractionsAndTarget = async (guildId?: string) => {
+      let infractions: Infraction[] | null | void = null;
+      let target: { id: string; displayName: string; imageURL: () => string | undefined } | null = null;
+
+      if (guildId) {
+        infractions = await getInfractionsByUserIdAndGuildId(targetId, guildId).catch((err) =>
+          logger.error({ err, guildId }, 'Failed to get infractions'),
+        );
+      } else {
+        infractions = await getInfractionsByUserId(targetId).catch((err) =>
+          logger.error({ err, guildId: targetId }, 'Failed to get infractions'),
+        );
+      }
+
+      const targetUser = await client.users.fetch(targetId).catch((err) => logger.error({ err, guildId }, 'Failed to fetch user'));
+
+      if (!targetUser) return { infractions, target: null };
+
+      target = {
+        id: targetId,
+        displayName: targetUser.username,
+        imageURL: () => targetUser.displayAvatarURL(),
+      };
+
+      return { infractions, target };
+    };
+
+    // Guild-based handling
+    if (interaction.inCachedGuild()) {
+      let infractions, target;
+
+      if (targetId === interaction.guildId) {
+        // Handle guild infractions
+        infractions = await getInfractionsByGuildId(targetId).catch((err) =>
+          logger.error({ err, guildId: targetId }, 'Failed to get infractions'),
+        );
+        target = {
+          id: interaction.guildId,
+          displayName: interaction.guild.name,
+          imageURL: () => interaction.guild.iconURL() ?? undefined,
+        };
+      } else {
+        // Handle user infractions in a guild
+        ({ infractions, target } = await fetchInfractionsAndTarget(interaction.guild?.id));
+      }
+
+      if (!target) {
+        await interaction.reply({
+          content: t('infractions.invalid-user', { lng: interaction.locale }),
+          flags: [MessageFlags.Ephemeral],
+        });
+        return;
+      }
+
+      if (infractions) {
+        return interaction.reply(
+          buildInfractionOverview({
+            client,
+            infractions,
+            itemsPerPage,
+            target,
+            locale: interaction.locale,
+            page: 0,
+          }),
+        );
+      }
+      return;
+    }
+
+    // Handle the case where no guild is involved
+    const { infractions, target } = await fetchInfractionsAndTarget();
+
+    if (!target) {
       await interaction.reply({
         content: t('infractions.invalid-user', { lng: interaction.locale }),
         flags: [MessageFlags.Ephemeral],
@@ -26,25 +100,17 @@ export default new Button({
       return;
     }
 
-    await interaction.deferUpdate();
-
-    const infractions = await getInfractionsByUserIdAndGuildId(targetUser.id, interaction.guild.id).catch((err) =>
-      logger.error({ err }, 'Failed to get infractions'),
-    );
-    if (!infractions) return;
-
-    const client = interaction.client as ExtendedClient;
-    const itemsPerPage = 3;
-
-    return interaction.editReply(
-      buildInfractionOverview({
-        client,
-        infractions,
-        targetUser,
-        itemsPerPage,
-        locale: interaction.locale,
-        page: 0,
-      }),
-    );
+    if (infractions) {
+      return interaction.reply(
+        buildInfractionOverview({
+          client,
+          infractions,
+          itemsPerPage,
+          target,
+          locale: interaction.locale,
+          page: 0,
+        }),
+      );
+    }
   },
 });
