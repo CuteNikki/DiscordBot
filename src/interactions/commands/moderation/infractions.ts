@@ -9,13 +9,13 @@ import {
   SlashCommandBuilder,
   userMention,
 } from 'discord.js';
+import { t } from 'i18next';
 
 import type { ExtendedClient } from 'classes/base/client';
 import { Command } from 'classes/base/command';
 
 import { deleteInfraction, getInfractionById, getInfractionsByGuildId, getInfractionsByUserIdAndGuildId } from 'database/infraction';
 
-import { t } from 'i18next';
 import { buildInfractionOverview } from 'utility/infraction';
 import { logger } from 'utility/logger';
 
