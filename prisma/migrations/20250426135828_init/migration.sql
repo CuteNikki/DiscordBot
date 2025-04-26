@@ -39,6 +39,21 @@ CREATE TABLE "Infraction" (
     CONSTRAINT "Infraction_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "MessageBuilder" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "guildId" TEXT,
+    "channelId" TEXT NOT NULL,
+    "messageId" TEXT,
+    "content" TEXT,
+    "embed" JSONB,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "MessageBuilder_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_userId_key" ON "User"("userId");
 
@@ -63,6 +78,21 @@ CREATE INDEX "infraction_user_guild" ON "Infraction"("userId", "guildId");
 -- CreateIndex
 CREATE INDEX "infraction_moderator_guild" ON "Infraction"("moderatorId", "guildId");
 
+-- CreateIndex
+CREATE INDEX "infraction_type" ON "Infraction"("type");
+
+-- CreateIndex
+CREATE INDEX "messagebuilder_user" ON "MessageBuilder"("userId");
+
+-- CreateIndex
+CREATE INDEX "messagebuilder_guild" ON "MessageBuilder"("guildId");
+
+-- CreateIndex
+CREATE INDEX "messagebuilder_channel" ON "MessageBuilder"("channelId");
+
+-- CreateIndex
+CREATE INDEX "messagebuilder_message" ON "MessageBuilder"("messageId");
+
 -- AddForeignKey
 ALTER TABLE "Blacklist" ADD CONSTRAINT "Blacklist_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -71,3 +101,6 @@ ALTER TABLE "Infraction" ADD CONSTRAINT "Infraction_userId_fkey" FOREIGN KEY ("u
 
 -- AddForeignKey
 ALTER TABLE "Infraction" ADD CONSTRAINT "Infraction_guildId_fkey" FOREIGN KEY ("guildId") REFERENCES "Guild"("guildId") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "MessageBuilder" ADD CONSTRAINT "MessageBuilder_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE RESTRICT ON UPDATE CASCADE;
