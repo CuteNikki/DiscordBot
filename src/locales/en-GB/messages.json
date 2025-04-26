@@ -8,7 +8,7 @@
     "invalid-user": "❌ Invalid user!",
     "invalid-subcommand": "❌ Invalid subcommand!",
     "invalid-page": "❌ Invalid page number! It must be a number between 1 and {{totalPages}}.",
-    "none": "❌ No infractions found for `{{targetUser}}`!",
+    "none": "❌ No infractions found for {{targetUser}}!",
     "custom-page-label": "Enter a page number",
     "deleted": "✅ Infraction with ID `{{infractionId}}` of {{targetUser}} has been deleted!",
     "delete-failed": "❌ Failed to delete infraction with ID `{{infractionId}}`!",

@@ -8,7 +8,7 @@
     "invalid-user": "❌ Ungültiger Benutzer!",
     "invalid-subcommand": "❌ Ungültiger Unterbefehl!",
     "invalid-page": "❌ Ungültige Seitenzahl! Es muss eine Zahl zwischen 1 und {{totalPages}} sein.",
-    "none": "❌ Keine Verstöße für `{{targetUser}}` gefunden!",
+    "none": "❌ Keine Verstöße für {{targetUser}} gefunden!",
     "custom-page-label": "Gib eine Seitenzahl ein",
     "deleted": "✅ Der Verstoß mit der ID `{{infractionId}}` von {{targetUser}} wurde gelöscht!",
     "delete-failed": "❌ Fehler beim Löschen des Verstoßes mit der ID `{{infractionId}}`!",

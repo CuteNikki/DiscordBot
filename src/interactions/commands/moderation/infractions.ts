@@ -118,7 +118,7 @@ export default new Command({
           embeds: [
             new EmbedBuilder()
               .setColor(Colors.Red)
-              .setDescription(t('infractions.no-infractions', { lng: interaction.locale, targetUser: interaction.user })),
+              .setDescription(t('infractions.none', { lng: interaction.locale, targetUser: interaction.user.toString() })),
           ],
         });
       }
@@ -220,7 +220,7 @@ export default new Command({
           embeds: [
             new EmbedBuilder()
               .setColor(Colors.Red)
-              .setDescription(t('infractions.no-infractions', { lng: interaction.locale, targetUser })),
+              .setDescription(t('infractions.none', { lng: interaction.locale, targetUser: targetUser.toString() })),
           ],
         });
       }
