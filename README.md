@@ -66,9 +66,7 @@ DISCORD_DEV_GUILD_ID="123123123123123123" # Optional (dev cmd registration)
 DISCORD_DEV_OWNER_ID="123123123123123123" # Optional (dev cmd usage)
 ```
 
-4. Upload the emojis from the assets folder to your application.
-
-> This should be done on https://discord.com/developers/applications
+4. Upload the emojis from the [assets folder](assets/) to your [application](https://discord.com/developers/applications).
 
 5. Set up database:
 
