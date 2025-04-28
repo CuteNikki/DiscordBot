@@ -15,6 +15,9 @@ Welcome to the official repository for the v2 of the Discord Bot! This bot is de
 - [Contributing](#contributing)
   - [Steps](#steps-to-contribute)
 - [Useful Guides](#useful-guides)
+  - [Custom Emojis](#custom-emojis)
+    - [How to Create](#how-to-create-custom-emojis)
+    - [How to Use](#how-to-use-custom-emojis)
   - [Creating Slash Commands](#creating-a-slash-command)
   - [Message Translation](#message-translation)
   - [Command Translation](#command-translation)
@@ -105,6 +108,71 @@ We welcome contributions! If you'd like to help improve the bot, feel free to fo
 5. Open a pull request
 
 ## Useful guides:
+
+### Custom Emojis
+
+You can find all the emojis that the bot currently uses in the [assets folder](assets/).
+
+#### How to create custom emojis
+
+Visit this website: https://emoji.gg/tools/icon-maker
+
+Follow these steps to get the exact same icon style as the bot currently uses.
+
+1. Change the shape color to white.
+2. Change the icon color to black.
+3. Change the icon size to 78px.
+4. Change the shape to Hexagon.
+5. Click on the Icons tab and choose whatever you want.
+6. Click `Download PNG`.
+7. Rename the file to anything you like.
+8. Upload the icon to your application in the [developer portal](https://discord.com/developers/applications).
+
+You can completely change and adjust the icon style to your liking.
+
+#### How to use custom emojis
+
+All custom emojis are fetched in the `clientReady` event and populate `client.customEmojis`.
+
+So in order to access an emoji with the name `globe` you'd do this:
+
+`client.customEmojis.globe`
+
+This will give you the ApplicationEmoji object, which looks like this:
+
+```json
+{
+  "animated": false,
+  "name": "globe",
+  "id": "1358759560256688128",
+  "application": "1183792864291995678",
+  "author": "303142922780672013",
+  "managed": false,
+  "requiresColons": true,
+  "guildId": null,
+  "createdTimestamp": 1744023923697,
+  "identifier": "globe:1358759560256688128",
+  "imageURL": "https://cdn.discordapp.com/emojis/1358759560256688128.webp"
+}
+```
+
+If you want to use this emoji in a message, I highly recommend to call `.toString()` on it:
+<br />
+`client.customEmojis.globe.toString()`
+<br />
+which will output:
+<br />
+`<globe:1358759560256688128>`
+
+To use it on a button you will need to do this:
+
+```ts
+new ButtonBuilder()
+  .setCustomId('some-id')
+  .setStyle(ButtonStyle.Secondary)
+  .setEmoji({ id: client.customEmojis.globe.id })
+  .setDisabled(false);
+```
 
 ### Creating Slash Commands
 
