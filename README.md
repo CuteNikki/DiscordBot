@@ -11,9 +11,6 @@ Welcome to the official repository for the v2 of the Discord Bot! This bot is de
   - [Prerequisites](#prerequisites)
   - [Setup](#setup)
 - [Configuration](#configuration)
-- [Community](#community)
-- [Contributing](#contributing)
-  - [Steps](#steps-to-contribute)
 - [Useful Guides](#useful-guides)
   - [Custom Emojis](#custom-emojis)
     - [How to Create](#how-to-create-custom-emojis)
@@ -21,6 +18,9 @@ Welcome to the official repository for the v2 of the Discord Bot! This bot is de
   - [Creating Slash Commands](#creating-a-slash-command)
   - [Message Translation](#message-translation)
   - [Command Translation](#command-translation)
+- [Community](#community)
+- [Contributing](#contributing)
+  - [Steps](#steps-to-contribute)
 - [License](#license)
 
 ## Features
@@ -52,21 +52,10 @@ git clone -b v2 --single-branch https://github.com/CuteNikki/DiscordBot.git
 bun install
 ```
 
-3. Create a `.env` file in the root directory and add your bot's token and database URL.
+3. Create a `.env` file in the root directory fill in the values.
 
 ```sh
-# You can copy this file to .env and fill in the values
-
-# !! if you don't use postgresql, you will need to change the 'provider' in ROOT/prisma/schema.prisma file!!
-DATABASE_URL="postgresql://user:password@localhost/your-database" # Required (database)
-
-# !! remove the https://discord.com/api/webhooks/ part from the webhook URL !!
-WEBHOOK_BLACKLIST="123123123123123123/abc123abc123abc123" # Optional (notifications)
-
-DISCORD_BOT_TOKEN="abc123abc123abc123" # Required (bot & cmd registration)
-DISCORD_BOT_ID="123123123123123123" # Required (cmd registration)
-DISCORD_DEV_GUILD_ID="123123123123123123" # Optional (dev cmd registration)
-DISCORD_DEV_OWNER_ID="123123123123123123" # Optional (dev cmd usage)
+cp .env.example .env
 ```
 
 4. Upload the emojis from the [assets folder](assets/) to your [application](https://discord.com/developers/applications).
@@ -90,22 +79,6 @@ bun run start
 All bot configuration is done through the [`.env`](.env.example) file located in the root directory and the [`src/utility/keys.ts`](src/utility/keys.ts) file.
 <br/>
 You can change various settings like webhooks, presence and more.
-
-## Community
-
-Join our Discord community for support, updates, and more! [Click Here](https://discord.gg/ACR6RBQj4y).
-
-## Contributing
-
-We welcome contributions! If you'd like to help improve the bot, feel free to fork the repository, submit issues, or open pull requests.
-
-### Steps to contribute:
-
-1. Fork the repo
-2. Create a new branch (`git checkout -b feature-name`)
-3. Commit your changes (`git commit -am 'Add new feature'`)
-4. Push to the branch (`git push origin feature-name`)
-5. Open a pull request
 
 ## Useful guides:
 
@@ -274,6 +247,22 @@ You said: nothing!
   }
 }
 ```
+
+## Community
+
+Join our Discord community for support, updates, and more! [Click Here](https://discord.gg/ACR6RBQj4y).
+
+## Contributing
+
+We welcome contributions! If you'd like to help improve the bot, feel free to fork the repository, submit issues, or open pull requests.
+
+### Steps to contribute:
+
+1. Fork the repo
+2. Create a new branch (`git checkout -b feature-name`)
+3. Commit your changes (`git commit -am 'Add new feature'`)
+4. Push to the branch (`git push origin feature-name`)
+5. Open a pull request
 
 ## License
 
