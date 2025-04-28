@@ -28,6 +28,17 @@
       "date": "Datum: {{date}}",
       "user": "User: {{user}}",
       "guild": "Server: {{guild}}"
+    },
+    "sort-by": {
+      "prefix": "Sortiere nach",
+      "created": "Erstellungsdatum",
+      "type": "Typ",
+      "moderator": "Moderator"
+    },
+    "sort-order": {
+      "prefix": "Sortiere nach",
+      "ascending": "Aufsteigend",
+      "descending": "Absteigend"
     }
   },
   "eval": {

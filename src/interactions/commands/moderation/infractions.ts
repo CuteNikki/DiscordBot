@@ -22,6 +22,8 @@ import {
   getInfractionsByUserIdAndGuildId,
 } from 'database/infraction';
 
+import { InfractionSortBy, InfractionSortOrder } from 'types/infraction';
+
 import { buildInfractionOverview } from 'utility/infraction';
 import { logger } from 'utility/logger';
 
@@ -135,6 +137,8 @@ export default new Command({
             imageURL: () => interaction.guild.iconURL() ?? undefined,
           },
           itemsPerPage,
+          sortBy: InfractionSortBy.createdAt,
+          sortOrder: InfractionSortOrder.desc,
           locale: interaction.locale,
           page: 0,
         }),
@@ -232,6 +236,8 @@ export default new Command({
           client,
           infractions,
           itemsPerPage,
+          sortBy: InfractionSortBy.createdAt,
+          sortOrder: InfractionSortOrder.desc,
           target: { id: targetUser.id, displayName: targetUser.username, imageURL: () => targetUser.displayAvatarURL() },
           locale: interaction.locale,
           page: 0,
