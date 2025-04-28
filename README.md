@@ -120,9 +120,9 @@ The following shows you how to create a simple command that replies with a messa
 
 ```ts
 import { SlashCommandBuilder } from 'discord.js';
+import { t } from 'i18next';
 
 import { Command } from 'classes/base/command';
-import { t } from 'i18next';
 
 export default new Command({
   // Will only be deployed to dev server and only usable by developer
