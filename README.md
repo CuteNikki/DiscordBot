@@ -130,6 +130,7 @@ export default new Command({
   // 3 seconds cooldown
   cooldown: 3000,
   // Permissions the bot needs to execute the command
+  // This is just an example, the bot does not need SendMessages to reply to an interaction!!
   botPermissions: ['SendMessages'],
   // Command name, description and options
   // Name must be lowercase and can only contain letters, numbers and underscores
