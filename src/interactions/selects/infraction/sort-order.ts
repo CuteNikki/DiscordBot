@@ -19,6 +19,8 @@ export default new SelectMenu({
     const targetId = interaction.customId.split('_')[1];
     const sortOrder = parseInt(interaction.values[0]) as InfractionSortOrder;
     const sortBy = parseInt(interaction.customId.split('_')[3]) as InfractionSortBy;
+    const showGuild = interaction.customId.split('_')[4] === '1';
+    const showUser = interaction.customId.split('_')[5] === '1';
 
     const client = interaction.client as ExtendedClient;
     const itemsPerPage = 3;
@@ -87,6 +89,8 @@ export default new SelectMenu({
             target,
             sortBy,
             sortOrder,
+            showGuild,
+            showUser,
             locale: interaction.locale,
             page: 0,
           }),
@@ -115,6 +119,8 @@ export default new SelectMenu({
           target,
           sortBy,
           sortOrder,
+          showGuild,
+          showUser,
           locale: interaction.locale,
           page: 0,
         }),

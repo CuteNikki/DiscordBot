@@ -14,10 +14,12 @@ export default new Button({
     const targetUserId = interaction.customId.split('_')[1];
     const sortOrder = parseInt(interaction.customId.split('_')[2]) as InfractionSortOrder;
     const sortBy = parseInt(interaction.customId.split('_')[3]) as InfractionSortBy;
+    const showGuild = interaction.customId.split('_')[4] === '1';
+    const showUser = interaction.customId.split('_')[5] === '1';
 
     await interaction.showModal(
       new ModalBuilder()
-        .setCustomId(`infractions-custom_${targetUserId}_${sortOrder}_${sortBy}`)
+        .setCustomId(`infractions-custom_${targetUserId}_${sortOrder}_${sortBy}_${showGuild ? '1' : '0'}_${showUser ? '1' : '0'}`)
         .setTitle('Custom Page')
         .addComponents(
           new ActionRowBuilder<TextInputBuilder>().addComponents(

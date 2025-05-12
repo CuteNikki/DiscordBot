@@ -28,9 +28,22 @@ interface OverviewOptions {
   itemsPerPage: number;
   sortBy: InfractionSortBy;
   sortOrder: InfractionSortOrder;
+  showGuild: boolean;
+  showUser: boolean;
 }
 
-export function buildInfractionOverview({ infractions, target, page, itemsPerPage, client, locale, sortBy, sortOrder }: OverviewOptions) {
+export function buildInfractionOverview({
+  infractions,
+  target,
+  page,
+  itemsPerPage,
+  client,
+  locale,
+  sortBy,
+  sortOrder,
+  showGuild,
+  showUser,
+}: OverviewOptions) {
   const staffEmoji = client.customEmojis.staff;
   const dateEmoji = client.customEmojis.date;
   const calendarEmoji = client.customEmojis.calendar;
@@ -71,21 +84,22 @@ export function buildInfractionOverview({ infractions, target, page, itemsPerPag
 
   const infractionEmbeds = paged.map((infraction) => {
     const guild = client.guilds.cache.get(infraction.guildId);
-    const lines = [
-      `**${infraction.id}**`,
-      `${userEmoji} ${t('infractions.embed.user', { lng: locale, user: userMention(infraction.userId) })}`,
-      `${serverEmoji} ${t('infractions.embed.guild', { lng: locale, guild: guild ? guild.name + ` (${infraction.guildId})` : infraction.guildId })}`,
+    const lines = [`**${infraction.id}**`];
+
+    if (showUser) lines.push(`${userEmoji} ${t('infractions.embed.user', { lng: locale, user: userMention(infraction.userId) })}`);
+    if (showGuild)
+      lines.push(
+        `${serverEmoji} ${t('infractions.embed.guild', { lng: locale, guild: guild ? guild.name + ` (${infraction.guildId})` : infraction.guildId })}`,
+      );
+    lines.push(
       `${receiptEmoji} ${t('infractions.embed.type', { lng: locale, type: infraction.type })}`,
       `${pencilEmoji} ${t('infractions.embed.reason', { lng: locale, reason: infraction.reason })}`,
       `${staffEmoji} ${t('infractions.embed.moderator', { lng: locale, moderator: userMention(infraction.moderatorId) })}`,
-    ];
-
-    if (infraction.expiresAt) {
+    );
+    if (infraction.expiresAt)
       lines.push(
         `${calendarEmoji} ${infraction.isActive ? t('infractions.embed.expires', { lng: locale, expires: `<t:${Math.floor(infraction.expiresAt.getTime() / 1000)}:R>` }) : t('infractions.embed.expired', { lng: locale, expired: `<t:${Math.floor(infraction.expiresAt.getTime() / 1000)}:R>` })}`,
       );
-    }
-
     lines.push(
       `${dateEmoji} ${t('infractions.embed.date', { lng: locale, date: `<t:${Math.floor(infraction.createdAt.getTime() / 1000)}:R>` })}`,
     );
@@ -95,33 +109,33 @@ export function buildInfractionOverview({ infractions, target, page, itemsPerPag
 
   const rowPages = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
-      .setCustomId(`infractions-first_${target.id}_${sortOrder}_${sortBy}`)
+      .setCustomId(`infractions-first_${target.id}_${sortOrder}_${sortBy}_${showGuild ? 1 : 0}_${showUser ? 1 : 0}`)
       .setEmoji({ id: backwardsEmoji.id })
       .setStyle(ButtonStyle.Secondary)
       .setDisabled(page === 0),
     new ButtonBuilder()
-      .setCustomId(`infractions-previous_${page}_${target.id}_${sortOrder}_${sortBy}`)
+      .setCustomId(`infractions-previous_${page}_${target.id}_${sortOrder}_${sortBy}_${showGuild ? 1 : 0}_${showUser ? 1 : 0}`)
       .setEmoji({ id: previousEmoji.id })
       .setStyle(ButtonStyle.Secondary)
       .setDisabled(page === 0),
     new ButtonBuilder()
-      .setCustomId(`infractions-custom_${target.id}_${sortOrder}_${sortBy}`)
+      .setCustomId(`infractions-custom_${target.id}_${sortOrder}_${sortBy}_${showGuild ? 1 : 0}_${showUser ? 1 : 0}`)
       .setLabel(`${page + 1} / ${totalPages}`)
       .setStyle(ButtonStyle.Secondary),
     new ButtonBuilder()
-      .setCustomId(`infractions-next_${page}_${target.id}_${sortOrder}_${sortBy}`)
+      .setCustomId(`infractions-next_${page}_${target.id}_${sortOrder}_${sortBy}_${showGuild ? 1 : 0}_${showUser ? 1 : 0}`)
       .setEmoji({ id: nextEmoji.id })
       .setStyle(ButtonStyle.Secondary)
       .setDisabled(page === totalPages - 1),
     new ButtonBuilder()
-      .setCustomId(`infractions-last_${target.id}_${sortOrder}_${sortBy}`)
+      .setCustomId(`infractions-last_${target.id}_${sortOrder}_${sortBy}_${showGuild ? 1 : 0}_${showUser ? 1 : 0}`)
       .setEmoji({ id: forwardsEmoji.id })
       .setStyle(ButtonStyle.Secondary)
       .setDisabled(page === totalPages - 1),
   );
   const rowSortBy = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
     new StringSelectMenuBuilder()
-      .setCustomId(`infractions-sort-by_${target.id}_${sortOrder}_${sortBy}`)
+      .setCustomId(`infractions-sort-by_${target.id}_${sortOrder}_${sortBy}_${showGuild ? 1 : 0}_${showUser ? 1 : 0}`)
       .setPlaceholder(t('infractions.sort-by.placeholder', { lng: locale }))
       .setMaxValues(1)
       .setOptions(
@@ -149,7 +163,7 @@ export function buildInfractionOverview({ infractions, target, page, itemsPerPag
   );
   const rowSortOrder = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
     new StringSelectMenuBuilder()
-      .setCustomId(`infractions-sort-order_${target.id}_${sortOrder}_${sortBy}`)
+      .setCustomId(`infractions-sort-order_${target.id}_${sortOrder}_${sortBy}_${showGuild ? 1 : 0}_${showUser ? 1 : 0}`)
       .setPlaceholder(t('infractions.sort-order.placeholder', { lng: locale }))
       .setMaxValues(1)
       .setOptions(

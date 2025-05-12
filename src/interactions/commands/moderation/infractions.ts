@@ -141,6 +141,8 @@ export default new Command({
           sortOrder: InfractionSortOrder.desc,
           locale: interaction.locale,
           page: 0,
+          showGuild: false, // Only showing infractions from the current guild
+          showUser: true, // Infractions can be from different users
         }),
       );
     }
@@ -241,6 +243,8 @@ export default new Command({
           target: { id: targetUser.id, displayName: targetUser.username, imageURL: () => targetUser.displayAvatarURL() },
           locale: interaction.locale,
           page: 0,
+          showGuild: !interaction.inCachedGuild(), // Show guilds if in DMs
+          showUser: false, // Only show infractions from the target user
         }),
       );
     }

@@ -18,6 +18,8 @@ export default new Button({
     const targetUserId = interaction.customId.split('_')[1];
     const sortOrder = parseInt(interaction.customId.split('_')[2]) as InfractionSortOrder;
     const sortBy = parseInt(interaction.customId.split('_')[3]) as InfractionSortBy;
+    const showGuild = interaction.customId.split('_')[4] === '1';
+    const showUser = interaction.customId.split('_')[5] === '1';
 
     const client = interaction.client as ExtendedClient;
     const itemsPerPage = 3;
@@ -87,6 +89,8 @@ export default new Button({
             itemsPerPage,
             sortBy,
             sortOrder,
+            showGuild,
+            showUser,
             locale: interaction.locale,
             page: Math.floor(infractions.length / itemsPerPage) - 1,
           }),
@@ -115,6 +119,8 @@ export default new Button({
           itemsPerPage,
           sortBy,
           sortOrder,
+          showGuild,
+          showUser,
           locale: interaction.locale,
           page: Math.floor(infractions.length / itemsPerPage) - 1,
         }),

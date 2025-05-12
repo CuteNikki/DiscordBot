@@ -18,6 +18,8 @@ export default new Modal({
     const targetUserId = interaction.customId.split('_')[1];
     const sortOrder = parseInt(interaction.customId.split('_')[2]);
     const sortBy = parseInt(interaction.customId.split('_')[3]);
+    const showGuild = interaction.customId.split('_')[4] === '1';
+    const showUser = interaction.customId.split('_')[5] === '1';
 
     const client = interaction.client as ExtendedClient;
 
@@ -114,6 +116,8 @@ export default new Modal({
           itemsPerPage,
           sortBy,
           sortOrder,
+          showGuild,
+          showUser,
           locale: interaction.locale,
           page: newPageIndex,
         }),
@@ -155,6 +159,8 @@ export default new Modal({
         itemsPerPage,
         sortBy,
         sortOrder,
+        showGuild,
+        showUser,
         locale: interaction.locale,
         page: newPageIndex,
       }),
