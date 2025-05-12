@@ -1,4 +1,5 @@
 export enum InfractionSortBy {
+  userId,
   createdAt,
   expiresAt,
   moderatorId,

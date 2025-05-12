@@ -166,34 +166,42 @@ export function buildInfractionOverview({
       .setStyle(ButtonStyle.Secondary)
       .setDisabled(page === totalPages - 1),
   );
-  const rowSortBy = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
-    new StringSelectMenuBuilder()
-      .setCustomId(`infractions-sort-by_${target.id}_${sortOrder}_${showGuild ? 1 : 0}_${showUser ? 1 : 0}`)
-      .setPlaceholder(t('infractions.sort-by.placeholder', { lng: locale }))
-      .setMaxValues(1)
-      .setOptions(
-        new StringSelectMenuOptionBuilder()
-          .setLabel(t('infractions.sort-by.prefix', { lng: locale }) + ' ' + t('infractions.sort-by.created', { lng: locale }))
-          .setValue(InfractionSortBy.createdAt.toString())
-          .setEmoji({ id: dateEmoji.id })
-          .setDefault(sortBy === InfractionSortBy.createdAt),
-        new StringSelectMenuOptionBuilder()
-          .setLabel(t('infractions.sort-by.prefix', { lng: locale }) + ' ' + t('infractions.sort-by.expires', { lng: locale }))
-          .setValue(InfractionSortBy.expiresAt.toString())
-          .setEmoji({ id: calendarEmoji.id })
-          .setDefault(sortBy === InfractionSortBy.expiresAt),
-        new StringSelectMenuOptionBuilder()
-          .setLabel(t('infractions.sort-by.prefix', { lng: locale }) + ' ' + t('infractions.sort-by.type', { lng: locale }))
-          .setValue(InfractionSortBy.type.toString())
-          .setEmoji({ id: pencilEmoji.id })
-          .setDefault(sortBy === InfractionSortBy.type),
-        new StringSelectMenuOptionBuilder()
-          .setLabel(t('infractions.sort-by.prefix', { lng: locale }) + ' ' + t('infractions.sort-by.moderator', { lng: locale }))
-          .setValue(InfractionSortBy.moderatorId.toString())
-          .setEmoji({ id: staffEmoji.id })
-          .setDefault(sortBy === InfractionSortBy.moderatorId),
-      ),
-  );
+  const selectSortBy = new StringSelectMenuBuilder()
+    .setCustomId(`infractions-sort-by_${target.id}_${sortOrder}_${showGuild ? 1 : 0}_${showUser ? 1 : 0}`)
+    .setPlaceholder(t('infractions.sort-by.placeholder', { lng: locale }))
+    .setMaxValues(1)
+    .setOptions(
+      new StringSelectMenuOptionBuilder()
+        .setLabel(t('infractions.sort-by.prefix', { lng: locale }) + ' ' + t('infractions.sort-by.created', { lng: locale }))
+        .setValue(InfractionSortBy.createdAt.toString())
+        .setEmoji({ id: dateEmoji.id })
+        .setDefault(sortBy === InfractionSortBy.createdAt),
+      new StringSelectMenuOptionBuilder()
+        .setLabel(t('infractions.sort-by.prefix', { lng: locale }) + ' ' + t('infractions.sort-by.expires', { lng: locale }))
+        .setValue(InfractionSortBy.expiresAt.toString())
+        .setEmoji({ id: calendarEmoji.id })
+        .setDefault(sortBy === InfractionSortBy.expiresAt),
+      new StringSelectMenuOptionBuilder()
+        .setLabel(t('infractions.sort-by.prefix', { lng: locale }) + ' ' + t('infractions.sort-by.type', { lng: locale }))
+        .setValue(InfractionSortBy.type.toString())
+        .setEmoji({ id: pencilEmoji.id })
+        .setDefault(sortBy === InfractionSortBy.type),
+      new StringSelectMenuOptionBuilder()
+        .setLabel(t('infractions.sort-by.prefix', { lng: locale }) + ' ' + t('infractions.sort-by.moderator', { lng: locale }))
+        .setValue(InfractionSortBy.moderatorId.toString())
+        .setEmoji({ id: staffEmoji.id })
+        .setDefault(sortBy === InfractionSortBy.moderatorId),
+    );
+  if (showUser) {
+    selectSortBy.addOptions(
+      new StringSelectMenuOptionBuilder()
+        .setLabel(t('infractions.sort-by.prefix', { lng: locale }) + ' ' + t('infractions.sort-by.user', { lng: locale }))
+        .setValue(InfractionSortBy.userId.toString())
+        .setEmoji({ id: userEmoji.id })
+        .setDefault(sortBy === InfractionSortBy.userId),
+    );
+  }
+  const rowSortBy = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectSortBy);
   const rowSortOrder = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
     new StringSelectMenuBuilder()
       .setCustomId(`infractions-sort-order_${target.id}_${sortBy}_${showGuild ? 1 : 0}_${showUser ? 1 : 0}`)

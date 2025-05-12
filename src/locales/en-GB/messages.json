@@ -35,7 +35,8 @@
       "created": "Created At",
       "expires": "Expires At",
       "type": "Type",
-      "moderator": "Moderator"
+      "moderator": "Moderator",
+      "user": "User"
     },
     "sort-order": {
       "prefix": "Sort Order",
