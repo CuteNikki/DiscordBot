@@ -32,6 +32,7 @@
     "sort-by": {
       "prefix": "Sortiere nach",
       "created": "Erstellungsdatum",
+      "expires": "Ablaufdatum",
       "type": "Typ",
       "moderator": "Moderator"
     },

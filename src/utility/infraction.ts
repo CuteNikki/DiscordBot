@@ -131,6 +131,11 @@ export function buildInfractionOverview({ infractions, target, page, itemsPerPag
           .setEmoji({ id: dateEmoji.id })
           .setDefault(sortBy === InfractionSortBy.createdAt),
         new StringSelectMenuOptionBuilder()
+          .setLabel(t('infractions.sort-by.prefix', { lng: locale }) + ' ' + t('infractions.sort-by.expires', { lng: locale }))
+          .setValue(InfractionSortBy.expiresAt.toString())
+          .setEmoji({ id: calendarEmoji.id })
+          .setDefault(sortBy === InfractionSortBy.expiresAt),
+        new StringSelectMenuOptionBuilder()
           .setLabel(t('infractions.sort-by.prefix', { lng: locale }) + ' ' + t('infractions.sort-by.type', { lng: locale }))
           .setValue(InfractionSortBy.type.toString())
           .setEmoji({ id: pencilEmoji.id })

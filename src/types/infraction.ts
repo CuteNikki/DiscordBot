@@ -1,5 +1,6 @@
 export enum InfractionSortBy {
   createdAt,
+  expiresAt,
   moderatorId,
   type,
 }
