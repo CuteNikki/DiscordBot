@@ -201,6 +201,15 @@ export function buildInfractionOverview({
         .setDefault(sortBy === InfractionSortBy.userId),
     );
   }
+  if (showGuild) {
+    selectSortBy.addOptions(
+      new StringSelectMenuOptionBuilder()
+        .setLabel(t('infractions.sort-by.prefix', { lng: locale }) + ' ' + t('infractions.sort-by.guild', { lng: locale }))
+        .setValue(InfractionSortBy.guildId.toString())
+        .setEmoji({ id: serverEmoji.id })
+        .setDefault(sortBy === InfractionSortBy.guildId),
+    );
+  }
   const rowSortBy = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectSortBy);
   const rowSortOrder = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
     new StringSelectMenuBuilder()

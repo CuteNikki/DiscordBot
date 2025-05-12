@@ -36,7 +36,8 @@
       "expires": "Expires At",
       "type": "Type",
       "moderator": "Moderator",
-      "user": "User"
+      "user": "User",
+      "guild": "Guild"
     },
     "sort-order": {
       "prefix": "Sort Order",
