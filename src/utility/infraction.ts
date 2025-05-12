@@ -129,7 +129,7 @@ export function buildInfractionOverview({
           new ButtonBuilder()
             .setCustomId(`infractions-delete_${infraction.id}`)
             .setEmoji({ id: deleteEmoji.id })
-            .setStyle(ButtonStyle.Danger)
+            .setStyle(ButtonStyle.Secondary)
             .setLabel(t('infractions.embed.delete', { lng: locale })),
         ),
       );
