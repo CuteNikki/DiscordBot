@@ -46,7 +46,7 @@ export default new SelectMenu({
 
       target = {
         id: targetId,
-        displayName: targetUser.username,
+        displayName: targetUser.displayName,
         imageURL: () => targetUser.displayAvatarURL(),
       };
 

@@ -13,7 +13,7 @@
     "deleted": "✅ Der Verstoß mit der ID `{{infractionId}}` von {{targetUser}} wurde gelöscht!",
     "delete-failed": "❌ Fehler beim Löschen des Verstoßes mit der ID `{{infractionId}}`!",
     "embed": {
-      "title": "{{user}} - Übersicht",
+      "title": "{{user}} - Verstöße",
       "total": "Gesamt: {{total}}",
       "bans": "Bans: {{bans}}",
       "temp-bans": "Temporäre Bans: {{tempBans}}",

@@ -13,7 +13,7 @@
     "deleted": "✅ Infraction with ID `{{infractionId}}` of {{targetUser}} has been deleted!",
     "delete-failed": "❌ Failed to delete infraction with ID `{{infractionId}}`!",
     "embed": {
-      "title": "{{user}} - Overview",
+      "title": "{{user}} - Infractions",
       "total": "Total: {{total}}",
       "bans": "Bans: {{bans}}",
       "temp-bans": "Temp Bans: {{tempBans}}",

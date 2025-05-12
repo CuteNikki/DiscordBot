@@ -4,10 +4,17 @@ import {
   ButtonBuilder,
   ButtonStyle,
   Colors,
-  EmbedBuilder,
+  ContainerBuilder,
+  MessageFlags,
+  SectionBuilder,
+  SeparatorBuilder,
+  SeparatorSpacingSize,
   StringSelectMenuBuilder,
   StringSelectMenuOptionBuilder,
+  TextDisplayBuilder,
+  ThumbnailBuilder,
   userMention,
+  type InteractionEditReplyOptions,
 } from 'discord.js';
 import { t } from 'i18next';
 
@@ -43,7 +50,7 @@ export function buildInfractionOverview({
   sortOrder,
   showGuild,
   showUser,
-}: OverviewOptions) {
+}: OverviewOptions): InteractionEditReplyOptions {
   const staffEmoji = client.customEmojis.staff;
   const dateEmoji = client.customEmojis.date;
   const calendarEmoji = client.customEmojis.calendar;
@@ -62,29 +69,40 @@ export function buildInfractionOverview({
   const serverEmoji = client.customEmojis.server;
   const ascendingEmoji = client.customEmojis.ascending;
   const descendingEmoji = client.customEmojis.descending;
+  const emptyEmoji = client.customEmojis.empty;
 
   const totalPages = Math.ceil(infractions.length / itemsPerPage);
   const paged = infractions.slice(page * itemsPerPage, (page + 1) * itemsPerPage);
 
   const countByType = (type: InfractionType) => infractions.filter((infraction) => infraction.type === type).length;
 
-  const overviewEmbed = new EmbedBuilder()
-    .setColor(Colors.White)
-    .setAuthor({ name: `${target.displayName} - Overview`, iconURL: target.imageURL() })
-    .setDescription(
-      [
-        `${infinityEmoji} ${t('infractions.embed.total', { lng: locale, total: infractions.length })}`,
-        `${banEmoji} ${t('infractions.embed.bans', { lng: locale, bans: countByType(InfractionType.Ban) })}`,
-        `${calendarEmoji} ${t('infractions.embed.temp-bans', { lng: locale, tempBans: countByType(InfractionType.Tempban) })}`,
-        `${hammerEmoji} ${t('infractions.embed.kicks', { lng: locale, kicks: countByType(InfractionType.Kick) })}`,
-        `${exclamationEmoji} ${t('infractions.embed.warns', { lng: locale, warns: countByType(InfractionType.Warn) })}`,
-        `${clockEmoji} ${t('infractions.embed.timeouts', { lng: locale, timeouts: countByType(InfractionType.Timeout) })}`,
-      ].join('\n'),
-    );
+  const container = new ContainerBuilder()
+    .setAccentColor(Colors.White)
+    .addSectionComponents(
+      new SectionBuilder()
+        .addTextDisplayComponents(
+          new TextDisplayBuilder().setContent(
+            `${emptyEmoji} **${t('infractions.embed.title', { lng: locale, user: target.displayName })}**`,
+          ),
+          new TextDisplayBuilder().setContent(
+            [
+              `${infinityEmoji} ${t('infractions.embed.total', { lng: locale, total: infractions.length })}`,
+              `${banEmoji} ${t('infractions.embed.bans', { lng: locale, bans: countByType(InfractionType.Ban) })}`,
+              `${calendarEmoji} ${t('infractions.embed.temp-bans', { lng: locale, tempBans: countByType(InfractionType.Tempban) })}`,
+              `${hammerEmoji} ${t('infractions.embed.kicks', { lng: locale, kicks: countByType(InfractionType.Kick) })}`,
+              `${exclamationEmoji} ${t('infractions.embed.warns', { lng: locale, warns: countByType(InfractionType.Warn) })}`,
+              `${clockEmoji} ${t('infractions.embed.timeouts', { lng: locale, timeouts: countByType(InfractionType.Timeout) })}`,
+            ].join('\n'),
+          ),
+        )
+        .setThumbnailAccessory(new ThumbnailBuilder().setURL(target.imageURL() ?? '')),
+    )
+    .addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large));
 
-  const infractionEmbeds = paged.map((infraction) => {
+  paged.map((infraction, index) => {
     const guild = client.guilds.cache.get(infraction.guildId);
-    const lines = [`**${infraction.id}**`];
+
+    const lines = [`${emptyEmoji} **${infraction.id}**`];
 
     if (showUser) lines.push(`${userEmoji} ${t('infractions.embed.user', { lng: locale, user: userMention(infraction.userId) })}`);
     if (showGuild)
@@ -104,7 +122,9 @@ export function buildInfractionOverview({
       `${dateEmoji} ${t('infractions.embed.date', { lng: locale, date: `<t:${Math.floor(infraction.createdAt.getTime() / 1000)}:R>` })}`,
     );
 
-    return new EmbedBuilder().setColor(Colors.White).setDescription(lines.join('\n'));
+    const text = new TextDisplayBuilder().setContent(lines.join('\n'));
+    container.addTextDisplayComponents(text);
+    if (index < paged.length - 1) container.addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small));
   });
 
   const rowPages = new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -180,8 +200,19 @@ export function buildInfractionOverview({
       ),
   );
 
+  container.addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Large));
+  container.addActionRowComponents(rowPages);
+  container.addActionRowComponents(rowSortBy);
+  container.addActionRowComponents(rowSortOrder);
+
   return {
-    embeds: [overviewEmbed, ...infractionEmbeds],
-    components: [rowPages, rowSortBy, rowSortOrder],
+    allowedMentions: { users: [] }, // Prevents pinging users
+    components: [container],
+    flags: MessageFlags.IsComponentsV2,
   };
+
+  // return {
+  //   embeds: [overviewEmbed, ...infractionEmbeds],
+  //   components: [rowPages, rowSortBy, rowSortOrder],
+  // };
 }

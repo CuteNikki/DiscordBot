@@ -46,7 +46,7 @@ export default new Button({
 
       target = {
         id: targetId,
-        displayName: targetUser.username,
+        displayName: targetUser.displayName,
         imageURL: () => targetUser.displayAvatarURL(),
       };
 

@@ -240,7 +240,7 @@ export default new Command({
           itemsPerPage,
           sortBy: InfractionSortBy.createdAt,
           sortOrder: InfractionSortOrder.desc,
-          target: { id: targetUser.id, displayName: targetUser.username, imageURL: () => targetUser.displayAvatarURL() },
+          target: { id: targetUser.id, displayName: targetUser.displayName, imageURL: () => targetUser.displayAvatarURL() },
           locale: interaction.locale,
           page: 0,
           showGuild: !interaction.inCachedGuild(), // Show guilds if in DMs
