@@ -67,7 +67,7 @@ export default new Event({
       const missingPermissions = interaction.member.permissions.missing(button.options.userPermissions);
 
       if (missingPermissions?.length) {
-        await interaction
+        return interaction
           .reply({
             embeds: [
               new EmbedBuilder()
@@ -77,7 +77,6 @@ export default new Event({
             flags: [MessageFlags.Ephemeral],
           })
           .catch((e) => console.error('Error while replying to interaction', e));
-        return;
       }
     }
 

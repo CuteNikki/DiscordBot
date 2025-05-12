@@ -34,7 +34,7 @@ export default new Event({
     const blacklist = await getBlacklist(interaction.user.id);
 
     if (blacklist) {
-      await interaction
+      return interaction
         .reply({
           content: blacklist.expiresAt
             ? `You are blacklisted from using this bot until <t:${Math.floor(blacklist.expiresAt.getTime() / 1_000)}>!`
@@ -42,7 +42,6 @@ export default new Event({
           flags: [MessageFlags.Ephemeral],
         })
         .catch((e) => console.error('Error while replying to interaction', e));
-      return;
     }
 
     /**
@@ -50,13 +49,12 @@ export default new Event({
      */
 
     if (modal.options.isDevelopment && KEYS.DISCORD_DEV_OWNER_ID !== interaction.user.id) {
-      await interaction
+      return interaction
         .reply({
           content: 'This modal is only available to the bot owner.',
           flags: [MessageFlags.Ephemeral],
         })
         .catch((err) => logger.debug({ err }, 'Error while replying to interaction'));
-      return;
     }
 
     /**
@@ -67,7 +65,7 @@ export default new Event({
       const missingPermissions = interaction.member.permissions.missing(modal.options.userPermissions);
 
       if (missingPermissions?.length) {
-        await interaction
+        return interaction
           .reply({
             embeds: [
               new EmbedBuilder()
@@ -77,7 +75,6 @@ export default new Event({
             flags: [MessageFlags.Ephemeral],
           })
           .catch((e) => console.error('Error while replying to interaction', e));
-        return;
       }
     }
 
