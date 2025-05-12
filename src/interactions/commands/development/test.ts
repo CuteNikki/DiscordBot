@@ -1,67 +1,71 @@
 import {
   ActionRowBuilder,
+  AttachmentBuilder,
   ButtonBuilder,
   ButtonStyle,
+  Colors,
+  ContainerBuilder,
+  MediaGalleryBuilder,
+  MediaGalleryItemBuilder,
+  MessageFlags,
+  SectionBuilder,
+  SeparatorBuilder,
+  SeparatorSpacingSize,
   SlashCommandBuilder,
-  StringSelectMenuBuilder,
-  StringSelectMenuOptionBuilder,
+  TextDisplayBuilder,
+  ThumbnailBuilder,
+  UserSelectMenuBuilder,
 } from 'discord.js';
 
 import { Command } from 'classes/base/command';
 
 export default new Command({
-  builder: new SlashCommandBuilder()
-    .setName('test')
-    .setDescription('Test command')
-    .addSubcommandGroup((group) =>
-      group
-        .setName('group')
-        .setDescription('Test group')
-        .addSubcommand((sub) =>
-          sub
-            .setName('sub')
-            .setDescription('Test subcommand')
-            .addStringOption((option) =>
-              option.setName('string-option').setDescription('Test string option').setChoices({ name: 'choice 1', value: 'test_1' }),
-            ),
-        ),
-    ),
+  builder: new SlashCommandBuilder().setName('test').setDescription('Test command'),
   execute(interaction) {
-    interaction.reply({
-      content: 'Test command executed',
-      components: [
+    const file = new AttachmentBuilder('assets/a.png', { name: 'a.png' });
+
+    const container = new ContainerBuilder()
+      .setAccentColor(Colors.Blurple)
+      .addTextDisplayComponents(new TextDisplayBuilder().setContent('This is a test message above an action row'))
+      .addActionRowComponents(
         new ActionRowBuilder<ButtonBuilder>().addComponents(
-          new ButtonBuilder()
-            .setCustomId('test')
-            .setLabel('Test Button')
-            .setStyle(ButtonStyle.Primary)
-            .setEmoji({ name: '✅' })
-            .setDisabled(false),
-          new ButtonBuilder()
-            .setCustomId('modal')
-            .setLabel('Test Modal')
-            .setStyle(ButtonStyle.Primary)
-            .setEmoji({ name: '📝' })
-            .setDisabled(false),
+          new ButtonBuilder().setCustomId('test').setLabel('Test').setStyle(ButtonStyle.Primary),
         ),
-        new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
-          new StringSelectMenuBuilder()
+      )
+      .addActionRowComponents(
+        new ActionRowBuilder<UserSelectMenuBuilder>().addComponents(
+          new UserSelectMenuBuilder()
             .setCustomId('select')
-            .setPlaceholder('Test Select Menu')
-            .addOptions(
-              new StringSelectMenuOptionBuilder()
-                .setLabel('Test Option 1')
-                .setValue('test_option_1')
-                .setDescription('This is a test option')
-                .setEmoji({ name: '✅' }),
-              new StringSelectMenuOptionBuilder()
-                .setLabel('Test Option 2')
-                .setValue('test_option_2')
-                .setDescription('This is another test option')
-                .setEmoji({ name: '📝' }),
-            ),
+            .setPlaceholder('Select a user')
+            .addDefaultUsers(interaction.user.id)
+            .setMaxValues(1),
         ),
-      ],
+      )
+      .addTextDisplayComponents(
+        new TextDisplayBuilder().setContent('This is a test message below an action row and above a large separator'),
+      )
+      .addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Large))
+      .addMediaGalleryComponents(
+        new MediaGalleryBuilder().addItems(
+          new MediaGalleryItemBuilder().setDescription('This is a test image').setURL('attachment://a.png'),
+        ),
+      )
+      .addTextDisplayComponents(new TextDisplayBuilder().setContent('This is a test message below an image'))
+      .addSeparatorComponents(new SeparatorBuilder().setDivider(true).setSpacing(SeparatorSpacingSize.Small))
+      .addTextDisplayComponents(new TextDisplayBuilder().setContent('This is a test message below a small separator'))
+      .addSectionComponents(
+        new SectionBuilder()
+          .addTextDisplayComponents(new TextDisplayBuilder().setContent('This is a test message inside a section, next to a button'))
+          .setButtonAccessory(new ButtonBuilder().setCustomId('test_2').setLabel('test').setStyle(ButtonStyle.Secondary)),
+        new SectionBuilder()
+          .addTextDisplayComponents(new TextDisplayBuilder().setContent('This is a test message inside a section, next to an image'))
+          .setThumbnailAccessory(new ThumbnailBuilder().setDescription('This is a test image').setURL('attachment://a.png')),
+      );
+
+    interaction.reply({
+      components: [container],
+      flags: [MessageFlags.IsComponentsV2],
+      files: [file],
     });
   },
 });
