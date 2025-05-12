@@ -70,6 +70,7 @@ export function buildInfractionOverview({
   const ascendingEmoji = client.customEmojis.ascending;
   const descendingEmoji = client.customEmojis.descending;
   const emptyEmoji = client.customEmojis.empty;
+  const deleteEmoji = client.customEmojis.trash;
 
   const totalPages = Math.ceil(infractions.length / itemsPerPage);
   const paged = infractions.slice(page * itemsPerPage, (page + 1) * itemsPerPage);
@@ -122,8 +123,20 @@ export function buildInfractionOverview({
       `${dateEmoji} ${t('infractions.embed.date', { lng: locale, date: `<t:${Math.floor(infraction.createdAt.getTime() / 1000)}:R>` })}`,
     );
 
-    const text = new TextDisplayBuilder().setContent(lines.join('\n'));
-    container.addTextDisplayComponents(text);
+    if (!showGuild) {
+      container.addSectionComponents(
+        new SectionBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(lines.join('\n'))).setButtonAccessory(
+          new ButtonBuilder()
+            .setCustomId(`infractions-delete_${infraction.id}`)
+            .setEmoji({ id: deleteEmoji.id })
+            .setStyle(ButtonStyle.Danger)
+            .setLabel(t('infractions.embed.delete', { lng: locale })),
+        ),
+      );
+    } else {
+      container.addTextDisplayComponents(new TextDisplayBuilder().setContent(lines.join('\n')));
+    }
+
     if (index < paged.length - 1) container.addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small));
   });
 
@@ -155,7 +168,7 @@ export function buildInfractionOverview({
   );
   const rowSortBy = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
     new StringSelectMenuBuilder()
-      .setCustomId(`infractions-sort-by_${target.id}_${sortOrder}_${sortBy}_${showGuild ? 1 : 0}_${showUser ? 1 : 0}`)
+      .setCustomId(`infractions-sort-by_${target.id}_${sortOrder}_${showGuild ? 1 : 0}_${showUser ? 1 : 0}`)
       .setPlaceholder(t('infractions.sort-by.placeholder', { lng: locale }))
       .setMaxValues(1)
       .setOptions(
@@ -183,7 +196,7 @@ export function buildInfractionOverview({
   );
   const rowSortOrder = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
     new StringSelectMenuBuilder()
-      .setCustomId(`infractions-sort-order_${target.id}_${sortOrder}_${sortBy}_${showGuild ? 1 : 0}_${showUser ? 1 : 0}`)
+      .setCustomId(`infractions-sort-order_${target.id}_${sortBy}_${showGuild ? 1 : 0}_${showUser ? 1 : 0}`)
       .setPlaceholder(t('infractions.sort-order.placeholder', { lng: locale }))
       .setMaxValues(1)
       .setOptions(

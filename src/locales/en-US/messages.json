@@ -27,7 +27,8 @@
       "expired": "Expired: {{expired}}",
       "date": "Date: {{date}}",
       "user": "User: {{user}}",
-      "guild": "Guild: {{guild}}"
+      "guild": "Guild: {{guild}}",
+      "delete": "Delete"
     },
     "sort-by": {
       "prefix": "Sort by",
