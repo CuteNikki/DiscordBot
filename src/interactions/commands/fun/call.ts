@@ -80,8 +80,18 @@ async function handleConnect(interaction: ChatInputCommandInteraction) {
   }
 
   // Check if another channel is already in the queue
-  if ((await getQueueSize()) > 0) {
+  if ((await getQueueSize(interaction.channelId)) > 0) {
     const randomChannelId = await getRandomChannel(interaction.channelId);
+
+    if (!randomChannelId) {
+      return interaction
+        .reply({
+          content: 'Failed to get a random channel.',
+          flags: [MessageFlags.Ephemeral],
+        })
+        .catch((err) => logger.error({ err }, 'Failed to reply to interaction'));
+    }
+
     const randomChannel = await interaction.client.channels
       .fetch(randomChannelId)
       .catch((err) => logger.error({ err }, 'Failed to fetch channel'));
@@ -97,18 +107,16 @@ async function handleConnect(interaction: ChatInputCommandInteraction) {
     // Add the channel to the calls map
     await establishConnection(interaction.channelId, randomChannelId);
     // Send a message to the connected channel
-    randomChannel
-      .send({ content: `A connection has been established!` })
-      .catch(() => {
-        interaction
-          .reply({
-            content: 'Failed to send a message to the random channel.',
-            flags: [MessageFlags.Ephemeral],
-          })
-          .catch((err) => logger.error({ err }, 'Failed to reply to interaction'));
-        return;
-      })
-      .catch((err) => logger.error({ err, channelId: randomChannelId }, 'Failed to send message to channel'));
+    randomChannel.send({ content: `A connection has been established!` }).catch((err) => {
+      logger.error({ err, channelId: randomChannelId }, 'Failed to send message to channel');
+      interaction
+        .reply({
+          content: 'Failed to send a message to the random channel.',
+          flags: [MessageFlags.Ephemeral],
+        })
+        .catch((err) => logger.error({ err }, 'Failed to reply to interaction'));
+      return;
+    });
     // Send a message to the current channel
     return interaction
       .reply({
@@ -183,7 +191,7 @@ async function handleDisconnect(interaction: ChatInputCommandInteraction) {
  */
 async function handleFriend(interaction: ChatInputCommandInteraction) {
   // Check if the channel is in a call
-  if (!isInCall(interaction.channelId)) {
+  if (!(await isInCall(interaction.channelId))) {
     return interaction
       .reply({
         content: 'This channel is not in a call!',
@@ -249,10 +257,15 @@ async function isInQueue(channelId: string): Promise<boolean> {
 
 /**
  * Gets the size of the queue
+ * @param currentChannelId The ID of the current channel
+ * If provided, the current channel ID will be excluded from the queue size
  * @returns The size of the queue
  */
-async function getQueueSize(): Promise<number> {
-  return queue.size;
+async function getQueueSize(currentChannelId?: string): Promise<number> {
+  if (!currentChannelId) return queue.size;
+  // Filter out the current channel ID from the queue
+  const others = Array.from(queue).filter((id) => id !== currentChannelId);
+  return others.length;
 }
 
 /**
@@ -260,8 +273,10 @@ async function getQueueSize(): Promise<number> {
  * @param currentChannelId The ID of the current channel
  * @returns A random channel ID from the queue
  */
-async function getRandomChannel(currentChannelId: string): Promise<string> {
-  return Array.from(queue).filter((channelId) => channelId !== currentChannelId)[Math.floor(Math.random() * (queue.size - 1))];
+async function getRandomChannel(currentChannelId: string): Promise<string | undefined> {
+  const others = Array.from(queue).filter((id) => id !== currentChannelId);
+  if (others.length === 0) return undefined;
+  return others[Math.floor(Math.random() * others.length)];
 }
 
 /**
@@ -306,6 +321,6 @@ async function establishConnection(channelId1: string, channelId2: string): Prom
  * @param channelId The ID of the channel to add to the queue
  * @returns the current queue
  */
-async function addToQueue(channelId: string): Promise<Set<string>> {
-  return queue.add(channelId);
+async function addToQueue(channelId: string): Promise<void> {
+  queue.add(channelId);
 }
