@@ -1,9 +1,13 @@
 import {
   ApplicationIntegrationType,
   ChatInputCommandInteraction,
+  Client,
+  Colors,
+  EmbedBuilder,
   InteractionContextType,
   MessageFlags,
   SlashCommandBuilder,
+  type SendableChannels,
 } from 'discord.js';
 
 import { Command } from 'classes/base/command';
@@ -57,83 +61,32 @@ export default new Command({
 /**
  * Handles the connect subcommand
  * @param interaction The interaction object
- */
+  */
 async function handleConnect(interaction: ChatInputCommandInteraction) {
-  // Check if the channel is already in a call
   if (await isInCall(interaction.channelId)) {
-    return interaction
-      .reply({
-        content: 'This channel is already in a call!',
-        flags: [MessageFlags.Ephemeral],
-      })
-      .catch((err) => logger.error({ err }, 'Failed to reply to interaction'));
+    return replyEphemeral(interaction, 'This channel is already in a call!');
   }
-
-  // Check if the channel is already in the queue
   if (await isInQueue(interaction.channelId)) {
-    return interaction
-      .reply({
-        content: 'This channel is already in the queue!',
-        flags: [MessageFlags.Ephemeral],
-      })
-      .catch((err) => logger.error({ err }, 'Failed to reply to interaction'));
+    return replyEphemeral(interaction, 'This channel is already in the queue!');
   }
-
-  // Check if another channel is already in the queue
   if ((await getQueueSize(interaction.channelId)) > 0) {
     const randomChannelId = await getRandomChannel(interaction.channelId);
-
     if (!randomChannelId) {
-      return interaction
-        .reply({
-          content: 'Failed to get a random channel.',
-          flags: [MessageFlags.Ephemeral],
-        })
-        .catch((err) => logger.error({ err }, 'Failed to reply to interaction'));
+      return replyEphemeral(interaction, 'Failed to get a random channel.');
     }
-
-    const randomChannel = await interaction.client.channels
-      .fetch(randomChannelId)
-      .catch((err) => logger.error({ err }, 'Failed to fetch channel'));
-    if (!randomChannel || !randomChannel.isSendable()) {
-      return interaction
-        .reply({
-          content: 'Failed to connect to a random channel.',
-        })
-        .catch((err) => logger.error({ err }, 'Failed to reply to interaction'));
+    const randomChannel = await fetchSendableChannel(interaction.client, randomChannelId);
+    if (!randomChannel) {
+      return replyEphemeral(interaction, 'Failed to connect to a random channel.');
     }
-    // Remove the channel from the queue
     await removeFromQueue(randomChannelId);
-    // Add the channel to the calls map
     await establishConnection(interaction.channelId, randomChannelId);
-    // Send a message to the connected channel
-    randomChannel.send({ content: `A connection has been established!` }).catch((err) => {
-      logger.error({ err, channelId: randomChannelId }, 'Failed to send message to channel');
-      interaction
-        .reply({
-          content: 'Failed to send a message to the random channel.',
-          flags: [MessageFlags.Ephemeral],
-        })
-        .catch((err) => logger.error({ err }, 'Failed to reply to interaction'));
-      return;
-    });
-    // Send a message to the current channel
+    await sendSafely(randomChannel, 'A connection has been established!');
     return interaction
-      .reply({
-        content: `A connection has been established!`,
-      })
+      .reply({ content: `A connection has been established!` })
       .catch((err) => logger.error({ err }, 'Failed to reply to interaction'));
   }
-  /**
-   * We are here if no connected channel is in the queue
-   */
-  // Add the channel to the queue
   await addToQueue(interaction.channelId);
-  await interaction
-    .reply({
-      content: 'Connecting to a call...',
-    })
-    .catch((err) => logger.error({ err }, 'Failed to reply to interaction'));
+  await replySafely(interaction, 'Connecting to a call...');
 }
 
 /**
@@ -141,48 +94,21 @@ async function handleConnect(interaction: ChatInputCommandInteraction) {
  * @param interaction The interaction object
  */
 async function handleDisconnect(interaction: ChatInputCommandInteraction) {
-  // Check if the channel is in the queue
   if (await isInQueue(interaction.channelId)) {
-    // Remove the channel from the queue
     await removeFromQueue(interaction.channelId);
-    return interaction
-      .reply({
-        content: 'You have been removed from the queue.',
-        flags: [MessageFlags.Ephemeral],
-      })
-      .catch((err) => logger.error({ err }, 'Failed to reply to interaction'));
+    return replyEphemeral(interaction, 'You have been removed from the queue.');
   }
-  // Check if the channel is in a call
   if (!(await isInCall(interaction.channelId))) {
-    return interaction
-      .reply({
-        content: 'This channel is not in a call or the queue!',
-        flags: [MessageFlags.Ephemeral],
-      })
-      .catch((err) => logger.error({ err }, 'Failed to reply to interaction'));
+    return replyEphemeral(interaction, 'This channel is not in a call or the queue!');
   }
-  // Get the connected channel
   const otherChannelId = await getConnectedChannel(interaction.channelId);
-  // Remove the connected channel from the calls map
   if (otherChannelId) {
     await removeFromCall(otherChannelId);
-    // Send a message to the connected channel if possible
-    const otherChannel = await interaction.client.channels
-      .fetch(otherChannelId)
-      .catch((err) => logger.error({ err, channelId: otherChannelId }, 'Failed to fetch channel'));
-    if (otherChannel && otherChannel.isSendable()) {
-      await otherChannel
-        .send({ content: 'The other party hung up the call.' })
-        .catch((err) => logger.error({ err, channelId: otherChannelId }, 'Failed to send message to channel'));
-    }
+    const otherChannel = await fetchSendableChannel(interaction.client, otherChannelId);
+    if (otherChannel) await sendSafely(otherChannel, `The other party hung up the call.`);
   }
-  // Remove the channel from the calls map
   await removeFromCall(interaction.channelId);
-  await interaction
-    .reply({
-      content: 'You hung up the call.',
-    })
-    .catch((err) => logger.error({ err }, 'Failed to reply to interaction'));
+  await replySafely(interaction, 'You hung up the call.');
 }
 
 /**
@@ -190,46 +116,22 @@ async function handleDisconnect(interaction: ChatInputCommandInteraction) {
  * @param interaction The interaction object
  */
 async function handleFriend(interaction: ChatInputCommandInteraction) {
-  // Check if the channel is in a call
   if (!(await isInCall(interaction.channelId))) {
-    return interaction
-      .reply({
-        content: 'This channel is not in a call!',
-        flags: [MessageFlags.Ephemeral],
-      })
-      .catch((err) => logger.error({ err }, 'Failed to reply to interaction'));
+    return replyEphemeral(interaction, 'This channel is not in a call!');
   }
-  // Get the connected channel
   const otherChannelId = await getConnectedChannel(interaction.channelId);
   if (!otherChannelId) {
-    return interaction
-      .reply({
-        content: 'Failed to get the connected channel.',
-        flags: [MessageFlags.Ephemeral],
-      })
-      .catch((err) => logger.error({ err }, 'Failed to reply to interaction'));
+    return replyEphemeral(interaction, 'Failed to get the connected channel.');
   }
-  const otherChannel = await interaction.client.channels
-    .fetch(otherChannelId)
-    .catch((err) => logger.error({ err, channelId: otherChannelId }, 'Failed to fetch channel'));
-  if (!otherChannel || !otherChannel.isSendable()) {
-    return interaction
-      .reply({
-        content: 'Failed to get the connected channel.',
-        flags: [MessageFlags.Ephemeral],
-      })
-      .catch((err) => logger.error({ err }, 'Failed to reply to interaction'));
+  const otherChannel = await fetchSendableChannel(interaction.client, otherChannelId);
+  if (!otherChannel) {
+    return replyEphemeral(interaction, 'Failed to get the connected channel.');
   }
-  // Send a message to the connected channel
-  const sentMessage = await otherChannel
-    .send({ content: `\`${interaction.user.username}\` wants you to add them!` })
-    .catch((err) => logger.error({ err, channelId: otherChannelId }, 'Failed to send message to channel'));
-  // Send a message to the current channel with the result
-  await interaction
-    .reply({
-      content: sentMessage ? `The other party has been asked to add you!` : 'Failed to send a message to the connected channel.',
-    })
-    .catch((err) => logger.error({ err }, 'Failed to reply to interaction'));
+  const sentMessage = await sendSafely(otherChannel, `\`${interaction.user.username}\` wants you to add them!`);
+  await replySafely(
+    interaction,
+    sentMessage ? `The other party has been asked to add you!` : 'Failed to send a message to the connected channel.',
+  );
 }
 
 /**
@@ -256,16 +158,22 @@ async function isInQueue(channelId: string): Promise<boolean> {
 }
 
 /**
+ * Helper to get all other channel IDs in the queue except the given one
+ * @param excludeChannelId The channel ID to exclude
+ * @returns Array of other channel IDs
+ */
+function getOtherQueueChannels(excludeChannelId?: string): string[] {
+  return excludeChannelId ? Array.from(queue).filter((id) => id !== excludeChannelId) : Array.from(queue);
+}
+
+/**
  * Gets the size of the queue
  * @param currentChannelId The ID of the current channel
  * If provided, the current channel ID will be excluded from the queue size
  * @returns The size of the queue
  */
 async function getQueueSize(currentChannelId?: string): Promise<number> {
-  if (!currentChannelId) return queue.size;
-  // Filter out the current channel ID from the queue
-  const others = Array.from(queue).filter((id) => id !== currentChannelId);
-  return others.length;
+  return getOtherQueueChannels(currentChannelId).length;
 }
 
 /**
@@ -274,7 +182,7 @@ async function getQueueSize(currentChannelId?: string): Promise<number> {
  * @returns A random channel ID from the queue
  */
 async function getRandomChannel(currentChannelId: string): Promise<string | undefined> {
-  const others = Array.from(queue).filter((id) => id !== currentChannelId);
+  const others = getOtherQueueChannels(currentChannelId);
   if (others.length === 0) return undefined;
   return others[Math.floor(Math.random() * others.length)];
 }
@@ -282,7 +190,7 @@ async function getRandomChannel(currentChannelId: string): Promise<string | unde
 /**
  * Removes a channel from the queue
  * @param channelId The ID of the channel to remove from the queue
- * @returns true if the channel was removed, false otherwise
+ * @returns true if channel was removed, false otherwise
  */
 async function removeFromQueue(channelId: string): Promise<boolean> {
   return queue.delete(channelId);
@@ -323,4 +231,52 @@ async function establishConnection(channelId1: string, channelId2: string): Prom
  */
 async function addToQueue(channelId: string): Promise<void> {
   queue.add(channelId);
+}
+
+/**
+ * Helper to reply with an ephemeral error
+ * @param interaction The interaction object
+ * @param content The content of the reply
+ */
+async function replyEphemeral(interaction: ChatInputCommandInteraction, content: string) {
+  return await interaction
+    .reply({ embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription(content)], flags: [MessageFlags.Ephemeral] })
+    .catch((err) => logger.error({ err }, 'Failed to reply to interaction'));
+}
+
+/**
+ * Helper to reply to an interaction safely
+ * @param interaction The interaction object
+ * @param content The content of the reply
+ * @returns The reply promise
+ */
+async function replySafely(interaction: ChatInputCommandInteraction, content: string) {
+  return await interaction
+    .reply({ content, flags: [MessageFlags.Ephemeral] })
+    .catch((err) => logger.error({ err }, 'Failed to reply to interaction'));
+}
+
+/**
+ * Helper to fetch a sendable channel
+ * @param client The client object
+ * @param channelId The ID of the channel to fetch
+ * @returns The sendable channel object or undefined
+ */
+async function fetchSendableChannel(client: Client, channelId: string) {
+  const channel = await client.channels
+    .fetch(channelId)
+    .catch((err: unknown) => logger.error({ err, channelId }, 'Failed to fetch channel'));
+  return channel && channel.isSendable() ? channel : undefined;
+}
+
+/**
+ * Helper to send a message to a channel
+ * @param channel The channel to send the message to
+ * @param content The content of the message
+ * @returns The sent message or undefined
+ */
+async function sendSafely(channel: SendableChannels, content: string) {
+  return await channel
+    .send({ content })
+    .catch((err: unknown) => logger.error({ err, channelId: channel.id }, 'Failed to send message to channel'));
 }
