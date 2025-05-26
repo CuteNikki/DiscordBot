@@ -92,7 +92,7 @@ export default new Button({
             showGuild,
             showUser,
             locale: interaction.locale,
-            page: Math.floor(infractions.length / itemsPerPage) - 1,
+            page: Math.ceil(infractions.length / itemsPerPage) - 1,
           }),
         );
       }
