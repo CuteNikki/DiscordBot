@@ -60,8 +60,9 @@ export async function evaluateCode(interaction: BaseInteraction, code: string, d
 
     // Prepare the output
     const resultString = result !== undefined ? util.inspect(result, { depth }) : '';
-    const truncatedResult = resultString.length > 1900 ? resultString.slice(0, 1900) + '...' : resultString;
-    const truncatedLogs = consoleOutput.length > 1900 ? consoleOutput.slice(0, 1900) + '...' : consoleOutput;
+    const truncatedResult = resultString.length > 1000 ? resultString.slice(0, 1000) + '...' : resultString;
+    const truncatedLogs = consoleOutput.length > 1000 ? consoleOutput.slice(0, 1000) + '...' : consoleOutput;
+    const truncatedCode = code.length > 4000 ? code.slice(0, 4000) + '...' : code;
 
     const endTime = performance.now();
 
@@ -70,9 +71,10 @@ export async function evaluateCode(interaction: BaseInteraction, code: string, d
         new EmbedBuilder()
           .setColor(Colors.Green)
           .setTitle(t('eval.embed.success-title', { lng: interaction.locale }))
-          .setDescription(t('eval.embed.success-message', { lng: interaction.locale }))
+          // .setDescription(t('eval.embed.success-message', { lng: interaction.locale }))
+          .setDescription(`\`\`\`js\n${truncatedCode}\n\`\`\``)
           .addFields(
-            { name: t('eval.embed.input', { lng: interaction.locale }), value: `\`\`\`js\n${code}\n\`\`\`` },
+            // { name: t('eval.embed.input', { lng: interaction.locale }), value: `\`\`\`js\n${truncatedCode}\n\`\`\`` },
             { name: t('eval.embed.output', { lng: interaction.locale }), value: `\`\`\`${truncatedResult || 'No output'}\`\`\`` },
             { name: t('eval.embed.console', { lng: interaction.locale }), value: `\`\`\`${truncatedLogs || 'No console output'}\`\`\`` },
             { name: t('eval.embed.inspect-depth', { lng: interaction.locale }), value: `\`${depth}\`` },
@@ -92,7 +94,8 @@ export async function evaluateCode(interaction: BaseInteraction, code: string, d
         : error instanceof Error
           ? `${error.name}: ${error.message}\n${error.stack ?? ''}`
           : util.inspect(error, { depth: 2 });
-    const truncatedError = errorString.length > 1900 ? `${errorString.slice(0, 1900)}...` : errorString;
+    const truncatedError = errorString.length > 1000 ? `${errorString.slice(0, 1000)}...` : errorString;
+    const truncatedCode = code.length > 4000 ? code.slice(0, 4000) + '...' : code;
 
     const endTime = performance.now();
 
@@ -101,10 +104,10 @@ export async function evaluateCode(interaction: BaseInteraction, code: string, d
         new EmbedBuilder()
           .setColor(Colors.Red)
           .setTitle(t('eval.embed.error-title', { lng: interaction.locale }))
-          .setDescription(t('eval.embed.error-message', { lng: interaction.locale }))
+          // .setDescription(t('eval.embed.error-message', { lng: interaction.locale }))
+          .setDescription(`\`\`\`js\n${truncatedCode}\n\`\`\``)
           .addFields(
-            { name: t('eval.embed.input', { lng: interaction.locale }), value: `\`\`\`js\n${code}\n\`\`\`` },
-            { name: t('eval.embed.output', { lng: interaction.locale }), value: `\`${truncatedError}\`` },
+            { name: t('eval.embed.output', { lng: interaction.locale }), value: `\`${truncatedError || 'No output'}\`` },
             { name: t('eval.embed.execution-time', { lng: interaction.locale }), value: `\`${Math.floor(endTime - startTime)}ms\`` },
             { name: t('eval.embed.inspect-depth', { lng: interaction.locale }), value: `\`${depth}\`` },
           ),
