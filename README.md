@@ -215,6 +215,9 @@ export default new Command({
 
 ### Message Translation
 
+Translation File: `src/locales/{lng}/messages.json`<br/>
+(replace `{lng}` with the language, e.g. `src/locales/en-GB/messages.json`)
+
 ```json
 {
   "repeat": {
@@ -232,6 +235,9 @@ You said: nothing!
 ```
 
 ### Command translation
+
+Translation File: `src/locales/{lng}/commands.json`<br/>
+(replace `{lng}` with the language, e.g. `src/locales/en-GB/commands.json`)
 
 ```json
 {
