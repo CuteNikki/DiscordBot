@@ -1,6 +1,6 @@
 {
   "interactions": {
-    "guild-only": "❌ Dieser Befehl kann nur in einem Server verwendet werden!"
+    "guild-only": "❌ Dies kann nur in einem Server verwendet werden!"
   },
   "infractions": {
     "not-found": "❌ Es wurden keine Verstöße mit der ID `{{infractionId}}` gefunden!",
@@ -9,6 +9,7 @@
     "invalid-subcommand": "❌ Ungültiger Unterbefehl!",
     "invalid-page": "❌ Ungültige Seitenzahl! Es muss eine Zahl zwischen 1 und {{totalPages}} sein.",
     "none": "❌ Keine Verstöße für {{targetUser}} gefunden!",
+    "custom-page-title": "Benutzerdefinierte Seite",
     "custom-page-label": "Gib eine Seitenzahl ein",
     "deleted": "✅ Der Verstoß mit der ID `{{infractionId}}` von {{targetUser}} wurde gelöscht!",
     "delete-failed": "❌ Fehler beim Löschen des Verstoßes mit der ID `{{infractionId}}`!",

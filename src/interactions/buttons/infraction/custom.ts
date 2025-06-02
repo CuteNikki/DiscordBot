@@ -20,7 +20,7 @@ export default new Button({
     await interaction.showModal(
       new ModalBuilder()
         .setCustomId(`infractions-custom_${targetUserId}_${sortOrder}_${sortBy}_${showGuild ? '1' : '0'}_${showUser ? '1' : '0'}`)
-        .setTitle('Custom Page')
+        .setTitle(t('infractions.custom-page-title', { lng: interaction.locale }))
         .addComponents(
           new ActionRowBuilder<TextInputBuilder>().addComponents(
             new TextInputBuilder()
