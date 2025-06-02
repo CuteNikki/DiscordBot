@@ -3,6 +3,8 @@ import { Routes } from 'discord.js';
 
 import { discordRestClient, prisma } from 'database/index';
 
+import { InfractionSortBy, InfractionSortOrder } from 'types/infraction';
+
 export const createInfraction = async (
   infraction: Omit<Infraction, 'id' | 'createdAt' | 'expiresAt' | 'isActive'> & { expiresAt?: Date; isActive?: boolean },
 ) =>
@@ -21,32 +23,61 @@ export const getInfractionById = async (id: string) =>
     where: { id },
   });
 
-export const getInfractionsByUserId = async (userId: string) =>
+export const getInfractionsByUserId = async (
+  userId: string,
+  sortBy: InfractionSortBy = InfractionSortBy.createdAt,
+  sortOrder: InfractionSortOrder = InfractionSortOrder.asc,
+) =>
   prisma.infraction.findMany({
     where: { userId },
+    orderBy: { [InfractionSortBy[sortBy]]: InfractionSortOrder[sortOrder] },
   });
 
-export const getInfractionsByGuildId = async (guildId: string) =>
+export const getInfractionsByGuildId = async (
+  guildId: string,
+  sortBy: InfractionSortBy = InfractionSortBy.createdAt,
+  sortOrder: InfractionSortOrder = InfractionSortOrder.asc,
+) =>
   prisma.infraction.findMany({
     where: { guildId },
+    orderBy: { [InfractionSortBy[sortBy]]: InfractionSortOrder[sortOrder] },
   });
 
-export const getInfractionsByUserIdAndGuildId = async (userId: string, guildId: string) =>
+export const getInfractionsByUserIdAndGuildId = async (
+  userId: string,
+  guildId: string,
+  sortBy: InfractionSortBy = InfractionSortBy.createdAt,
+  sortOrder: InfractionSortOrder = InfractionSortOrder.asc,
+) =>
   prisma.infraction.findMany({
     where: { userId, guildId },
+    orderBy: { [InfractionSortBy[sortBy]]: InfractionSortOrder[sortOrder] },
   });
 
-export const getInfractionsByModeratorIdAndGuildId = async (moderatorId: string, guildId: string) =>
+export const getInfractionsByModeratorIdAndGuildId = async (
+  moderatorId: string,
+  guildId: string,
+  sortBy: InfractionSortBy = InfractionSortBy.createdAt,
+  sortOrder: InfractionSortOrder = InfractionSortOrder.asc,
+) =>
   prisma.infraction.findMany({
     where: { moderatorId, guildId },
+    orderBy: { [InfractionSortBy[sortBy]]: InfractionSortOrder[sortOrder] },
   });
 
-export const getInfractionsByUserIdAndGuildIdPaginated = async (userId: string, guildId: string, skip: number, take: number) =>
+export const getInfractionsByUserIdAndGuildIdPaginated = async (
+  userId: string,
+  guildId: string,
+  skip: number,
+  take: number,
+  sortBy: InfractionSortBy = InfractionSortBy.createdAt,
+  sortOrder: InfractionSortOrder = InfractionSortOrder.asc,
+) =>
   prisma.infraction.findMany({
     where: { userId, guildId },
     skip,
     take,
-    orderBy: { createdAt: 'desc' },
+    orderBy: { [InfractionSortBy[sortBy]]: InfractionSortOrder[sortOrder] },
   });
 
 export const getExpiredInfractions = async () =>

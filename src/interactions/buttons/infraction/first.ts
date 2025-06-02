@@ -7,6 +7,8 @@ import type { ExtendedClient } from 'classes/base/client';
 
 import { getInfractionsByGuildId, getInfractionsByUserId, getInfractionsByUserIdAndGuildId } from 'database/infraction';
 
+import type { InfractionSortBy, InfractionSortOrder } from 'types/infraction';
+
 import { buildInfractionOverview } from 'utility/infraction';
 import { logger } from 'utility/logger';
 
@@ -15,6 +17,10 @@ export default new Button({
   includeCustomId: true,
   async execute(interaction) {
     const targetId = interaction.customId.split('_')[1];
+    const sortOrder = parseInt(interaction.customId.split('_')[2]) as InfractionSortOrder;
+    const sortBy = parseInt(interaction.customId.split('_')[3]) as InfractionSortBy;
+    const showGuild = interaction.customId.split('_')[4] === '1';
+    const showUser = interaction.customId.split('_')[5] === '1';
 
     const client = interaction.client as ExtendedClient;
     const itemsPerPage = 3;
@@ -25,11 +31,11 @@ export default new Button({
       let target: { id: string; displayName: string; imageURL: () => string | undefined } | null = null;
 
       if (guildId) {
-        infractions = await getInfractionsByUserIdAndGuildId(targetId, guildId).catch((err) =>
+        infractions = await getInfractionsByUserIdAndGuildId(targetId, guildId, sortBy, sortOrder).catch((err) =>
           logger.error({ err, guildId }, 'Failed to get infractions'),
         );
       } else {
-        infractions = await getInfractionsByUserId(targetId).catch((err) =>
+        infractions = await getInfractionsByUserId(targetId, sortBy, sortOrder).catch((err) =>
           logger.error({ err, guildId: targetId }, 'Failed to get infractions'),
         );
       }
@@ -40,7 +46,7 @@ export default new Button({
 
       target = {
         id: targetId,
-        displayName: targetUser.username,
+        displayName: targetUser.displayName,
         imageURL: () => targetUser.displayAvatarURL(),
       };
 
@@ -53,7 +59,7 @@ export default new Button({
 
       if (targetId === interaction.guildId) {
         // Handle guild infractions
-        infractions = await getInfractionsByGuildId(targetId).catch((err) =>
+        infractions = await getInfractionsByGuildId(targetId, sortBy, sortOrder).catch((err) =>
           logger.error({ err, guildId: targetId }, 'Failed to get infractions'),
         );
         target = {
@@ -75,12 +81,16 @@ export default new Button({
       }
 
       if (infractions) {
-        return interaction.reply(
+        return interaction.update(
           buildInfractionOverview({
             client,
             infractions,
             itemsPerPage,
             target,
+            sortBy,
+            sortOrder,
+            showGuild,
+            showUser,
             locale: interaction.locale,
             page: 0,
           }),
@@ -101,12 +111,16 @@ export default new Button({
     }
 
     if (infractions) {
-      return interaction.reply(
+      return interaction.update(
         buildInfractionOverview({
           client,
           infractions,
           itemsPerPage,
           target,
+          sortBy,
+          sortOrder,
+          showGuild,
+          showUser,
           locale: interaction.locale,
           page: 0,
         }),

@@ -13,7 +13,14 @@ export default new Modal({
   customId: 'infractions-custom',
   includeCustomId: true,
   async execute(interaction) {
+    await interaction.deferUpdate();
+
     const targetUserId = interaction.customId.split('_')[1];
+    const sortOrder = parseInt(interaction.customId.split('_')[2]);
+    const sortBy = parseInt(interaction.customId.split('_')[3]);
+    const showGuild = interaction.customId.split('_')[4] === '1';
+    const showUser = interaction.customId.split('_')[5] === '1';
+
     const client = interaction.client as ExtendedClient;
 
     // Helper function to fetch infractions and target
@@ -48,7 +55,7 @@ export default new Modal({
     const targetUser = await client.users.fetch(targetUserId).catch(() => null);
 
     if (!targetUser) {
-      await interaction.reply({
+      await interaction.followUp({
         content: 'User not found.',
         flags: [MessageFlags.Ephemeral],
       });
@@ -78,7 +85,7 @@ export default new Modal({
       }
 
       if (!target) {
-        await interaction.reply({
+        await interaction.followUp({
           content: t('infractions.invalid-user', { lng: interaction.locale }),
           flags: [MessageFlags.Ephemeral],
         });
@@ -91,7 +98,7 @@ export default new Modal({
       const totalPages = Math.ceil(infractions.length / itemsPerPage);
 
       if (isNaN(newPageIndex) || newPageIndex < 0 || newPageIndex >= totalPages) {
-        await interaction.reply({
+        await interaction.followUp({
           content: t('infractions.invalid-page', {
             lng: interaction.locale,
             totalPages,
@@ -101,12 +108,16 @@ export default new Modal({
         return;
       }
 
-      return interaction.reply(
+      return interaction.editReply(
         buildInfractionOverview({
           client,
           infractions,
           target,
           itemsPerPage,
+          sortBy,
+          sortOrder,
+          showGuild,
+          showUser,
           locale: interaction.locale,
           page: newPageIndex,
         }),
@@ -117,7 +128,7 @@ export default new Modal({
     const { infractions, target } = await fetchInfractionsAndTarget();
 
     if (!target) {
-      await interaction.reply({
+      await interaction.followUp({
         content: 'User not found.',
         flags: [MessageFlags.Ephemeral],
       });
@@ -130,7 +141,7 @@ export default new Modal({
     const totalPages = Math.ceil(infractions.length / itemsPerPage);
 
     if (isNaN(newPageIndex) || newPageIndex < 0 || newPageIndex >= totalPages) {
-      await interaction.reply({
+      await interaction.followUp({
         content: t('infractions.invalid-page', {
           lng: interaction.locale,
           totalPages,
@@ -140,12 +151,16 @@ export default new Modal({
       return;
     }
 
-    return interaction.reply(
+    return interaction.editReply(
       buildInfractionOverview({
         client,
         infractions,
         target,
         itemsPerPage,
+        sortBy,
+        sortOrder,
+        showGuild,
+        showUser,
         locale: interaction.locale,
         page: newPageIndex,
       }),

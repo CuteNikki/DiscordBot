@@ -22,6 +22,8 @@ import {
   getInfractionsByUserIdAndGuildId,
 } from 'database/infraction';
 
+import { InfractionSortBy, InfractionSortOrder } from 'types/infraction';
+
 import { buildInfractionOverview } from 'utility/infraction';
 import { logger } from 'utility/logger';
 
@@ -135,8 +137,12 @@ export default new Command({
             imageURL: () => interaction.guild.iconURL() ?? undefined,
           },
           itemsPerPage,
+          sortBy: InfractionSortBy.createdAt,
+          sortOrder: InfractionSortOrder.desc,
           locale: interaction.locale,
           page: 0,
+          showGuild: false, // Only showing infractions from the current guild
+          showUser: true, // Infractions can be from different users
         }),
       );
     }
@@ -232,9 +238,13 @@ export default new Command({
           client,
           infractions,
           itemsPerPage,
-          target: { id: targetUser.id, displayName: targetUser.username, imageURL: () => targetUser.displayAvatarURL() },
+          sortBy: InfractionSortBy.createdAt,
+          sortOrder: InfractionSortOrder.desc,
+          target: { id: targetUser.id, displayName: targetUser.displayName, imageURL: () => targetUser.displayAvatarURL() },
           locale: interaction.locale,
           page: 0,
+          showGuild: !interaction.inCachedGuild(), // Show guilds if in DMs
+          showUser: false, // Only show infractions from the target user
         }),
       );
     }

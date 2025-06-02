@@ -1,6 +1,6 @@
 {
   "interactions": {
-    "guild-only": "❌ This command can only be used in a guild!"
+    "guild-only": "❌ This can only be used in a guild!"
   },
   "infractions": {
     "not-found": "❌ No infraction was found with the ID `{{infractionId}}`!",
@@ -9,11 +9,12 @@
     "invalid-subcommand": "❌ Invalid subcommand!",
     "invalid-page": "❌ Invalid page number! It must be a number between 1 and {{totalPages}}.",
     "none": "❌ No infractions found for {{targetUser}}!",
+    "custom-page-title": "Custom Page",
     "custom-page-label": "Enter a page number",
     "deleted": "✅ Infraction with ID `{{infractionId}}` of {{targetUser}} has been deleted!",
     "delete-failed": "❌ Failed to delete infraction with ID `{{infractionId}}`!",
     "embed": {
-      "title": "{{user}} - Overview",
+      "title": "{{user}} - Infractions",
       "total": "Total: {{total}}",
       "bans": "Bans: {{bans}}",
       "temp-bans": "Temp Bans: {{tempBans}}",
@@ -27,7 +28,22 @@
       "expired": "Expired: {{expired}}",
       "date": "Date: {{date}}",
       "user": "User: {{user}}",
-      "guild": "Guild: {{guild}}"
+      "guild": "Guild: {{guild}}",
+      "delete": "Delete"
+    },
+    "sort-by": {
+      "prefix": "Sort by",
+      "created": "Created At",
+      "expires": "Expires At",
+      "type": "Type",
+      "moderator": "Moderator",
+      "user": "User",
+      "guild": "Guild"
+    },
+    "sort-order": {
+      "prefix": "Sort Order",
+      "ascending": "Ascending",
+      "descending": "Descending"
     }
   },
   "eval": {

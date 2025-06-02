@@ -102,7 +102,7 @@ export default new Event({
 
       if (now < expirationTime) {
         const expiredTimestamp = Math.round(expirationTime / 1_000);
-        await interaction
+        return interaction
           .reply({
             embeds: [
               new EmbedBuilder()
@@ -111,9 +111,9 @@ export default new Event({
                   `Please wait, you are on cooldown for \`${selectMenu.options.customId}\`.\nYou can use it again <t:${expiredTimestamp}:R>.`,
                 ),
             ],
+            flags: [MessageFlags.Ephemeral],
           })
           .catch((e) => console.error('Error while replying to interaction', e));
-        return;
       }
     }
 
@@ -127,7 +127,7 @@ export default new Event({
     if (interaction.inCachedGuild() && selectMenu.options.botPermissions) {
       const missingPermissions = interaction.guild.members.me?.permissions.missing(selectMenu.options.botPermissions);
       if (missingPermissions?.length) {
-        await interaction
+        return interaction
           .reply({
             embeds: [
               new EmbedBuilder()
@@ -137,7 +137,6 @@ export default new Event({
             flags: [MessageFlags.Ephemeral],
           })
           .catch((e) => console.error('Error while replying to interaction', e));
-        return;
       }
     }
 
