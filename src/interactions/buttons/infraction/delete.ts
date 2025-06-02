@@ -1,4 +1,5 @@
-import { MessageFlags } from 'discord.js';
+import { Colors, ContainerBuilder, MessageFlags, TextDisplayBuilder, userMention } from 'discord.js';
+import { t } from 'i18next';
 
 import { Button } from 'classes/base/button';
 
@@ -13,26 +14,46 @@ export default new Button({
 
     if (!interaction.inCachedGuild()) {
       await interaction.reply({
-        content: 'You can only delete infractions on a guild.',
-        flags: [MessageFlags.Ephemeral],
+        components: [
+          new ContainerBuilder()
+            .setAccentColor(Colors.Red)
+            .addTextDisplayComponents(new TextDisplayBuilder().setContent(t('interactions.guild-only', { lng: interaction.locale }))),
+        ],
+        flags: [MessageFlags.Ephemeral, MessageFlags.IsComponentsV2],
       });
       return;
     }
 
-    await interaction.deferReply();
+    await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
     const infraction = await getInfractionById(infractionId).catch(() => null);
 
     if (!infraction || infraction.guildId !== interaction.guildId) {
-      await interaction.reply({
-        content: 'This infraction does not exist or is not in this guild.',
+      await interaction.editReply({
+        components: [
+          new ContainerBuilder()
+            .setAccentColor(Colors.Red)
+            .addTextDisplayComponents(
+              new TextDisplayBuilder().setContent(t('infractions.not-found', { lng: interaction.locale, infractionId })),
+            ),
+        ],
+        flags: [MessageFlags.IsComponentsV2],
       });
       return;
     }
 
     await deleteInfraction(infractionId).catch(() => null);
     await interaction.editReply({
-      content: `Infraction with ID \`${infractionId}\` has been deleted.`,
+      components: [
+        new ContainerBuilder()
+          .setAccentColor(Colors.Green)
+          .addTextDisplayComponents(
+            new TextDisplayBuilder().setContent(
+              t('infractions.deleted', { lng: interaction.locale, infractionId, targetUser: userMention(infraction.userId) }),
+            ),
+          ),
+      ],
+      flags: [MessageFlags.IsComponentsV2],
     });
   },
 });
