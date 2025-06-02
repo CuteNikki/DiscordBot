@@ -13,16 +13,16 @@
     "prisma-studio": "prisma studio"
   },
   "devDependencies": {
-    "@eslint/js": "^9.27.0",
+    "@eslint/js": "^9.28.0",
     "@types/bun": "latest",
     "@types/figlet": "^1.7.0",
     "@types/node-cron": "^3.0.11",
     "@types/react": "18.3.20",
-    "eslint": "^9.27.0",
+    "eslint": "^9.28.0",
     "eslint-config-prettier": "^10.1.5",
     "globals": "^16.2.0",
     "prettier": "^3.5.3",
-    "typescript-eslint": "^8.32.1"
+    "typescript-eslint": "^8.33.0"
   },
   "peerDependencies": {
     "typescript": "^5.8.3"
@@ -33,7 +33,7 @@
     "canvacord": "^6.0.2",
     "canvas": "^3.1.0",
     "discord-hybrid-sharding": "^2.2.6",
-    "discord.js": "^15.0.0-dev.1748174699-c1f5bb2fb",
+    "discord.js": "^15.0.0-dev.1748650424-ef2c1bfa7",
     "figlet": "^1.8.1",
     "globby": "^14.1.0",
     "he": "^1.2.0",
