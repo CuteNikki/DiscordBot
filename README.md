@@ -16,8 +16,10 @@ Welcome to the official repository for the v2 of the Discord Bot! This bot is de
     - [How to Create](#how-to-create-custom-emojis)
     - [How to Use](#how-to-use-custom-emojis)
   - [Creating Slash Commands](#creating-a-slash-command)
-  - [Message Translation](#message-translation)
-  - [Command Translation](#command-translation)
+  - [Translation](#translation)
+    - [Supported Languages](#supported-languages-and-completion-status)
+    - [Message Translation](#message-translation)
+    - [Command Translation](#command-translation)
 - [Community](#community)
 - [Contributing](#contributing)
   - [Steps](#steps-to-contribute)
@@ -52,7 +54,7 @@ git clone -b v2 --single-branch https://github.com/CuteNikki/DiscordBot.git
 bun install
 ```
 
-3. Create a `.env` file in the root directory fill in the values.
+3. Create a `.env` file in the root directory and fill in the values.
 
 ```sh
 cp .env.example .env
@@ -78,7 +80,7 @@ bun run start
 
 All bot configuration is done through the [`.env`](.env.example) file located in the root directory and the [`src/utility/keys.ts`](src/utility/keys.ts) file.
 <br/>
-You can change various settings like webhooks, presence and more.
+You can change various settings such as webhooks, presence, and more. For detailed explanations and instructions, please refer to the comments in the files mentioned above.
 
 ## Useful guides:
 
@@ -149,13 +151,21 @@ new ButtonBuilder()
 
 ### Creating Slash Commands
 
-When adding a new command make sure to run `bun register` to register the command!
-<br/>
-Restart your discord to get refresh the commands after the register script has completed.
+To add a new slash command, follow these steps:
 
-Be aware that if `isDevelopment` is set to true then the command will only show up in the development server that was configured in the `.env` file.
+1. After creating a command, register it by running:
 
-The following shows you how to create a simple command that replies with a message (and using translations).
+```bash
+bun register
+```
+
+2. Restart your Discord client to see updated slash commands once the registration script has finished running.
+
+> **Note**: If `isDevelopment` is set to `true` on the command, it will **only** appear in the development server specified in your `.env` file.
+
+#### Example: A Simple Translated Command with Autocomplete.
+
+The example below creates a `/repeat` command that replies with the user's input. It also uses i18next for localization and supports autocomplete.
 
 ```ts
 import { SlashCommandBuilder } from 'discord.js';
@@ -164,22 +174,22 @@ import { t } from 'i18next';
 import { Command } from 'classes/base/command';
 
 export default new Command({
-  // Will only be deployed to dev server and only usable by developer
+  // Only available in the dev server
   isDevelopment: true,
-  // 3 seconds cooldown
+  // 3-second cooldown
   cooldown: 3000,
-  // Permissions the bot needs to execute the command
+  // Bot permissions required to run the command
   // This is just an example, the bot does not need SendMessages to reply to an interaction!!
   botPermissions: ['SendMessages'],
-  // Command name, description and options
-  // Name must be lowercase and can only contain letters, numbers and underscores
+  // Builder for command name, description and options
   builder: new SlashCommandBuilder()
     .setName('repeat')
     .setDescription('Replies with whatever you say!')
     .addStringOption((option) =>
       option
         .setName('text')
-        .setDescription('The text to repeat') /*.setRequired(true)*/
+        .setDescription('The text to repeat')
+        /*.setRequired(true)*/
         .setAutocomplete(true),
     ),
   autocomplete(interaction) {
@@ -195,14 +205,13 @@ export default new Command({
       // Discord's limit for autocomplete choices is 25
       const sliced = filtered.slice(0, 25);
 
+      // Respond with [{ name: "displayed text", value: "value" },...]
       interaction.respond(sliced.map((choice) => ({ name: choice, value: choice })));
     }
   },
   execute(interaction) {
     // Get the text option from the interaction
-    const text = interaction.options.getString('text');
-
-    // This is just an example, you can do whatever you want with the text
+    const text = interaction.options.getString('text', false);
 
     // Reply with the text the user provided
     // If the user didn't provide any text, we can just say "nothing"
@@ -213,10 +222,20 @@ export default new Command({
 });
 ```
 
-### Message Translation
+### Translation
+
+#### Supported Languages and Completion Status
+
+| Language          | Completion |
+| ----------------- | ---------- |
+| English (`en-GB`) | 100%       |
+| English (`en-US`) | 100%       |
+| German (`de`)     | 100%       |
+
+#### Message Translation
 
 Translation File: `src/locales/{lng}/messages.json`<br/>
-(replace `{lng}` with the language, e.g. `src/locales/en-GB/messages.json`)
+(replace `{lng}` with the language code, e.g. `src/locales/en-GB/messages.json`)
 
 ```json
 {
@@ -227,17 +246,17 @@ Translation File: `src/locales/{lng}/messages.json`<br/>
 }
 ```
 
-Example outputs with the inputs of `test` and _no input_ would be:
+**Example Outputs:**
 
-```
-You said: test
-You said: nothing!
-```
+| Input  | Output               |
+| ------ | -------------------- |
+| `test` | `You said: test`     |
+| None   | `You said: nothing!` |
 
-### Command translation
+#### Command Translation
 
 Translation File: `src/locales/{lng}/commands.json`<br/>
-(replace `{lng}` with the language, e.g. `src/locales/en-GB/commands.json`)
+(replace `{lng}` with the language code, e.g. `src/locales/en-GB/commands.json`)
 
 ```json
 {
@@ -256,7 +275,7 @@ Translation File: `src/locales/{lng}/commands.json`<br/>
 
 ## Community
 
-Join our Discord community for support, updates, and more! [Click Here](https://discord.gg/ACR6RBQj4y).
+Join our [Discord community](https://discord.gg/ACR6RBQj4y) for support, feature requests, bug reports, or just hang out with other contributors!
 
 ## Contributing
 
