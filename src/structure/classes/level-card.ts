@@ -1,7 +1,5 @@
-/** @jsx JSX.createElement */
-/** @jsxFrag JSX.Fragment */
-
-import { Builder, Font, FontFactory, JSX, StyleSheet } from 'canvacord';
+import { Builder, JSX as CanvacordJSX, Font, FontFactory, StyleSheet } from 'canvacord';
+import { type JSX } from 'react';
 
 import { statusColors } from 'constants/canvacord';
 
@@ -41,10 +39,10 @@ export class RankCard extends Builder {
       return formatter.format(v);
     };
 
-    return JSX.createElement(
+    return CanvacordJSX.createElement(
       'div',
       { className: 'flex h-full w-full p-6' },
-      JSX.createElement(
+      CanvacordJSX.createElement(
         'div',
         {
           className: StyleSheet.cn(
@@ -60,22 +58,22 @@ export class RankCard extends Builder {
             StyleSheet.css(styles.background)
           )
         },
-        JSX.createElement(
+        CanvacordJSX.createElement(
           'div',
           {
             className: StyleSheet.cn('flex relative', StyleSheet.tw(styles.avatar?.container)),
             style: StyleSheet.css(styles.avatar?.container)
           },
           avatar
-            ? JSX.createElement('img', {
+            ? CanvacordJSX.createElement('img', {
                 alt: 'avatar',
                 src: avatar,
                 className: StyleSheet.cn('h-38 w-38 rounded-full ml-4', StyleSheet.tw(styles.avatar?.image))
               })
-            : JSX.createElement('div', { className: StyleSheet.cn('h-38 w-38 rounded-full ml-4', StyleSheet.tw(styles.avatar?.image)) }),
+            : CanvacordJSX.createElement('div', { className: StyleSheet.cn('h-38 w-38 rounded-full ml-4', StyleSheet.tw(styles.avatar?.image)) }),
           status
             ? status !== 'none'
-              ? JSX.createElement('div', {
+              ? CanvacordJSX.createElement('div', {
                   className: StyleSheet.cn(
                     'absolute h-8 w-8 rounded-full bottom-5 right-0 flex',
                     `bg-[${statusColors[status]}]`,
@@ -83,23 +81,23 @@ export class RankCard extends Builder {
                   ),
                   style: StyleSheet.css(styles.avatar?.status)
                 })
-              : JSX.createElement('div', { className: 'hidden ' })
-            : JSX.createElement('div', { className: 'hidden' })
+              : CanvacordJSX.createElement('div', { className: 'hidden ' })
+            : CanvacordJSX.createElement('div', { className: 'hidden' })
         ),
-        JSX.createElement(
+        CanvacordJSX.createElement(
           'div',
           {
             className: StyleSheet.cn('flex flex-col ml-8', StyleSheet.tw(styles.container)),
             style: StyleSheet.css(styles.container)
           },
-          JSX.createElement(
+          CanvacordJSX.createElement(
             'div',
             {
               className: StyleSheet.cn('flex flex-col', StyleSheet.tw(styles.username?.container)),
               style: StyleSheet.css(styles.username?.container)
             },
             username
-              ? JSX.createElement(
+              ? CanvacordJSX.createElement(
                   'h1',
                   {
                     className: StyleSheet.cn('text-white font-semibold text-3xl mb-0', StyleSheet.tw(styles.username?.name), !handle ? 'mb-2' : ''),
@@ -107,9 +105,9 @@ export class RankCard extends Builder {
                   },
                   username as unknown as JSX.Element
                 )
-              : JSX.createElement('div', { className: 'hidden' }),
+              : CanvacordJSX.createElement('div', { className: 'hidden' }),
             handle
-              ? JSX.createElement(
+              ? CanvacordJSX.createElement(
                   'p',
                   {
                     className: StyleSheet.cn('text-[#808386] font-semibold text-lg mt-0', StyleSheet.tw(styles.username?.handle)),
@@ -117,40 +115,40 @@ export class RankCard extends Builder {
                   },
                   handle as unknown as JSX.Element
                 )
-              : JSX.createElement('div', { className: 'hidden' })
+              : CanvacordJSX.createElement('div', { className: 'hidden' })
           ),
-          JSX.createElement(
+          CanvacordJSX.createElement(
             'div',
             {
               className: StyleSheet.cn('flex relative', StyleSheet.tw(styles.progressbar?.container)),
               style: StyleSheet.css(styles.progressbar?.container)
             },
-            JSX.createElement(
+            CanvacordJSX.createElement(
               'div',
               {
                 className: StyleSheet.cn('bg-[#484b4e] w-160 h-6 rounded-xl flex', StyleSheet.tw(styles.progressbar?.track)),
                 style: StyleSheet.css(styles.progressbar?.track)
               },
-              JSX.createElement('div', {
+              CanvacordJSX.createElement('div', {
                 className: StyleSheet.cn('bg-[#fff] max-w-160 h-6 rounded-xl absolute flex', `w-[${progressWidth}%]`, StyleSheet.tw(styles.progressbar?.thumb)),
                 style: StyleSheet.css(styles.progressbar?.thumb)
               })
             )
           ),
-          JSX.createElement(
+          CanvacordJSX.createElement(
             'div',
             {
               className: StyleSheet.cn('flex', StyleSheet.tw(styles.statistics?.container)),
               style: StyleSheet.css(styles.statistics?.container)
             },
             level != null
-              ? JSX.createElement(
+              ? CanvacordJSX.createElement(
                   'div',
                   {
                     className: StyleSheet.cn('flex items-center text-[#808386] font-medium', StyleSheet.tw(styles.statistics?.level?.container)),
                     style: StyleSheet.css(styles.statistics?.level?.container)
                   },
-                  JSX.createElement(
+                  CanvacordJSX.createElement(
                     'h3',
                     {
                       className: StyleSheet.tw(styles.statistics?.level?.text),
@@ -158,7 +156,7 @@ export class RankCard extends Builder {
                     },
                     (texts.level || 'LEVEL:') as unknown as JSX.Element
                   ),
-                  JSX.createElement(
+                  CanvacordJSX.createElement(
                     'span',
                     {
                       className: StyleSheet.cn('text-white ml-1', StyleSheet.tw(styles.statistics?.level?.value)),
@@ -167,15 +165,15 @@ export class RankCard extends Builder {
                     fixed(level, abbreviate) as unknown as JSX.Element
                   )
                 )
-              : JSX.createElement('div', { className: 'hidden ' }),
+              : CanvacordJSX.createElement('div', { className: 'hidden ' }),
             currentXP != null
-              ? JSX.createElement(
+              ? CanvacordJSX.createElement(
                   'div',
                   {
                     className: StyleSheet.cn('flex items-center text-[#808386] font-medium ml-8', StyleSheet.tw(styles.statistics?.xp?.container)),
                     style: StyleSheet.css(styles.statistics?.xp?.container)
                   },
-                  JSX.createElement(
+                  CanvacordJSX.createElement(
                     'h3',
                     {
                       className: StyleSheet.tw(styles.statistics?.xp?.text),
@@ -183,7 +181,7 @@ export class RankCard extends Builder {
                     },
                     (texts.xp || 'XP:') as unknown as JSX.Element
                   ),
-                  JSX.createElement(
+                  CanvacordJSX.createElement(
                     'span',
                     {
                       className: StyleSheet.cn('text-white ml-1', StyleSheet.tw(styles.statistics?.xp?.value)),
@@ -192,15 +190,15 @@ export class RankCard extends Builder {
                     fixed(currentXP, abbreviate) as unknown as JSX.Element
                   )
                 )
-              : JSX.createElement('div', { className: 'hidden' }),
+              : CanvacordJSX.createElement('div', { className: 'hidden' }),
             rank != null
-              ? JSX.createElement(
+              ? CanvacordJSX.createElement(
                   'div',
                   {
                     className: StyleSheet.cn('flex items-center text-[#808386] font-medium ml-8', StyleSheet.tw(styles.statistics?.xp?.container)),
                     style: StyleSheet.css(styles.statistics?.xp?.container)
                   },
-                  JSX.createElement(
+                  CanvacordJSX.createElement(
                     'h3',
                     {
                       className: StyleSheet.tw(styles.statistics?.xp?.text),
@@ -208,7 +206,7 @@ export class RankCard extends Builder {
                     },
                     (texts.rank || 'RANK:') as unknown as JSX.Element
                   ),
-                  JSX.createElement(
+                  CanvacordJSX.createElement(
                     'span',
                     {
                       className: StyleSheet.cn('text-white ml-1', StyleSheet.tw(styles.statistics?.xp?.value)),
@@ -217,7 +215,7 @@ export class RankCard extends Builder {
                     fixed(rank, abbreviate) as unknown as JSX.Element
                   )
                 )
-              : JSX.createElement('div', { className: 'hidden ' })
+              : CanvacordJSX.createElement('div', { className: 'hidden ' })
           )
         )
       )

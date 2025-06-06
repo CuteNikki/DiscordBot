@@ -8,6 +8,7 @@
   "module": "./src/index.ts",
   "dependencies": {
     "@translate-tools/core": "^2.0.1",
+    "@types/react": "18.3.2",
     "canvacord": "^6.0.2",
     "cron": "^3.5.0",
     "dayjs": "^1.11.13",
