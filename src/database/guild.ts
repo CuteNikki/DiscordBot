@@ -13,6 +13,13 @@ export const getGuild = async (guildId: string, include: Prisma.GuildInclude = {
     include,
   });
 
+export const getGuildOrCreate = async (guildId: string) =>
+  await prisma.guild.upsert({
+    where: { guildId },
+    update: {},
+    create: { guildId },
+  });
+
 export const updateGuild = async (guildId: string, data: Partial<Omit<Guild, 'guildId'>>) =>
   prisma.guild.update({
     where: { guildId },
