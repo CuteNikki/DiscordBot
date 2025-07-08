@@ -149,7 +149,8 @@ export class Connect4 extends Opponent {
       }
 
       if (coords.y === 0) {
-        const components = buttonInteraction.message.components[column > this.max_buttons - 1 ? 1 : 0].components as JSONEncodable<APIButtonComponent>[];
+        const actionRows = buttonInteraction.message.components as unknown as ActionRowBuilder<ButtonBuilder>[];
+        const components = actionRows[column > this.max_buttons - 1 ? 1 : 0].components as JSONEncodable<APIButtonComponent>[];
         components[column % this.max_buttons] = ButtonBuilder.from(components[column % this.max_buttons]).setDisabled(true);
       }
 
