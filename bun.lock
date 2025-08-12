@@ -4,7 +4,7 @@
     "": {
       "name": "discord-bot",
       "dependencies": {
-        "@translate-tools/core": "^2.0.1",
+        "@translate-tools/core": "^2.1.0",
         "@types/react": "18.3.2",
         "canvacord": "^6.0.2",
         "cron": "^3.5.0",
@@ -15,23 +15,22 @@
         "discord.js": "^14.21.0",
         "i18next": "^23.16.8",
         "i18next-fs-backend": "^2.6.0",
-        "mediaplex": "^0.0.9",
-        "mongoose": "^8.16.2",
+        "mongoose": "^8.17.1",
         "ms": "^2.1.3",
         "node-os-utils": "^1.3.7",
-        "pino": "^9.7.0",
+        "pino": "^9.8.0",
         "pino-pretty": "^12.1.0",
       },
       "devDependencies": {
-        "@eslint/compat": "^1.3.1",
-        "@types/bun": "^1.2.18",
+        "@eslint/compat": "^1.3.2",
+        "@types/bun": "^1.2.20",
         "@types/ms": "^0.7.34",
         "@types/node-os-utils": "^1.3.4",
-        "@typescript-eslint/eslint-plugin": "^8.36.0",
-        "@typescript-eslint/parser": "^8.36.0",
-        "eslint": "^9.30.1",
+        "@typescript-eslint/eslint-plugin": "^8.39.1",
+        "@typescript-eslint/parser": "^8.39.1",
+        "eslint": "^9.33.0",
         "prettier": "^3.6.2",
-        "typescript": "^5.8.3",
+        "typescript": "^5.9.2",
       },
     },
   },
@@ -459,28 +458,6 @@
     "luxon": ["luxon@3.5.0", "", {}, "sha512-rh+Zjr6DNfUYR3bPwJEnuwDdqMbxZW7LOQfUN4B54+Cl+0o5zaU9RJ6bcidfDtC1cWCZXQ+nvX8bf6bAji37QQ=="],
 
     "magic-bytes.js": ["magic-bytes.js@1.10.0", "", {}, "sha512-/k20Lg2q8LE5xiaaSkMXk4sfvI+9EGEykFS4b0CHHGWqDYU0bGUFSwchNOMA56D7TCs9GwVTkqe9als1/ns8UQ=="],
-
-    "mediaplex": ["mediaplex@0.0.9", "", { "optionalDependencies": { "mediaplex-android-arm64": "0.0.9", "mediaplex-darwin-arm64": "0.0.9", "mediaplex-darwin-universal": "0.0.9", "mediaplex-darwin-x64": "0.0.9", "mediaplex-freebsd-x64": "0.0.9", "mediaplex-linux-arm-gnueabihf": "0.0.9", "mediaplex-linux-x64-gnu": "0.0.9", "mediaplex-win32-arm64-msvc": "0.0.9", "mediaplex-win32-ia32-msvc": "0.0.9", "mediaplex-win32-x64-msvc": "0.0.9" } }, "sha512-D907iMYWey2RA5T0EtE82RgY3ufFYZ95/5jjty01SOSUOK8lIudjMpkaMwEewk1/tU1XpthR2/ca0U4MTGSIUw=="],
-
-    "mediaplex-android-arm64": ["mediaplex-android-arm64@0.0.9", "", { "os": "android", "cpu": "arm64" }, "sha512-XAQlZwMcMO2Rk91CL4dK9OgsXa97Ahchd4bu3/DkzTxOXZQUmMZX4yEAN4FjjQctxMefBY9oh5ZdewBAffk+Fg=="],
-
-    "mediaplex-darwin-arm64": ["mediaplex-darwin-arm64@0.0.9", "", { "os": "darwin", "cpu": "arm64" }, "sha512-Q79D2jxlJ8vtdj5rlV2HgzSqINSMxZC+wpcHkGHZ/lEATh0fC5OlKdjk3wZRgfEEnY851TBuVvZoRJgJYEnKag=="],
-
-    "mediaplex-darwin-universal": ["mediaplex-darwin-universal@0.0.9", "", { "os": "darwin" }, "sha512-hyptA3BKr8SgDbdop8kTS9xQ4rwnYiiwqG3cHCdHj2qaWRjMus6JF6ep27A9GTDs4rFSsSXKivZZ2IlOHEW9OA=="],
-
-    "mediaplex-darwin-x64": ["mediaplex-darwin-x64@0.0.9", "", { "os": "darwin", "cpu": "x64" }, "sha512-gSznB2pTt0QikrqwvNUYcFfUVkVkZiNijw5aaIZDTZfWvyFQk3HtenSQ82zwk4UKt7IfrChgh/7RLmQqOnym2g=="],
-
-    "mediaplex-freebsd-x64": ["mediaplex-freebsd-x64@0.0.9", "", { "os": "freebsd", "cpu": "x64" }, "sha512-fcCEMLTkyPNb8dYwv+3xKIGBgLKvyw/DX4KDAw0gWy378j8aB+D7HjVupI/XWZODrzkSvIiYabCx0oy4Nyz8dg=="],
-
-    "mediaplex-linux-arm-gnueabihf": ["mediaplex-linux-arm-gnueabihf@0.0.9", "", { "os": "linux", "cpu": "arm" }, "sha512-ZmXcv81pxgM11/R4d5WVu0ss2Pgi2eTKR/uW9cz5wUHI5uAVsI1Wf8Gufv/h24JsvLDv2e31BUmls742WzvHIQ=="],
-
-    "mediaplex-linux-x64-gnu": ["mediaplex-linux-x64-gnu@0.0.9", "", { "os": "linux", "cpu": "x64" }, "sha512-Qfzb5BcxX1N1J5ukns5DTruze/ivJJIbK0OuKCBLMoufctPMPlZKKUUJNrro088Lp0AtDXzbQoV4cVAK5nm4UQ=="],
-
-    "mediaplex-win32-arm64-msvc": ["mediaplex-win32-arm64-msvc@0.0.9", "", { "os": "win32", "cpu": "arm64" }, "sha512-c3FDtvg2DAoe0EWSh0vIhPwfpHLgEmW8uGajtyON5W5/ygAslAuK9Q9CemHfLfUbeko2r0RlGm2gpygn1PAzLQ=="],
-
-    "mediaplex-win32-ia32-msvc": ["mediaplex-win32-ia32-msvc@0.0.9", "", { "os": "win32", "cpu": "ia32" }, "sha512-ScmLR3wB6norxTXrD4JRYs9EhnbhimjXieDfmgy9DJIagxDiWQ3oxfoj8aUg1bdiS62MIiW78jQxtGUb7z8xkw=="],
-
-    "mediaplex-win32-x64-msvc": ["mediaplex-win32-x64-msvc@0.0.9", "", { "os": "win32", "cpu": "x64" }, "sha512-0H6d4AdciOam1k2iBROjePNE5FA1QkQZ2PqmODAO4ElVEBylgWzGheyAKEyZcmdjNrHORJLl2+XpIssAvsKxag=="],
 
     "memory-pager": ["memory-pager@1.5.0", "", {}, "sha512-ZS4Bp4r/Zoeq6+NLJpP+0Zzm0pR8whtGPf1XExKLJBAczGMnSi3It14OiNCStjQjM6NU1okjQGSxgEZN8eBYKg=="],
 
