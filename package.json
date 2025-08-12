@@ -13,22 +13,22 @@
     "prisma-studio": "prisma studio"
   },
   "devDependencies": {
-    "@eslint/js": "^9.31.0",
+    "@eslint/js": "^9.33.0",
     "@types/bun": "latest",
     "@types/figlet": "^1.7.0",
     "@types/node-cron": "^3.0.11",
-    "@types/react": "18.3.20",
-    "eslint": "^9.31.0",
-    "eslint-config-prettier": "^10.1.5",
+    "@types/react": "18.3.23",
+    "eslint": "^9.33.0",
+    "eslint-config-prettier": "^10.1.8",
     "globals": "^16.3.0",
     "prettier": "^3.6.2",
-    "typescript-eslint": "^8.36.0"
+    "typescript-eslint": "^8.39.1"
   },
   "peerDependencies": {
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.2"
   },
   "dependencies": {
-    "@prisma/client": "^6.11.1",
+    "@prisma/client": "^6.13.0",
     "@types/he": "^1.2.3",
     "canvacord": "^6.0.2",
     "canvas": "^3.1.2",
@@ -37,12 +37,12 @@
     "figlet": "^1.8.2",
     "globby": "^14.1.0",
     "he": "^1.2.0",
-    "i18next": "^25.3.2",
+    "i18next": "^25.3.4",
     "i18next-fs-backend": "^2.6.0",
-    "node-cron": "^3.0.3",
-    "pino": "^9.7.0",
-    "pino-pretty": "^13.0.0",
-    "prisma": "^6.11.1"
+    "node-cron": "^4.2.1",
+    "pino": "^9.8.0",
+    "pino-pretty": "^13.1.1",
+    "prisma": "^6.13.0"
   },
   "prettier": {
     "singleQuote": true,
