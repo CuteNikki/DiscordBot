@@ -1,10 +1,4 @@
-import {
-  REST,
-  Routes,
-  type APIApplicationCommandSubcommandGroupOption,
-  type APIApplicationCommandSubcommandOption,
-  type RESTPostAPIChatInputApplicationCommandsJSONBody,
-} from 'discord.js';
+import { REST, Routes, type RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord.js';
 import { performance } from 'perf_hooks';
 
 import type { Command } from 'classes/base/command';
@@ -16,11 +10,7 @@ import { initializeI18N, translateCommand } from 'utility/translation';
 
 await initializeI18N('commands');
 
-const commands: (
-  | RESTPostAPIChatInputApplicationCommandsJSONBody
-  | APIApplicationCommandSubcommandOption
-  | APIApplicationCommandSubcommandGroupOption
-)[] = [];
+const commands: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [];
 const tableData: { file: string; name: string; valid: string }[] = [];
 const startTime = performance.now();
 const filePaths = await getCommandFiles();
@@ -30,7 +20,7 @@ await Promise.all(
     const command = (await import(`${filePath}?update=${Date.now()}`)).default;
 
     if (isValidCommand(command)) {
-      commands.push(command.options.builder.toJSON());
+      commands.push(command.options.builder.toJSON() as RESTPostAPIChatInputApplicationCommandsJSONBody);
       tableData.push({
         file: filePath.split('/').slice(-2).join('/'),
         name: command.options.builder.name,
