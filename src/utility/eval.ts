@@ -86,12 +86,7 @@ export async function evaluateCode(interaction: BaseInteraction, code: string, d
       ],
     });
   } catch (error) {
-    const errorString =
-      typeof error === 'string'
-        ? error
-        : error instanceof Error
-          ? `${error.name}: ${error.message}\n${error.stack ?? ''}`
-          : util.inspect(error, { depth: 2 });
+    const errorString = error instanceof Error ? `${error.name}: ${error.message}\n${error.stack ?? ''}` : String(error);
     const truncatedError = errorString.length > 1000 ? `${errorString.slice(0, 1000)}...` : errorString;
     const truncatedCode = code.length > 4000 ? code.slice(0, 4000) + '...' : code;
 
@@ -126,7 +121,7 @@ export function getEvalModal(locale: string, depth: string | number, code?: stri
         new TextInputBuilder()
           .setCustomId('code')
           .setPlaceholder(t('eval.modal.code-placeholder', { lng: locale }))
-          .setValue(code || ' ')
+          .setValue(code || '')
           .setStyle(TextInputStyle.Paragraph)
           .setRequired(true)
           .setMaxLength(1900),
@@ -135,7 +130,7 @@ export function getEvalModal(locale: string, depth: string | number, code?: stri
         new TextInputBuilder()
           .setCustomId('depth')
           .setPlaceholder('0')
-          .setValue(depth.toString() || ' ')
+          .setValue(depth.toString() || '')
           .setStyle(TextInputStyle.Short)
           .setRequired(false)
           .setMaxLength(2),
