@@ -5,6 +5,7 @@ import {
   LabelBuilder,
   ModalBuilder,
   PrimaryButtonBuilder,
+  SuccessButtonBuilder,
   TextInputBuilder,
   TextInputStyle,
   type BaseInteraction,
@@ -15,7 +16,7 @@ import util from 'node:util';
 import vm from 'node:vm';
 
 export async function evaluateCode(interaction: BaseInteraction, code: string, depth: number) {
-  if (!interaction.isCommand() && !interaction.isModalSubmit()) {
+  if (!interaction.isCommand() && !interaction.isModalSubmit() && !interaction.isButton()) {
     return;
   }
 
@@ -82,7 +83,10 @@ export async function evaluateCode(interaction: BaseInteraction, code: string, d
           ),
       ],
       components: [
-        new ActionRowBuilder().addComponents(new PrimaryButtonBuilder().setCustomId('eval').setLabel('Edit').setEmoji({ name: '✏️' })),
+        new ActionRowBuilder().addComponents(
+          new PrimaryButtonBuilder().setCustomId('eval').setLabel('Edit').setEmoji({ name: '✏️' }),
+          new SuccessButtonBuilder().setCustomId('eval-rerun').setLabel('Rerun').setEmoji({ name: '🔁' }),
+        ),
       ],
     });
   } catch (error) {
@@ -106,7 +110,10 @@ export async function evaluateCode(interaction: BaseInteraction, code: string, d
           ),
       ],
       components: [
-        new ActionRowBuilder().addComponents(new PrimaryButtonBuilder().setCustomId('eval').setLabel('Edit').setEmoji({ name: '✏️' })),
+        new ActionRowBuilder().addComponents(
+          new PrimaryButtonBuilder().setCustomId('eval').setLabel('Edit').setEmoji({ name: '✏️' }),
+          new SuccessButtonBuilder().setCustomId('eval-rerun').setLabel('Rerun').setEmoji({ name: '🔁' }),
+        ),
       ],
     });
   }
