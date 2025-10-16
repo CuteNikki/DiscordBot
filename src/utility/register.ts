@@ -20,17 +20,18 @@ await Promise.all(
     const command = (await import(`${filePath}?update=${Date.now()}`)).default;
 
     if (isValidCommand(command)) {
-      commands.push(command.options.builder.toJSON() as RESTPostAPIChatInputApplicationCommandsJSONBody);
+      const commandData = command.options.builder.toJSON() as RESTPostAPIChatInputApplicationCommandsJSONBody;
+      commands.push(commandData);
       tableData.push({
         file: filePath.split('/').slice(-2).join('/'),
-        name: command.options.builder.name,
+        name: commandData.name,
         valid: '✅',
       });
-      logger.debug(`Loaded command file ${filePath.split('/').slice(-2).join('/')} (${command.options.builder.name})`);
+      logger.debug(`Loaded command file ${filePath.split('/').slice(-2).join('/')} (${commandData.name})`);
     } else {
       tableData.push({
         file: filePath.split('/').slice(-2).join('/'),
-        name: command?.options?.builder?.name || 'undefined',
+        name: 'undefined',
         valid: '❌',
       });
       logger.warn(`Command file ${filePath} is missing data or execute`);
