@@ -11,8 +11,8 @@ export default new Modal({
   async execute(interaction) {
     await interaction.deferReply();
 
-    const code = interaction.fields.getTextInputValue('code');
-    const depth = parseInt(interaction.fields.getTextInputValue('depth') || '0', 10);
+    const code = interaction.components.getTextInputValue('code');
+    const depth = parseInt(interaction.components.getTextInputValue('depth') || '0', 10);
 
     if (isNaN(depth)) {
       await interaction.editReply({

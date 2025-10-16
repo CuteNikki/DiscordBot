@@ -122,7 +122,7 @@ export function getEvalModal(locale: string, depth: string | number, code?: stri
     .setCustomId('eval')
     .setTitle(t('eval.modal.title', { lng: locale }))
     .addLabelComponents(
-      new LabelBuilder().setLabel(t('eval.modal.inspect-depth', { lng: locale })).setTextInputComponent(
+      new LabelBuilder().setLabel(t('eval.modal.code', { lng: locale })).setTextInputComponent(
         new TextInputBuilder()
           .setCustomId('code')
           .setPlaceholder(t('eval.modal.code-placeholder', { lng: locale }))
@@ -131,16 +131,14 @@ export function getEvalModal(locale: string, depth: string | number, code?: stri
           .setRequired(true)
           .setMaxLength(1900),
       ),
-      new LabelBuilder()
-        .setLabel(t('eval.modal.inspect-depth', { lng: locale }))
-        .setTextInputComponent(
-          new TextInputBuilder()
-            .setCustomId('depth')
-            .setPlaceholder('0')
-            .setValue(depth.toString() || ' ')
-            .setStyle(TextInputStyle.Short)
-            .setRequired(false)
-            .setMaxLength(2),
-        ),
+      new LabelBuilder().setLabel(t('eval.modal.inspect-depth', { lng: locale })).setTextInputComponent(
+        new TextInputBuilder()
+          .setCustomId('depth')
+          .setPlaceholder('0')
+          .setValue(depth.toString() || ' ')
+          .setStyle(TextInputStyle.Short)
+          .setRequired(false)
+          .setMaxLength(2),
+      ),
     );
 }

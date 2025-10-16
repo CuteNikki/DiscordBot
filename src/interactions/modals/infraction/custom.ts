@@ -62,7 +62,7 @@ export default new Modal({
       return;
     }
 
-    const page = interaction.fields.getTextInputValue('page');
+    const page = interaction.components.getTextInputValue('page');
     const newPageIndex = parseInt(page, 10) - 1;
 
     // If interaction is in a cached guild, fetch guild-specific infractions
