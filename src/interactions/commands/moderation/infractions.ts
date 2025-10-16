@@ -1,12 +1,12 @@
 import {
   ApplicationIntegrationType,
+  ChatInputCommandBuilder,
   ChatInputCommandInteraction,
   Colors,
   EmbedBuilder,
   InteractionContextType,
   MessageFlags,
   PermissionFlagsBits,
-  SlashCommandBuilder,
   userMention,
 } from 'discord.js';
 import { t } from 'i18next';
@@ -28,27 +28,27 @@ import { buildInfractionOverview } from 'utility/infraction';
 import { logger } from 'utility/logger';
 
 export default new Command({
-  builder: new SlashCommandBuilder()
+  builder: new ChatInputCommandBuilder()
     .setContexts(InteractionContextType.Guild, InteractionContextType.PrivateChannel, InteractionContextType.BotDM)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
     .setName('infractions')
     .setDescription('Manage infractions in the guild')
-    .addSubcommand((subcommand) =>
+    .addSubcommands((subcommand) =>
       subcommand
         .setName('history')
         .setDescription("View a user's infractions")
-        .addUserOption((option) => option.setName('user').setDescription('The user to view infractions for').setRequired(false)),
+        .addUserOptions((option) => option.setName('user').setDescription('The user to view infractions for').setRequired(false)),
     )
-    .addSubcommand((subcommand) =>
+    .addSubcommands((subcommand) =>
       subcommand
         .setName('delete')
         .setDescription("Delete a user's infraction")
-        .addStringOption((option) =>
+        .addStringOptions((option) =>
           option.setName('id').setDescription('The ID of the infraction to delete').setAutocomplete(true).setRequired(true),
         ),
     )
-    .addSubcommand((cmd) => cmd.setName('all').setDescription('View all infractions in the guild')),
+    .addSubcommands((cmd) => cmd.setName('all').setDescription('View all infractions in the guild')),
   async autocomplete(interaction) {
     const focused = interaction.options.getFocused();
 

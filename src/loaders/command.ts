@@ -18,13 +18,14 @@ export async function loadCommands(client: ExtendedClient) {
       const command = (await import(`${filePath}?update=${Date.now()}`)).default;
 
       if (isValidCommand(command)) {
-        client.commands.set(command.options.builder.name, command);
+        const commandData = command.options.builder.toJSON();
+        client.commands.set(commandData.name, command);
         tableData.push({
           file: filePath.split('/').slice(-2).join('/'),
-          name: command.options.builder.name,
+          name: commandData.name,
           valid: '✅',
         });
-        logger.debug(`Loaded command file ${filePath.split('/').slice(-2).join('/')} (${command.options.builder.name})`);
+        logger.debug(`Loaded command file ${filePath.split('/').slice(-2).join('/')} (${commandData.name})`);
       } else {
         tableData.push({
           file: filePath.split('/').slice(-2).join('/'),

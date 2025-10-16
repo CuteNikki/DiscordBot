@@ -11,7 +11,7 @@
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Builder, Font, FontFactory, JSX } from 'canvacord';
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import { ActionRowBuilder, DangerButtonBuilder, PrimaryButtonBuilder, SecondaryButtonBuilder, SuccessButtonBuilder } from 'discord.js';
 
 import type { ExtendedClient } from 'classes/base/client';
 
@@ -80,22 +80,25 @@ export class TriviaBuilder extends Builder<TriviaProps> {
   }
 
   public getComponents(result?: boolean, timedOut?: boolean) {
-    const row = new ActionRowBuilder<ButtonBuilder>();
+    const row = new ActionRowBuilder();
 
     const answers = this.options.get('shuffledAnswers');
 
     answers.map((answer, index) => {
-      const button = new ButtonBuilder()
+      const button = result
+        ? answer === this.options.get('correctAnswer')
+          ? new SuccessButtonBuilder()
+          : new DangerButtonBuilder()
+        : new SecondaryButtonBuilder();
+
+      button
         .setCustomId(`trivia-answer_${index}`)
         .setEmoji({ id: this.options.get('answerLabels')[index].emoji })
-        .setStyle(
-          result ? (answer === this.options.get('correctAnswer') ? ButtonStyle.Success : ButtonStyle.Danger) : ButtonStyle.Secondary,
-        )
         .setDisabled(result ? true : false);
+
       row.addComponents(button);
     });
-    if (result && !timedOut)
-      row.addComponents(new ButtonBuilder().setCustomId('trivia-next').setEmoji({ name: '➡️' }).setStyle(ButtonStyle.Primary));
+    if (result && !timedOut) row.addComponents(new PrimaryButtonBuilder().setCustomId('trivia-next').setEmoji({ name: '➡️' }));
 
     return row;
   }

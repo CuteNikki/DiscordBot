@@ -1,4 +1,4 @@
-import { MessageFlags, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
+import { ChatInputCommandBuilder, MessageFlags, PermissionFlagsBits } from 'discord.js';
 
 import type { ExtendedClient } from 'classes/base/client';
 import { Command } from 'classes/base/command';
@@ -9,11 +9,11 @@ import { reloadableTypes, typeLabelMap, type ReloadType } from 'types/reload';
 
 export default new Command({
   isDevelopment: true,
-  builder: new SlashCommandBuilder()
+  builder: new ChatInputCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .setName('reload')
     .setDescription('Reloads interactions and event handlers')
-    .addStringOption((option) =>
+    .addStringOptions((option) =>
       option
         .setName('type')
         .setDescription('Type of file to reload')

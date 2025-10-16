@@ -1,6 +1,5 @@
 import {
   ActionRowBuilder,
-  ButtonBuilder,
   ButtonInteraction,
   Colors,
   CommandInteraction,
@@ -8,6 +7,7 @@ import {
   EmbedBuilder,
   Message,
   MessageFlags,
+  type ButtonBuilder,
 } from 'discord.js';
 
 import type { PaginationButtonProps, PaginationButtons, PaginationProps } from 'types/pagination';
@@ -157,7 +157,7 @@ export class Pagination {
    * @returns The button props if found
    */
   private isValidButton(interaction: ButtonInteraction): PaginationButtonProps | undefined {
-    return this.getButtonProps().find((button) => 'custom_id' in button.data.data && button.data.data.custom_id === interaction.customId);
+    return this.getButtonProps().find((button) => String(button.data.toJSON().id) === interaction.customId);
   }
 
   /**
@@ -172,9 +172,9 @@ export class Pagination {
    * Generate the action rows with all updated buttons
    * @returns The generated components
    */
-  private getComponents(disabled?: boolean): ActionRowBuilder<ButtonBuilder>[] {
+  private getComponents(disabled?: boolean): ActionRowBuilder[] {
     const buttonPropsList = this.getButtonProps();
-    const buttonRows: ActionRowBuilder<ButtonBuilder>[] = [];
+    const buttonRows: ActionRowBuilder[] = [];
     let row: ButtonBuilder[] = [];
 
     buttonPropsList.forEach((buttonProps) => {
@@ -184,14 +184,14 @@ export class Pagination {
 
       // If the row has 5 buttons, push it into the buttonRows and reset row
       if (row.length === 5) {
-        buttonRows.push(new ActionRowBuilder<ButtonBuilder>().addComponents(...row));
+        buttonRows.push(new ActionRowBuilder().addComponents(...row));
         row = []; // Reset the row
       }
     });
 
     // Push any remaining buttons into the final row if they exist
     if (row.length > 0) {
-      buttonRows.push(new ActionRowBuilder<ButtonBuilder>().addComponents(...row));
+      buttonRows.push(new ActionRowBuilder().addComponents(...row));
     }
 
     return buttonRows;

@@ -1,4 +1,4 @@
-import { PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
+import { ChatInputCommandBuilder, PermissionFlagsBits } from 'discord.js';
 
 import { Command } from 'classes/base/command';
 
@@ -6,12 +6,12 @@ import { evaluateCode, getEvalModal } from 'utility/eval';
 
 export default new Command({
   isDevelopment: true,
-  builder: new SlashCommandBuilder()
+  builder: new ChatInputCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .setName('eval')
     .setDescription('Evaluate JavaScript code')
-    .addStringOption((option) => option.setName('code').setDescription('Code to evaluate').setMaxLength(1900).setRequired(false))
-    .addNumberOption((option) =>
+    .addStringOptions((option) => option.setName('code').setDescription('Code to evaluate').setMaxLength(1900).setRequired(false))
+    .addNumberOptions((option) =>
       option.setName('depth').setDescription('Depth of inspection').setMinValue(0).setMaxValue(99).setRequired(false),
     ),
   async execute(interaction) {

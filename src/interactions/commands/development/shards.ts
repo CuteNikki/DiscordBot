@@ -1,12 +1,11 @@
 import {
   ApplicationIntegrationType,
-  ButtonBuilder,
-  ButtonStyle,
+  ChatInputCommandBuilder,
   Colors,
   EmbedBuilder,
   InteractionContextType,
   MessageFlags,
-  SlashCommandBuilder,
+  SecondaryButtonBuilder,
   time,
   TimestampStyles,
 } from 'discord.js';
@@ -16,7 +15,7 @@ import { Command } from 'classes/base/command';
 import { Pagination } from 'classes/pagination';
 
 export default new Command({
-  builder: new SlashCommandBuilder()
+  builder: new ChatInputCommandBuilder()
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel)
     .setName('shards')
@@ -95,37 +94,27 @@ export default new Command({
       buttons: [
         // First page button
         () => ({
-          data: new ButtonBuilder()
-            .setCustomId('pagination_first')
-            .setStyle(ButtonStyle.Secondary)
-            .setEmoji({ id: extendedClient.customEmojis.backwards.id }),
+          data: new SecondaryButtonBuilder().setCustomId('pagination_first').setEmoji({ id: extendedClient.customEmojis.backwards.id }),
           disableOn: (index) => index === 0,
           onClick: () => ({ newIndex: 0 }),
         }),
         // Previous page button
         () => ({
-          data: new ButtonBuilder()
+          data: new SecondaryButtonBuilder()
             .setCustomId('pagination_previous')
-            .setStyle(ButtonStyle.Secondary)
             .setEmoji({ id: extendedClient.customEmojis.backwardstep.id }),
           disableOn: (index) => index === 0,
           onClick: (index) => ({ newIndex: index > 0 ? index - 1 : index }),
         }),
         // Next page button
         () => ({
-          data: new ButtonBuilder()
-            .setCustomId('pagination_next')
-            .setStyle(ButtonStyle.Secondary)
-            .setEmoji({ id: extendedClient.customEmojis.forwardstep.id }),
+          data: new SecondaryButtonBuilder().setCustomId('pagination_next').setEmoji({ id: extendedClient.customEmojis.forwardstep.id }),
           disableOn: (index, totalPages) => index === totalPages - 1,
           onClick: (index, totalPages) => ({ newIndex: index < totalPages - 1 ? index + 1 : index }),
         }),
         // Last page button
         () => ({
-          data: new ButtonBuilder()
-            .setCustomId('pagination_last')
-            .setStyle(ButtonStyle.Secondary)
-            .setEmoji({ id: extendedClient.customEmojis.forwards.id }),
+          data: new SecondaryButtonBuilder().setCustomId('pagination_last').setEmoji({ id: extendedClient.customEmojis.forwards.id }),
           disableOn: (index, totalPages) => index === totalPages - 1,
           onClick: (_index, totalPages) => ({ newIndex: totalPages - 1 }),
         }),

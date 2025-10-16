@@ -1,10 +1,10 @@
 import {
   ActionRowBuilder,
-  ButtonBuilder,
-  ButtonStyle,
   Colors,
   EmbedBuilder,
+  LabelBuilder,
   ModalBuilder,
+  PrimaryButtonBuilder,
   TextInputBuilder,
   TextInputStyle,
   type BaseInteraction,
@@ -82,9 +82,7 @@ export async function evaluateCode(interaction: BaseInteraction, code: string, d
           ),
       ],
       components: [
-        new ActionRowBuilder<ButtonBuilder>().addComponents(
-          new ButtonBuilder().setCustomId('eval').setLabel('Edit').setStyle(ButtonStyle.Primary).setEmoji({ name: '✏️' }),
-        ),
+        new ActionRowBuilder().addComponents(new PrimaryButtonBuilder().setCustomId('eval').setLabel('Edit').setEmoji({ name: '✏️' })),
       ],
     });
   } catch (error) {
@@ -113,9 +111,7 @@ export async function evaluateCode(interaction: BaseInteraction, code: string, d
           ),
       ],
       components: [
-        new ActionRowBuilder<ButtonBuilder>().addComponents(
-          new ButtonBuilder().setCustomId('eval').setLabel('Edit').setStyle(ButtonStyle.Primary).setEmoji({ name: '✏️' }),
-        ),
+        new ActionRowBuilder().addComponents(new PrimaryButtonBuilder().setCustomId('eval').setLabel('Edit').setEmoji({ name: '✏️' })),
       ],
     });
   }
@@ -125,26 +121,26 @@ export function getEvalModal(locale: string, depth: string | number, code?: stri
   return new ModalBuilder()
     .setCustomId('eval')
     .setTitle(t('eval.modal.title', { lng: locale }))
-    .setComponents(
-      new ActionRowBuilder<TextInputBuilder>().addComponents(
+    .addLabelComponents(
+      new LabelBuilder().setLabel(t('eval.modal.inspect-depth', { lng: locale })).setTextInputComponent(
         new TextInputBuilder()
           .setCustomId('code')
-          .setLabel(t('eval.modal.code', { lng: locale }))
           .setPlaceholder(t('eval.modal.code-placeholder', { lng: locale }))
           .setValue(code || '')
           .setStyle(TextInputStyle.Paragraph)
           .setRequired(true)
           .setMaxLength(1900),
       ),
-      new ActionRowBuilder<TextInputBuilder>().addComponents(
-        new TextInputBuilder()
-          .setCustomId('depth')
-          .setLabel(t('eval.modal.inspect-depth', { lng: locale }))
-          .setPlaceholder('0')
-          .setValue(depth.toString())
-          .setStyle(TextInputStyle.Short)
-          .setRequired(false)
-          .setMaxLength(2),
-      ),
+      new LabelBuilder()
+        .setLabel(t('eval.modal.inspect-depth', { lng: locale }))
+        .setTextInputComponent(
+          new TextInputBuilder()
+            .setCustomId('depth')
+            .setPlaceholder('0')
+            .setValue(depth.toString())
+            .setStyle(TextInputStyle.Short)
+            .setRequired(false)
+            .setMaxLength(2),
+        ),
     );
 }

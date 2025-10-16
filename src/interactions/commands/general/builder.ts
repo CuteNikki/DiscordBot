@@ -1,11 +1,11 @@
 import {
   ApplicationIntegrationType,
   ChannelType,
+  ChatInputCommandBuilder,
   ChatInputCommandInteraction,
   Client,
   InteractionContextType,
   Message,
-  SlashCommandBuilder,
 } from 'discord.js';
 
 import { deleteMessageBuilder, getMessageBuilder, getMessageBuilders, updateOrCreateMessageBuilder } from 'database/message-builder';
@@ -86,17 +86,17 @@ const setupBuilderListeners = (builderInstance: MessageBuilder, interaction: Cha
 };
 
 export default new Command({
-  builder: new SlashCommandBuilder()
+  builder: new ChatInputCommandBuilder()
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel)
     .setName('builder')
     .setDescription('Create a custom message')
-    .addSubcommand((cmd) => cmd.setName('list').setDescription('List all custom messages'))
-    .addSubcommand((cmd) =>
+    .addSubcommands((cmd) => cmd.setName('list').setDescription('List all custom messages'))
+    .addSubcommands((cmd) =>
       cmd
         .setName('create')
         .setDescription('Create a custom message')
-        .addChannelOption((option) =>
+        .addChannelOptions((option) =>
           option
             .setName('channel')
             .setDescription('The channel to send the message in')
@@ -104,19 +104,19 @@ export default new Command({
             .addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement),
         ),
     )
-    .addSubcommand((cmd) =>
+    .addSubcommands((cmd) =>
       cmd
         .setName('edit')
         .setDescription('Edit a custom message')
-        .addStringOption((option) =>
+        .addStringOptions((option) =>
           option.setName('id').setDescription('The ID of the custom message').setRequired(true).setAutocomplete(true),
         ),
     )
-    .addSubcommand((cmd) =>
+    .addSubcommands((cmd) =>
       cmd
         .setName('delete')
         .setDescription('Delete a custom message')
-        .addStringOption((option) =>
+        .addStringOptions((option) =>
           option.setName('id').setDescription('The ID of the custom message').setRequired(true).setAutocomplete(true),
         ),
     ),

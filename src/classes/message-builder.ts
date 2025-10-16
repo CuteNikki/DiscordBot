@@ -1,14 +1,17 @@
 import {
   ActionRowBuilder,
-  ButtonBuilder,
   ButtonInteraction,
-  ButtonStyle,
   ComponentType,
+  DangerButtonBuilder,
   EmbedBuilder,
   InteractionCollector,
+  LabelBuilder,
   Message,
   MessageFlags,
   ModalBuilder,
+  PrimaryButtonBuilder,
+  SecondaryButtonBuilder,
+  SuccessButtonBuilder,
   TextInputBuilder,
   TextInputStyle,
   type CommandInteraction,
@@ -223,15 +226,15 @@ export class MessageBuilder extends events {
         new ModalBuilder()
           .setCustomId(MessageBuilderCustomIds.ContentModal)
           .setTitle('Content')
-          .addComponents(
-            new ActionRowBuilder<TextInputBuilder>().addComponents(
+          .addLabelComponents(
+            new LabelBuilder().setLabel('Content').setTextInputComponent(
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.ContentInput)
-                .setLabel('Content')
                 .setPlaceholder('Enter the content you want to set.')
                 .setValue(this.message.content ?? '')
                 .setStyle(TextInputStyle.Paragraph)
-                .setRequired(false),
+                .setRequired(false)
+                .setMaxLength(2000),
             ),
           ),
       )
@@ -247,7 +250,7 @@ export class MessageBuilder extends events {
 
     await modalInteraction.deferUpdate().catch((error) => logger.debug({ err: error }, 'Failed to defer update'));
 
-    const content = modalInteraction.fields.getTextInputValue(MessageBuilderCustomIds.ContentInput);
+    const content = modalInteraction.components.getTextInputValue(MessageBuilderCustomIds.ContentInput);
 
     this.message.content = content;
     await this.updateMessage(message);
@@ -264,20 +267,18 @@ export class MessageBuilder extends events {
         new ModalBuilder()
           .setCustomId(MessageBuilderCustomIds.TitleModal)
           .setTitle('Title')
-          .addComponents(
-            new ActionRowBuilder<TextInputBuilder>().addComponents(
+          .addLabelComponents(
+            new LabelBuilder().setLabel('Title').setTextInputComponent(
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.TitleInput)
-                .setLabel('Title')
                 .setPlaceholder('Enter the title you want to set.')
                 .setValue(this.message.embed?.title ?? '')
                 .setStyle(TextInputStyle.Short)
                 .setRequired(false),
             ),
-            new ActionRowBuilder<TextInputBuilder>().addComponents(
+            new LabelBuilder().setLabel('URL').setTextInputComponent(
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.TitleUrlInput)
-                .setLabel('URL')
                 .setPlaceholder('Enter the URL you want to set.')
                 .setValue(this.message.embed?.url ?? '')
                 .setStyle(TextInputStyle.Short)
@@ -297,8 +298,8 @@ export class MessageBuilder extends events {
 
     await modalInteraction.deferUpdate().catch((error) => logger.debug({ err: error }, 'Failed to defer update'));
 
-    const title = modalInteraction.fields.getTextInputValue(MessageBuilderCustomIds.TitleInput);
-    const url = modalInteraction.fields.getTextInputValue(MessageBuilderCustomIds.TitleUrlInput);
+    const title = modalInteraction.components.getTextInputValue(MessageBuilderCustomIds.TitleInput);
+    const url = modalInteraction.components.getTextInputValue(MessageBuilderCustomIds.TitleUrlInput);
 
     if (!this.message.embed) this.message.embed = {};
     this.message.embed.title = title;
@@ -317,15 +318,15 @@ export class MessageBuilder extends events {
         new ModalBuilder()
           .setCustomId(MessageBuilderCustomIds.ColorModal)
           .setTitle('Color')
-          .addComponents(
-            new ActionRowBuilder<TextInputBuilder>().addComponents(
+          .addLabelComponents(
+            new LabelBuilder().setLabel('Color').setTextInputComponent(
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.ColorInput)
-                .setLabel('Color')
-                .setPlaceholder('Enter the color you want to set.')
+                .setPlaceholder('Enter the color you want to set. (Hex code, e.g. #FF5733)')
                 .setValue(this.message.embed?.color ? '#' + this.message.embed.color.toString(16) : '')
                 .setStyle(TextInputStyle.Short)
-                .setRequired(false),
+                .setRequired(false)
+                .setMaxLength(7),
             ),
           ),
       )
@@ -339,7 +340,7 @@ export class MessageBuilder extends events {
       .catch((error) => logger.debug({ err: error }, 'Failed to await modal submission'));
     if (!modalInteraction) return;
 
-    const color = modalInteraction.fields.getTextInputValue(MessageBuilderCustomIds.ColorInput);
+    const color = modalInteraction.components.getTextInputValue(MessageBuilderCustomIds.ColorInput);
 
     const isValidHex = /^#([0-9A-F]{6})$/i.test(color);
 
@@ -373,11 +374,10 @@ export class MessageBuilder extends events {
         new ModalBuilder()
           .setCustomId(MessageBuilderCustomIds.DescriptionModal)
           .setTitle('Description')
-          .addComponents(
-            new ActionRowBuilder<TextInputBuilder>().addComponents(
+          .addLabelComponents(
+            new LabelBuilder().setLabel('Description').setTextInputComponent(
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.DescriptionInput)
-                .setLabel('Description')
                 .setPlaceholder('Enter the description you want to set.')
                 .setValue(this.message.embed?.description ?? '')
                 .setStyle(TextInputStyle.Paragraph)
@@ -397,7 +397,7 @@ export class MessageBuilder extends events {
 
     await modalInteraction.deferUpdate().catch((error) => logger.debug({ err: error }, 'Failed to defer update'));
 
-    const description = modalInteraction.fields.getTextInputValue(MessageBuilderCustomIds.DescriptionInput);
+    const description = modalInteraction.components.getTextInputValue(MessageBuilderCustomIds.DescriptionInput);
 
     if (!this.message.embed) this.message.embed = {};
     this.message.embed.description = description;
@@ -420,31 +420,34 @@ export class MessageBuilder extends events {
         new ModalBuilder()
           .setCustomId(MessageBuilderCustomIds.FieldAddModal)
           .setTitle('Add Field')
-          .addComponents(
-            new ActionRowBuilder<TextInputBuilder>().addComponents(
-              new TextInputBuilder()
-                .setCustomId(MessageBuilderCustomIds.FieldAddNameInput)
-                .setLabel('Name')
-                .setPlaceholder('Enter the name of the field you want to add.')
-                .setStyle(TextInputStyle.Short)
-                .setRequired(false),
-            ),
-            new ActionRowBuilder<TextInputBuilder>().addComponents(
-              new TextInputBuilder()
-                .setCustomId(MessageBuilderCustomIds.FieldAddValueInput)
-                .setLabel('Value')
-                .setPlaceholder('Enter the value of the field you want to add.')
-                .setStyle(TextInputStyle.Paragraph)
-                .setRequired(false),
-            ),
-            new ActionRowBuilder<TextInputBuilder>().addComponents(
-              new TextInputBuilder()
-                .setCustomId(MessageBuilderCustomIds.FieldAddInlineInput)
-                .setLabel('Inline')
-                .setPlaceholder('true/false - Enter whether the field should be inline.')
-                .setStyle(TextInputStyle.Short)
-                .setRequired(false),
-            ),
+          .addLabelComponents(
+            new LabelBuilder()
+              .setLabel('Name')
+              .setTextInputComponent(
+                new TextInputBuilder()
+                  .setCustomId(MessageBuilderCustomIds.FieldAddNameInput)
+                  .setPlaceholder('Enter the name of the field you want to add.')
+                  .setStyle(TextInputStyle.Short)
+                  .setRequired(false),
+              ),
+            new LabelBuilder()
+              .setLabel('Value')
+              .setTextInputComponent(
+                new TextInputBuilder()
+                  .setCustomId(MessageBuilderCustomIds.FieldAddValueInput)
+                  .setPlaceholder('Enter the value of the field you want to add.')
+                  .setStyle(TextInputStyle.Paragraph)
+                  .setRequired(false),
+              ),
+            new LabelBuilder()
+              .setLabel('Inline')
+              .setTextInputComponent(
+                new TextInputBuilder()
+                  .setCustomId(MessageBuilderCustomIds.FieldAddInlineInput)
+                  .setPlaceholder('true/false - Enter whether the field should be inline.')
+                  .setStyle(TextInputStyle.Short)
+                  .setRequired(false),
+              ),
           ),
       )
       .catch((error) => logger.debug({ err: error }, 'Failed to show modal'));
@@ -457,9 +460,9 @@ export class MessageBuilder extends events {
       .catch((error) => logger.debug({ err: error }, 'Failed to await modal submission'));
     if (!modalInteraction) return;
 
-    const name = modalInteraction.fields.getTextInputValue(MessageBuilderCustomIds.FieldAddNameInput);
-    const value = modalInteraction.fields.getTextInputValue(MessageBuilderCustomIds.FieldAddValueInput);
-    const inline = modalInteraction.fields.getTextInputValue(MessageBuilderCustomIds.FieldAddInlineInput);
+    const name = modalInteraction.components.getTextInputValue(MessageBuilderCustomIds.FieldAddNameInput);
+    const value = modalInteraction.components.getTextInputValue(MessageBuilderCustomIds.FieldAddValueInput);
+    const inline = modalInteraction.components.getTextInputValue(MessageBuilderCustomIds.FieldAddInlineInput);
 
     if (!name || !value) {
       await modalInteraction.reply({ content: 'Please provide a name and value for the field.', flags: [MessageFlags.Ephemeral] });
@@ -495,17 +498,16 @@ export class MessageBuilder extends events {
         new ModalBuilder()
           .setCustomId(MessageBuilderCustomIds.FieldRemoveModal)
           .setTitle('Remove Field')
-          .addComponents(
-            new ActionRowBuilder<TextInputBuilder>().addComponents(
-              new TextInputBuilder()
-                .setCustomId(MessageBuilderCustomIds.FieldRemoveIndexInput)
-                .setLabel('Index')
-                .setPlaceholder(
-                  `Available indexes: ${this.message.embed.fields.map((field, index) => `${index + 1}. ${field.name}`).join(', ')}`,
-                )
-                .setStyle(TextInputStyle.Short)
-                .setRequired(false),
-            ),
+          .addLabelComponents(
+            new LabelBuilder()
+              .setLabel('Index')
+              .setTextInputComponent(
+                new TextInputBuilder()
+                  .setCustomId(MessageBuilderCustomIds.FieldRemoveIndexInput)
+                  .setPlaceholder('Enter the index of the field you want to remove.')
+                  .setStyle(TextInputStyle.Short)
+                  .setRequired(true),
+              ),
           ),
       )
       .catch((error) => logger.debug({ err: error }, 'Failed to show modal'));
@@ -518,7 +520,7 @@ export class MessageBuilder extends events {
       .catch((error) => logger.debug({ err: error }, 'Failed to await modal submission'));
     if (!modalInteraction) return;
 
-    const index = modalInteraction.fields.getTextInputValue(MessageBuilderCustomIds.FieldRemoveIndexInput);
+    const index = modalInteraction.components.getTextInputValue(MessageBuilderCustomIds.FieldRemoveIndexInput);
 
     const fieldIndex = parseInt(index);
     if (isNaN(fieldIndex) || fieldIndex < 0 || fieldIndex > this.message.embed.fields.length) {
@@ -544,29 +546,26 @@ export class MessageBuilder extends events {
         new ModalBuilder()
           .setCustomId(MessageBuilderCustomIds.AuthorModal)
           .setTitle('Author')
-          .addComponents(
-            new ActionRowBuilder<TextInputBuilder>().addComponents(
+          .addLabelComponents(
+            new LabelBuilder().setLabel('Name').setTextInputComponent(
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.AuthorNameInput)
-                .setLabel('Name')
                 .setPlaceholder('Enter the name you want to set.')
                 .setValue(this.message.embed?.author?.name ?? '')
                 .setStyle(TextInputStyle.Short)
                 .setRequired(false),
             ),
-            new ActionRowBuilder<TextInputBuilder>().addComponents(
+            new LabelBuilder().setLabel('Icon').setTextInputComponent(
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.AuthorIconInput)
-                .setLabel('Icon')
                 .setPlaceholder('Enter the icon URL you want to set.')
                 .setValue(this.message.embed?.author?.iconURL ?? '')
                 .setStyle(TextInputStyle.Short)
                 .setRequired(false),
             ),
-            new ActionRowBuilder<TextInputBuilder>().addComponents(
+            new LabelBuilder().setLabel('URL').setTextInputComponent(
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.AuthorUrlInput)
-                .setLabel('URL')
                 .setPlaceholder('Enter the URL you want to set.')
                 .setValue(this.message.embed?.author?.url ?? '')
                 .setStyle(TextInputStyle.Short)
@@ -586,9 +585,9 @@ export class MessageBuilder extends events {
 
     await modalInteraction.deferUpdate().catch((error) => logger.debug({ err: error }, 'Failed to defer update'));
 
-    const name = modalInteraction.fields.getTextInputValue(MessageBuilderCustomIds.AuthorNameInput);
-    const icon = modalInteraction.fields.getTextInputValue(MessageBuilderCustomIds.AuthorIconInput);
-    const url = modalInteraction.fields.getTextInputValue(MessageBuilderCustomIds.AuthorUrlInput);
+    const name = modalInteraction.components.getTextInputValue(MessageBuilderCustomIds.AuthorNameInput);
+    const icon = modalInteraction.components.getTextInputValue(MessageBuilderCustomIds.AuthorIconInput);
+    const url = modalInteraction.components.getTextInputValue(MessageBuilderCustomIds.AuthorUrlInput);
 
     if (!this.message.embed) this.message.embed = {};
     this.message.embed.author = { name, iconURL: icon, url };
@@ -606,20 +605,18 @@ export class MessageBuilder extends events {
         new ModalBuilder()
           .setCustomId(MessageBuilderCustomIds.FooterModal)
           .setTitle('Footer')
-          .addComponents(
-            new ActionRowBuilder<TextInputBuilder>().addComponents(
+          .addLabelComponents(
+            new LabelBuilder().setLabel('Text').setTextInputComponent(
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.FooterTextInput)
-                .setLabel('Text')
                 .setPlaceholder('Enter the text you want to set.')
                 .setValue(this.message.embed?.footer?.text ?? '')
                 .setStyle(TextInputStyle.Short)
                 .setRequired(false),
             ),
-            new ActionRowBuilder<TextInputBuilder>().addComponents(
+            new LabelBuilder().setLabel('Icon').setTextInputComponent(
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.FooterIconInput)
-                .setLabel('Icon')
                 .setPlaceholder('Enter the icon URL you want to set.')
                 .setValue(this.message.embed?.footer?.iconURL ?? '')
                 .setStyle(TextInputStyle.Short)
@@ -639,8 +636,8 @@ export class MessageBuilder extends events {
 
     await modalInteraction.deferUpdate().catch((error) => logger.debug({ err: error }, 'Failed to defer update'));
 
-    const text = modalInteraction.fields.getTextInputValue(MessageBuilderCustomIds.FooterTextInput);
-    const icon = modalInteraction.fields.getTextInputValue(MessageBuilderCustomIds.FooterIconInput);
+    const text = modalInteraction.components.getTextInputValue(MessageBuilderCustomIds.FooterTextInput);
+    const icon = modalInteraction.components.getTextInputValue(MessageBuilderCustomIds.FooterIconInput);
 
     if (!this.message.embed) this.message.embed = {};
     this.message.embed.footer = { text, iconURL: icon };
@@ -658,11 +655,10 @@ export class MessageBuilder extends events {
         new ModalBuilder()
           .setCustomId(MessageBuilderCustomIds.ThumbnailModal)
           .setTitle('Thumbnail')
-          .addComponents(
-            new ActionRowBuilder<TextInputBuilder>().addComponents(
+          .addLabelComponents(
+            new LabelBuilder().setLabel('Thumbnail').setTextInputComponent(
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.ThumbnailInput)
-                .setLabel('Thumbnail')
                 .setPlaceholder('Enter the thumbnail URL you want to set.')
                 .setValue(this.message.embed?.thumbnail ?? '')
                 .setStyle(TextInputStyle.Short)
@@ -682,7 +678,7 @@ export class MessageBuilder extends events {
 
     await modalInteraction.deferUpdate().catch((error) => logger.debug({ err: error }, 'Failed to defer update'));
 
-    const thumbnail = modalInteraction.fields.getTextInputValue(MessageBuilderCustomIds.ThumbnailInput);
+    const thumbnail = modalInteraction.components.getTextInputValue(MessageBuilderCustomIds.ThumbnailInput);
 
     if (!this.message.embed) this.message.embed = {};
     this.message.embed.thumbnail = thumbnail;
@@ -700,11 +696,10 @@ export class MessageBuilder extends events {
         new ModalBuilder()
           .setCustomId(MessageBuilderCustomIds.ImageModal)
           .setTitle('Image')
-          .addComponents(
-            new ActionRowBuilder<TextInputBuilder>().addComponents(
+          .addLabelComponents(
+            new LabelBuilder().setLabel('Image').setTextInputComponent(
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.ImageInput)
-                .setLabel('Image')
                 .setPlaceholder('Enter the image URL you want to set.')
                 .setValue(this.message.embed?.image ?? '')
                 .setStyle(TextInputStyle.Short)
@@ -724,7 +719,7 @@ export class MessageBuilder extends events {
 
     await modalInteraction.deferUpdate().catch((error) => logger.debug({ err: error }, 'Failed to defer update'));
 
-    const image = modalInteraction.fields.getTextInputValue(MessageBuilderCustomIds.ImageInput);
+    const image = modalInteraction.components.getTextInputValue(MessageBuilderCustomIds.ImageInput);
 
     if (!this.message.embed) this.message.embed = {};
     this.message.embed.image = image;
@@ -776,74 +771,62 @@ export class MessageBuilder extends events {
    * Get the components for the message builder
    * @returns The components
    */
-  private getComponents(): ActionRowBuilder<ButtonBuilder>[] {
-    const contentButton = new ButtonBuilder()
+  private getComponents(): ActionRowBuilder[] {
+    const contentButton = new SecondaryButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.ContentButton)
       .setLabel('Message')
-      .setEmoji({ name: '📝' })
-      .setStyle(ButtonStyle.Secondary);
-    const titleButton = new ButtonBuilder()
+      .setEmoji({ name: '📝' });
+    const titleButton = new SecondaryButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.TitleButton)
       .setLabel('Title')
-      .setEmoji({ name: '📑' })
-      .setStyle(ButtonStyle.Secondary);
-    const descriptionButton = new ButtonBuilder()
+      .setEmoji({ name: '📑' });
+    const descriptionButton = new SecondaryButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.DescriptionButton)
       .setEmoji({ name: '📖' })
-      .setLabel('Description')
-      .setStyle(ButtonStyle.Secondary);
-    const colorButton = new ButtonBuilder()
+      .setLabel('Description');
+    const colorButton = new SecondaryButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.ColorButton)
       .setLabel('Color')
-      .setEmoji({ name: '🎨' })
-      .setStyle(ButtonStyle.Secondary);
-    const addFieldButton = new ButtonBuilder()
+      .setEmoji({ name: '🎨' });
+    const addFieldButton = new SuccessButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.FieldAddButton)
       .setLabel('Add field')
-      .setEmoji({ name: '➕' })
-      .setStyle(ButtonStyle.Success);
-    const removeFieldButton = new ButtonBuilder()
+      .setEmoji({ name: '➕' });
+    const removeFieldButton = new DangerButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.FieldRemoveButton)
       .setLabel('Remove field')
-      .setEmoji({ name: '➖' })
-      .setStyle(ButtonStyle.Danger);
-    const thumbnailButton = new ButtonBuilder()
+      .setEmoji({ name: '➖' });
+    const thumbnailButton = new SecondaryButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.ThumbnailButton)
       .setLabel('Thumbnail')
-      .setEmoji({ name: '🖼️' })
-      .setStyle(ButtonStyle.Secondary);
-    const imageButton = new ButtonBuilder()
+      .setEmoji({ name: '🖼️' });
+    const imageButton = new SecondaryButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.ImageButton)
       .setLabel('Image')
-      .setEmoji({ name: '📷' })
-      .setStyle(ButtonStyle.Secondary);
-    const footerButton = new ButtonBuilder()
+      .setEmoji({ name: '📷' });
+    const footerButton = new SecondaryButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.FooterButton)
       .setLabel('Footer')
-      .setEmoji({ name: '📎' })
-      .setStyle(ButtonStyle.Secondary);
-    const authorButton = new ButtonBuilder()
+      .setEmoji({ name: '📎' });
+    const authorButton = new SecondaryButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.AuthorButton)
       .setLabel('Author')
-      .setEmoji({ name: '🏷️' })
-      .setStyle(ButtonStyle.Secondary);
-    const submitButton = new ButtonBuilder()
+      .setEmoji({ name: '🏷️' });
+    const submitButton = new PrimaryButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.SubmitButton)
       .setLabel('Submit')
-      .setEmoji({ name: '✅' })
-      .setStyle(ButtonStyle.Primary);
-    const deleteButton = new ButtonBuilder()
+      .setEmoji({ name: '✅' });
+    const deleteButton = new DangerButtonBuilder()
       .setCustomId(MessageBuilderCustomIds.DeleteButton)
       .setLabel('Delete')
-      .setEmoji({ name: '🗑️' })
-      .setStyle(ButtonStyle.Danger);
+      .setEmoji({ name: '🗑️' });
 
     return [
-      new ActionRowBuilder<ButtonBuilder>().addComponents(contentButton, titleButton, descriptionButton),
-      new ActionRowBuilder<ButtonBuilder>().addComponents(colorButton, thumbnailButton, imageButton),
-      new ActionRowBuilder<ButtonBuilder>().addComponents(authorButton, footerButton),
-      new ActionRowBuilder<ButtonBuilder>().addComponents(addFieldButton, removeFieldButton),
-      new ActionRowBuilder<ButtonBuilder>().addComponents(submitButton, deleteButton),
+      new ActionRowBuilder().addComponents(contentButton, titleButton, descriptionButton),
+      new ActionRowBuilder().addComponents(colorButton, thumbnailButton, imageButton),
+      new ActionRowBuilder().addComponents(authorButton, footerButton),
+      new ActionRowBuilder().addComponents(addFieldButton, removeFieldButton),
+      new ActionRowBuilder().addComponents(submitButton, deleteButton),
     ];
   }
 
@@ -870,13 +853,13 @@ export class MessageBuilder extends events {
     if (embed.author)
       embedBuilder.setAuthor({
         name: this.replacePlaceholders(embed.author.name),
-        iconURL: this.replacePlaceholders(embed.author.iconURL),
+        icon_url: this.replacePlaceholders(embed.author.iconURL),
         url: this.replacePlaceholders(embed.author.url),
       });
     if (embed.footer)
       embedBuilder.setFooter({
         text: this.replacePlaceholders(embed.footer.text),
-        iconURL: this.replacePlaceholders(embed.footer.iconURL),
+        icon_url: this.replacePlaceholders(embed.footer.iconURL),
       });
     if (!embed.title && !embed.description && !embed.fields && !embed.author?.name) embedBuilder.setDescription('** **');
 

@@ -142,11 +142,7 @@ which will output:
 To use it on a button you will need to do this:
 
 ```ts
-new ButtonBuilder()
-  .setCustomId('some-id')
-  .setStyle(ButtonStyle.Secondary)
-  .setEmoji({ id: client.customEmojis.globe.id })
-  .setDisabled(false);
+new SecondaryButtonBuilder().setCustomId('some-id').setEmoji({ id: client.customEmojis.globe.id }).setDisabled(false);
 ```
 
 ### Creating Slash Commands
@@ -168,7 +164,7 @@ bun register
 The example below creates a `/repeat` command that replies with the user's input. It also uses i18next for localization and supports autocomplete.
 
 ```ts
-import { SlashCommandBuilder } from 'discord.js';
+import { ChatInputCommandBuilder } from 'discord.js';
 import { t } from 'i18next';
 
 import { Command } from 'classes/base/command';
@@ -182,10 +178,10 @@ export default new Command({
   // This is just an example, the bot does not need SendMessages to reply to an interaction!!
   botPermissions: ['SendMessages'],
   // Builder for command name, description and options
-  builder: new SlashCommandBuilder()
+  builder: new ChatInputCommandBuilder()
     .setName('repeat')
     .setDescription('Replies with whatever you say!')
-    .addStringOption((option) =>
+    .addStringOptions((option) =>
       option
         .setName('text')
         .setDescription('The text to repeat')

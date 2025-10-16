@@ -1,11 +1,10 @@
 import { InfractionType, type Infraction } from '@prisma/client';
 import {
   ActionRowBuilder,
-  ButtonBuilder,
-  ButtonStyle,
   Colors,
   ContainerBuilder,
   MessageFlags,
+  SecondaryButtonBuilder,
   SectionBuilder,
   SeparatorBuilder,
   SeparatorSpacingSize,
@@ -125,11 +124,10 @@ export function buildInfractionOverview({
 
     if (!showGuild) {
       container.addSectionComponents(
-        new SectionBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(lines.join('\n'))).setButtonAccessory(
-          new ButtonBuilder()
+        new SectionBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(lines.join('\n'))).setSecondaryButtonAccessory(
+          new SecondaryButtonBuilder()
             .setCustomId(`infractions-delete_${infraction.id}`)
             .setEmoji({ id: deleteEmoji.id })
-            .setStyle(ButtonStyle.Secondary)
             .setLabel(t('infractions.embed.delete', { lng: locale })),
         ),
       );
@@ -140,30 +138,25 @@ export function buildInfractionOverview({
     if (index < paged.length - 1) container.addSeparatorComponents(new SeparatorBuilder().setSpacing(SeparatorSpacingSize.Small));
   });
 
-  const rowPages = new ActionRowBuilder<ButtonBuilder>().addComponents(
-    new ButtonBuilder()
+  const rowPages = new ActionRowBuilder().addComponents(
+    new SecondaryButtonBuilder()
       .setCustomId(`infractions-first_${target.id}_${sortOrder}_${sortBy}_${showGuild ? 1 : 0}_${showUser ? 1 : 0}`)
       .setEmoji({ id: backwardsEmoji.id })
-      .setStyle(ButtonStyle.Secondary)
       .setDisabled(page === 0),
-    new ButtonBuilder()
+    new SecondaryButtonBuilder()
       .setCustomId(`infractions-previous_${page}_${target.id}_${sortOrder}_${sortBy}_${showGuild ? 1 : 0}_${showUser ? 1 : 0}`)
       .setEmoji({ id: previousEmoji.id })
-      .setStyle(ButtonStyle.Secondary)
       .setDisabled(page === 0),
-    new ButtonBuilder()
+    new SecondaryButtonBuilder()
       .setCustomId(`infractions-custom_${target.id}_${sortOrder}_${sortBy}_${showGuild ? 1 : 0}_${showUser ? 1 : 0}`)
-      .setLabel(`${page + 1} / ${totalPages}`)
-      .setStyle(ButtonStyle.Secondary),
-    new ButtonBuilder()
+      .setLabel(`${page + 1} / ${totalPages}`),
+    new SecondaryButtonBuilder()
       .setCustomId(`infractions-next_${page}_${target.id}_${sortOrder}_${sortBy}_${showGuild ? 1 : 0}_${showUser ? 1 : 0}`)
       .setEmoji({ id: nextEmoji.id })
-      .setStyle(ButtonStyle.Secondary)
       .setDisabled(page === totalPages - 1),
-    new ButtonBuilder()
+    new SecondaryButtonBuilder()
       .setCustomId(`infractions-last_${target.id}_${sortOrder}_${sortBy}_${showGuild ? 1 : 0}_${showUser ? 1 : 0}`)
       .setEmoji({ id: forwardsEmoji.id })
-      .setStyle(ButtonStyle.Secondary)
       .setDisabled(page === totalPages - 1),
   );
   const selectSortBy = new StringSelectMenuBuilder()
@@ -210,8 +203,8 @@ export function buildInfractionOverview({
         .setDefault(sortBy === InfractionSortBy.guildId),
     );
   }
-  const rowSortBy = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectSortBy);
-  const rowSortOrder = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+  const rowSortBy = new ActionRowBuilder().addComponents(selectSortBy);
+  const rowSortOrder = new ActionRowBuilder().addComponents(
     new StringSelectMenuBuilder()
       .setCustomId(`infractions-sort-order_${target.id}_${sortBy}_${showGuild ? 1 : 0}_${showUser ? 1 : 0}`)
       .setPlaceholder(t('infractions.sort-order.placeholder', { lng: locale }))

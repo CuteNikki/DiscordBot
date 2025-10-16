@@ -1,13 +1,12 @@
 import {
-  ActionRowBuilder,
   ApplicationIntegrationType,
-  ButtonBuilder,
-  ButtonStyle,
+  ChatInputCommandBuilder,
   EmbedBuilder,
   InteractionContextType,
+  LabelBuilder,
   MessageFlags,
   ModalBuilder,
-  SlashCommandBuilder,
+  SecondaryButtonBuilder,
   TextInputBuilder,
   TextInputStyle,
 } from 'discord.js';
@@ -18,7 +17,7 @@ import { Pagination } from 'classes/pagination';
 import { logger } from 'utility/logger';
 
 export default new Command({
-  builder: new SlashCommandBuilder()
+  builder: new ChatInputCommandBuilder()
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .setContexts(InteractionContextType.BotDM, InteractionContextType.Guild, InteractionContextType.PrivateChannel)
     .setName('pagination')
@@ -74,22 +73,19 @@ export default new Command({
       buttons: [
         // First page button
         () => ({
-          data: new ButtonBuilder().setCustomId('pagination_first').setStyle(ButtonStyle.Secondary).setEmoji({ name: '⏪' }),
+          data: new SecondaryButtonBuilder().setCustomId('pagination_first').setEmoji({ name: '⏪' }),
           disableOn: (index) => index === 0,
           onClick: () => ({ newIndex: 0 }),
         }),
         // Previous page button
         () => ({
-          data: new ButtonBuilder().setCustomId('pagination_previous').setStyle(ButtonStyle.Secondary).setEmoji({ name: '⬅️' }),
+          data: new SecondaryButtonBuilder().setCustomId('pagination_previous').setEmoji({ name: '⬅️' }),
           disableOn: (index) => index === 0,
           onClick: (index) => ({ newIndex: index > 0 ? index - 1 : index }),
         }),
         // Custom page button
         (index, totalPages) => ({
-          data: new ButtonBuilder()
-            .setCustomId('pagination_custom')
-            .setStyle(ButtonStyle.Secondary)
-            .setLabel(`${index + 1} / ${totalPages}`),
+          data: new SecondaryButtonBuilder().setCustomId('pagination_custom').setLabel(`${index + 1} / ${totalPages}`),
           disableOn: () => false,
           onClick: async (clickPageIndex, clickTotalPages, buttonInteraction) => {
             // Show the modal
@@ -97,11 +93,10 @@ export default new Command({
               new ModalBuilder()
                 .setCustomId('pagination_modal')
                 .setTitle('Custom Page')
-                .addComponents(
-                  new ActionRowBuilder<TextInputBuilder>().addComponents(
+                .addLabelComponents(
+                  new LabelBuilder().setLabel('Enter the page number you want to go to.').setTextInputComponent(
                     new TextInputBuilder()
                       .setCustomId('pagination_input')
-                      .setLabel('Enter the page number you want to go to.')
                       .setStyle(TextInputStyle.Short)
                       .setPlaceholder(`${clickPageIndex + 1}`),
                   ),
@@ -117,7 +112,7 @@ export default new Command({
               });
 
               // Get the input value from the modal
-              const newPage = parseInt(modalInteraction.fields.getTextInputValue('pagination_input'));
+              const newPage = parseInt(modalInteraction.components.getTextInputValue('pagination_input'));
 
               // Validate the page number
               if (newPage > 0 && newPage <= clickTotalPages) {
@@ -151,18 +146,18 @@ export default new Command({
         }),
         // Next page button
         () => ({
-          data: new ButtonBuilder().setCustomId('pagination_next').setStyle(ButtonStyle.Secondary).setEmoji({ name: '➡️' }),
+          data: new SecondaryButtonBuilder().setCustomId('pagination_next').setEmoji({ name: '➡️' }),
           disableOn: (index, totalPages) => index === totalPages - 1,
           onClick: (index, totalPages) => ({ newIndex: index < totalPages - 1 ? index + 1 : index }),
         }),
         // Last page button
         () => ({
-          data: new ButtonBuilder().setCustomId('pagination_last').setStyle(ButtonStyle.Secondary).setEmoji({ name: '⏩' }),
+          data: new SecondaryButtonBuilder().setCustomId('pagination_last').setEmoji({ name: '⏩' }),
           disableOn: (index, totalPages) => index === totalPages - 1,
           onClick: (_index, totalPages) => ({ newIndex: totalPages - 1 }),
         }),
         () => ({
-          data: new ButtonBuilder().setCustomId('pagination_locate').setStyle(ButtonStyle.Secondary).setEmoji({ name: '📍' }),
+          data: new SecondaryButtonBuilder().setCustomId('pagination_locate').setEmoji({ name: '📍' }),
           disableOn: () => false,
           onClick: () => {
             // Get the page index of where the user is located
@@ -184,7 +179,7 @@ export default new Command({
           },
         }),
         () => ({
-          data: new ButtonBuilder().setCustomId('pagination_refresh').setStyle(ButtonStyle.Secondary).setEmoji({ name: '🔄' }),
+          data: new SecondaryButtonBuilder().setCustomId('pagination_refresh').setEmoji({ name: '🔄' }),
           disableOn: () => false,
           onClick: (index) => {
             // Refresh the pagination to the current index

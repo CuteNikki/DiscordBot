@@ -1,10 +1,10 @@
 import {
   ApplicationIntegrationType,
+  ChatInputCommandBuilder,
   ChatInputCommandInteraction,
   ComponentType,
   InteractionContextType,
   MessageFlags,
-  SlashCommandBuilder,
 } from 'discord.js';
 import { decode } from 'he';
 
@@ -18,12 +18,12 @@ import { logger } from 'utility/logger';
 import { TriviaCategory, TriviaDifficulty, TriviaType } from 'types/trivia';
 
 export default new Command({
-  builder: new SlashCommandBuilder()
+  builder: new ChatInputCommandBuilder()
     .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .setName('trivia')
     .setDescription('Play a trivia game')
-    .addStringOption((option) =>
+    .addStringOptions((option) =>
       option
         .setName('difficulty')
         .setDescription('Select the difficulty level')
@@ -34,14 +34,14 @@ export default new Command({
         )
         .setRequired(false),
     )
-    .addStringOption((option) =>
+    .addStringOptions((option) =>
       option
         .setName('type')
         .setDescription('Select the type of question')
         .setChoices({ name: 'Multiple Choice', value: TriviaType.MultipleChoice }, { name: 'True/False', value: TriviaType.TrueFalse })
         .setRequired(false),
     )
-    .addNumberOption((option) =>
+    .addNumberOptions((option) =>
       option.setName('category').setDescription('Select the trivia category').setRequired(false).setAutocomplete(true),
     ),
 

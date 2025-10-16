@@ -2,16 +2,14 @@ import {
   ApplicationCommandType,
   AutocompleteInteraction,
   BaseInteraction,
+  ChatInputCommandBuilder,
   ChatInputCommandInteraction,
+  ChatInputCommandSubcommandBuilder,
+  ChatInputCommandSubcommandGroupBuilder,
   ContextMenuCommandBuilder,
   MessageContextMenuCommandInteraction,
-  SlashCommandBuilder,
-  SlashCommandSubcommandBuilder,
-  SlashCommandSubcommandGroupBuilder,
   UserContextMenuCommandInteraction,
   type PermissionsString,
-  type SlashCommandOptionsOnlyBuilder,
-  type SlashCommandSubcommandsOnlyBuilder,
 } from 'discord.js';
 
 /** Resolves the appropriate interaction type based on the provided application command type. */
@@ -50,12 +48,7 @@ export class Command<T extends ApplicationCommandType = ApplicationCommandType.C
       cooldown?: number;
       /** The data for the command. */
       builder: T extends ApplicationCommandType.ChatInput
-        ?
-            | SlashCommandBuilder
-            | SlashCommandOptionsOnlyBuilder
-            | SlashCommandSubcommandBuilder
-            | SlashCommandSubcommandGroupBuilder
-            | SlashCommandSubcommandsOnlyBuilder
+        ? ChatInputCommandBuilder | ChatInputCommandSubcommandBuilder | ChatInputCommandSubcommandGroupBuilder
         : ContextMenuCommandBuilder;
       /** The function to execute when the command is in autocomplete mode. */
       autocomplete?: (interaction: AutocompleteInteraction) => unknown;

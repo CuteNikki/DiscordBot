@@ -1,12 +1,12 @@
 import {
   ApplicationIntegrationType,
+  ChatInputCommandBuilder,
   ChatInputCommandInteraction,
   Client,
   Colors,
   EmbedBuilder,
   InteractionContextType,
   MessageFlags,
-  SlashCommandBuilder,
   type SendableChannels,
 } from 'discord.js';
 
@@ -37,14 +37,14 @@ const calls = new Map<string, string>();
 
 export default new Command({
   isDevelopment: true,
-  builder: new SlashCommandBuilder()
+  builder: new ChatInputCommandBuilder()
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
     .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
     .setName('call')
     .setDescription('Connect to a random call')
-    .addSubcommand((cmd) => cmd.setName('connect').setDescription('Connect to a random call'))
-    .addSubcommand((cmd) => cmd.setName('hangup').setDescription('Disconnect from the current call or the queue'))
-    .addSubcommand((cmd) => cmd.setName('friend').setDescription('Ask the other party to be your friend')),
+    .addSubcommands((cmd) => cmd.setName('connect').setDescription('Connect to a random call'))
+    .addSubcommands((cmd) => cmd.setName('hangup').setDescription('Disconnect from the current call or the queue'))
+    .addSubcommands((cmd) => cmd.setName('friend').setDescription('Ask the other party to be your friend')),
   async execute(interaction) {
     const subcommand = interaction.options.getSubcommand();
 
@@ -61,7 +61,7 @@ export default new Command({
 /**
  * Handles the connect subcommand
  * @param interaction The interaction object
-  */
+ */
 async function handleConnect(interaction: ChatInputCommandInteraction) {
   if (await isInCall(interaction.channelId)) {
     return replyEphemeral(interaction, 'This channel is already in a call!');

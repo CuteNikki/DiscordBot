@@ -1,17 +1,17 @@
 import {
   ActionRowBuilder,
   AttachmentBuilder,
-  ButtonBuilder,
-  ButtonStyle,
+  ChatInputCommandBuilder,
   Colors,
   ContainerBuilder,
   MediaGalleryBuilder,
   MediaGalleryItemBuilder,
   MessageFlags,
+  PrimaryButtonBuilder,
+  SecondaryButtonBuilder,
   SectionBuilder,
   SeparatorBuilder,
   SeparatorSpacingSize,
-  SlashCommandBuilder,
   TextDisplayBuilder,
   ThumbnailBuilder,
   UserSelectMenuBuilder,
@@ -20,20 +20,16 @@ import {
 import { Command } from 'classes/base/command';
 
 export default new Command({
-  builder: new SlashCommandBuilder().setName('test').setDescription('Test command'),
+  builder: new ChatInputCommandBuilder().setName('test').setDescription('Test command'),
   execute(interaction) {
     const file = new AttachmentBuilder('assets/a.png', { name: 'a.png' });
 
     const container = new ContainerBuilder()
       .setAccentColor(Colors.Blurple)
       .addTextDisplayComponents(new TextDisplayBuilder().setContent('This is a test message above an action row'))
+      .addActionRowComponents(new ActionRowBuilder().addComponents(new PrimaryButtonBuilder().setCustomId('test').setLabel('Test')))
       .addActionRowComponents(
-        new ActionRowBuilder<ButtonBuilder>().addComponents(
-          new ButtonBuilder().setCustomId('test').setLabel('Test').setStyle(ButtonStyle.Primary),
-        ),
-      )
-      .addActionRowComponents(
-        new ActionRowBuilder<UserSelectMenuBuilder>().addComponents(
+        new ActionRowBuilder().addComponents(
           new UserSelectMenuBuilder()
             .setCustomId('select')
             .setPlaceholder('Select a user')
@@ -56,7 +52,7 @@ export default new Command({
       .addSectionComponents(
         new SectionBuilder()
           .addTextDisplayComponents(new TextDisplayBuilder().setContent('This is a test message inside a section, next to a button'))
-          .setButtonAccessory(new ButtonBuilder().setCustomId('test_2').setLabel('test').setStyle(ButtonStyle.Secondary)),
+          .setSecondaryButtonAccessory(new SecondaryButtonBuilder().setCustomId('test_2').setLabel('test')),
         new SectionBuilder()
           .addTextDisplayComponents(new TextDisplayBuilder().setContent('This is a test message inside a section, next to an image'))
           .setThumbnailAccessory(new ThumbnailBuilder().setDescription('This is a test image').setURL('attachment://a.png')),
