@@ -1,3 +1,5 @@
+// @todo: add translations
+
 import { Modal } from 'classes/base/modal';
 
 export default new Modal({

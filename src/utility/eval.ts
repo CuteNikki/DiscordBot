@@ -84,6 +84,7 @@ export async function evaluateCode(interaction: BaseInteraction, code: string, d
       ],
       components: [
         new ActionRowBuilder().addComponents(
+          // @todo: add translations
           new PrimaryButtonBuilder().setCustomId('eval').setLabel('Edit').setEmoji({ name: '✏️' }),
           new SuccessButtonBuilder().setCustomId('eval-rerun').setLabel('Rerun').setEmoji({ name: '🔁' }),
         ),
@@ -111,6 +112,7 @@ export async function evaluateCode(interaction: BaseInteraction, code: string, d
       ],
       components: [
         new ActionRowBuilder().addComponents(
+          // @todo: add translations
           new PrimaryButtonBuilder().setCustomId('eval').setLabel('Edit').setEmoji({ name: '✏️' }),
           new SuccessButtonBuilder().setCustomId('eval-rerun').setLabel('Rerun').setEmoji({ name: '🔁' }),
         ),

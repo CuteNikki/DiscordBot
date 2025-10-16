@@ -1,3 +1,6 @@
+// @todo: add translations
+// @todo: use containers for replies
+
 import { Collection, Colors, EmbedBuilder, Events, MessageFlags } from 'discord.js';
 
 import { Event } from 'classes/base/event';

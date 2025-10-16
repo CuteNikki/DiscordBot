@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } from 'discord.js';
+import { LabelBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } from 'discord.js';
 
 import { Button } from 'classes/base/button';
 
@@ -9,15 +9,16 @@ export default new Button({
       new ModalBuilder()
         .setCustomId('test')
         .setTitle('Test Modal')
-        .addComponents(
-          new ActionRowBuilder<TextInputBuilder>().addComponents(
-            new TextInputBuilder()
-              .setCustomId('test')
-              .setLabel('Test Input')
-              .setStyle(TextInputStyle.Short)
-              .setPlaceholder('Enter something here')
-              .setRequired(true),
-          ),
+        .addLabelComponents(
+          new LabelBuilder()
+            .setLabel('Test Input')
+            .setTextInputComponent(
+              new TextInputBuilder()
+                .setCustomId('test')
+                .setStyle(TextInputStyle.Short)
+                .setPlaceholder('Enter something here')
+                .setRequired(true),
+            ),
         ),
     );
   },

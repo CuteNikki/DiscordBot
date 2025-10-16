@@ -56,7 +56,7 @@ export default new Modal({
 
     if (!targetUser) {
       await interaction.followUp({
-        content: 'User not found.',
+        content: t('infractions.invalid-user', { lng: interaction.locale }),
         flags: [MessageFlags.Ephemeral],
       });
       return;

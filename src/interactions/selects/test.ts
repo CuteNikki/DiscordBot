@@ -1,3 +1,5 @@
+// @todo: add translations
+
 import { SelectMenu } from 'classes/base/select';
 
 export default new SelectMenu({

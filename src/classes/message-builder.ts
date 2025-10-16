@@ -1,3 +1,5 @@
+// @todo: add translations
+
 import {
   ActionRowBuilder,
   ButtonInteraction,

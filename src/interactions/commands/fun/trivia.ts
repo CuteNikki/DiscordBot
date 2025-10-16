@@ -1,3 +1,5 @@
+// @todo: Add translations
+
 import {
   ApplicationIntegrationType,
   ChatInputCommandBuilder,
