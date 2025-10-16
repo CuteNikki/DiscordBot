@@ -126,7 +126,7 @@ export function getEvalModal(locale: string, depth: string | number, code?: stri
         new TextInputBuilder()
           .setCustomId('code')
           .setPlaceholder(t('eval.modal.code-placeholder', { lng: locale }))
-          .setValue(code || '')
+          .setValue(code || ' ')
           .setStyle(TextInputStyle.Paragraph)
           .setRequired(true)
           .setMaxLength(1900),
@@ -137,7 +137,7 @@ export function getEvalModal(locale: string, depth: string | number, code?: stri
           new TextInputBuilder()
             .setCustomId('depth')
             .setPlaceholder('0')
-            .setValue(depth.toString())
+            .setValue(depth.toString() || ' ')
             .setStyle(TextInputStyle.Short)
             .setRequired(false)
             .setMaxLength(2),

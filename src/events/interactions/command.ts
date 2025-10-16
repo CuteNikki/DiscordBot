@@ -61,12 +61,13 @@ export default new Event({
      */
 
     const cooldowns = client.cooldowns;
-    if (!cooldowns.has(command.options.builder.name)) {
-      cooldowns.set(command.options.builder.name, new Collection());
+    const commandData = command.options.builder.toJSON();
+    if (!cooldowns.has(commandData.name)) {
+      cooldowns.set(commandData.name, new Collection());
     }
 
     const now = Date.now();
-    const timestamps = cooldowns.get(command.options.builder.name)!;
+    const timestamps = cooldowns.get(commandData.name)!;
     const defaultCooldown = 3_000;
     const cooldownAmount = command.options.cooldown ?? defaultCooldown;
 
@@ -80,7 +81,7 @@ export default new Event({
             new EmbedBuilder()
               .setColor(Colors.Red)
               .setDescription(
-                `Please wait, you are on cooldown for \`${command.options.builder.name}\`.\nYou can use it again ${time(expiredTimestamp, TimestampStyles.RelativeTime)}.`,
+                `Please wait, you are on cooldown for \`${commandData.name}\`.\nYou can use it again ${time(expiredTimestamp, TimestampStyles.RelativeTime)}.`,
               ),
           ],
           flags: [MessageFlags.Ephemeral],
