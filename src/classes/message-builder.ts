@@ -233,7 +233,7 @@ export class MessageBuilder extends events {
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.ContentInput)
                 .setPlaceholder('Enter the content you want to set.')
-                .setValue(this.message.content ?? ' ')
+                .setValue(this.message.content ?? '')
                 .setStyle(TextInputStyle.Paragraph)
                 .setRequired(false)
                 .setMaxLength(2000),
@@ -274,7 +274,7 @@ export class MessageBuilder extends events {
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.TitleInput)
                 .setPlaceholder('Enter the title you want to set.')
-                .setValue(this.message.embed?.title ?? ' ')
+                .setValue(this.message.embed?.title ?? '')
                 .setStyle(TextInputStyle.Short)
                 .setRequired(false),
             ),
@@ -282,7 +282,7 @@ export class MessageBuilder extends events {
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.TitleUrlInput)
                 .setPlaceholder('Enter the URL you want to set.')
-                .setValue(this.message.embed?.url ?? ' ')
+                .setValue(this.message.embed?.url ?? '')
                 .setStyle(TextInputStyle.Short)
                 .setRequired(false),
             ),
@@ -325,7 +325,7 @@ export class MessageBuilder extends events {
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.ColorInput)
                 .setPlaceholder('Enter the color you want to set. (Hex code, e.g. #FF5733)')
-                .setValue(this.message.embed?.color ? '#' + this.message.embed.color.toString(16) : ' ')
+                .setValue(this.message.embed?.color ? '#' + this.message.embed.color.toString(16) : '')
                 .setStyle(TextInputStyle.Short)
                 .setRequired(false)
                 .setMaxLength(7),
@@ -381,7 +381,7 @@ export class MessageBuilder extends events {
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.DescriptionInput)
                 .setPlaceholder('Enter the description you want to set.')
-                .setValue(this.message.embed?.description ?? ' ')
+                .setValue(this.message.embed?.description ?? '')
                 .setStyle(TextInputStyle.Paragraph)
                 .setRequired(false),
             ),
@@ -553,7 +553,7 @@ export class MessageBuilder extends events {
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.AuthorNameInput)
                 .setPlaceholder('Enter the name you want to set.')
-                .setValue(this.message.embed?.author?.name ?? ' ')
+                .setValue(this.message.embed?.author?.name ?? '')
                 .setStyle(TextInputStyle.Short)
                 .setRequired(false),
             ),
@@ -561,7 +561,7 @@ export class MessageBuilder extends events {
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.AuthorIconInput)
                 .setPlaceholder('Enter the icon URL you want to set.')
-                .setValue(this.message.embed?.author?.iconURL ?? ' ')
+                .setValue(this.message.embed?.author?.iconURL ?? '')
                 .setStyle(TextInputStyle.Short)
                 .setRequired(false),
             ),
@@ -569,7 +569,7 @@ export class MessageBuilder extends events {
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.AuthorUrlInput)
                 .setPlaceholder('Enter the URL you want to set.')
-                .setValue(this.message.embed?.author?.url ?? ' ')
+                .setValue(this.message.embed?.author?.url ?? '')
                 .setStyle(TextInputStyle.Short)
                 .setRequired(false),
             ),
@@ -612,7 +612,7 @@ export class MessageBuilder extends events {
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.FooterTextInput)
                 .setPlaceholder('Enter the text you want to set.')
-                .setValue(this.message.embed?.footer?.text ?? ' ')
+                .setValue(this.message.embed?.footer?.text ?? '')
                 .setStyle(TextInputStyle.Short)
                 .setRequired(false),
             ),
@@ -620,7 +620,7 @@ export class MessageBuilder extends events {
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.FooterIconInput)
                 .setPlaceholder('Enter the icon URL you want to set.')
-                .setValue(this.message.embed?.footer?.iconURL ?? ' ')
+                .setValue(this.message.embed?.footer?.iconURL ?? '')
                 .setStyle(TextInputStyle.Short)
                 .setRequired(false),
             ),
@@ -662,7 +662,7 @@ export class MessageBuilder extends events {
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.ThumbnailInput)
                 .setPlaceholder('Enter the thumbnail URL you want to set.')
-                .setValue(this.message.embed?.thumbnail ?? ' ')
+                .setValue(this.message.embed?.thumbnail ?? '')
                 .setStyle(TextInputStyle.Short)
                 .setRequired(false),
             ),
@@ -703,7 +703,7 @@ export class MessageBuilder extends events {
               new TextInputBuilder()
                 .setCustomId(MessageBuilderCustomIds.ImageInput)
                 .setPlaceholder('Enter the image URL you want to set.')
-                .setValue(this.message.embed?.image ?? ' ')
+                .setValue(this.message.embed?.image ?? '')
                 .setStyle(TextInputStyle.Short)
                 .setRequired(false),
             ),

@@ -38,7 +38,7 @@
     "canvacord": "^6.0.3",
     "canvas": "^3.2.0",
     "discord-hybrid-sharding": "^2.2.6",
-    "discord.js": "^15.0.0-dev.1760486511-25b22c67a",
+    "discord.js": "^15.0.0-dev.1760659318-0cc92bd5b",
     "figlet": "^1.9.3",
     "globby": "^14.1.0",
     "he": "^1.2.0",

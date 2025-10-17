@@ -166,22 +166,22 @@ export function buildInfractionOverview({
     .setOptions(
       new StringSelectMenuOptionBuilder()
         .setLabel(t('infractions.sort-by.prefix', { lng: locale }) + ' ' + t('infractions.sort-by.created', { lng: locale }))
-        .setValue(InfractionSortBy.createdAt.toString() || ' ')
+        .setValue(InfractionSortBy.createdAt.toString())
         .setEmoji({ id: dateEmoji.id })
         .setDefault(sortBy === InfractionSortBy.createdAt),
       new StringSelectMenuOptionBuilder()
         .setLabel(t('infractions.sort-by.prefix', { lng: locale }) + ' ' + t('infractions.sort-by.expires', { lng: locale }))
-        .setValue(InfractionSortBy.expiresAt.toString() || ' ')
+        .setValue(InfractionSortBy.expiresAt.toString())
         .setEmoji({ id: calendarEmoji.id })
         .setDefault(sortBy === InfractionSortBy.expiresAt),
       new StringSelectMenuOptionBuilder()
         .setLabel(t('infractions.sort-by.prefix', { lng: locale }) + ' ' + t('infractions.sort-by.type', { lng: locale }))
-        .setValue(InfractionSortBy.type.toString() || ' ')
+        .setValue(InfractionSortBy.type.toString())
         .setEmoji({ id: pencilEmoji.id })
         .setDefault(sortBy === InfractionSortBy.type),
       new StringSelectMenuOptionBuilder()
         .setLabel(t('infractions.sort-by.prefix', { lng: locale }) + ' ' + t('infractions.sort-by.moderator', { lng: locale }))
-        .setValue(InfractionSortBy.moderatorId.toString() || ' ')
+        .setValue(InfractionSortBy.moderatorId.toString())
         .setEmoji({ id: staffEmoji.id })
         .setDefault(sortBy === InfractionSortBy.moderatorId),
     );
@@ -189,7 +189,7 @@ export function buildInfractionOverview({
     selectSortBy.addOptions(
       new StringSelectMenuOptionBuilder()
         .setLabel(t('infractions.sort-by.prefix', { lng: locale }) + ' ' + t('infractions.sort-by.user', { lng: locale }))
-        .setValue(InfractionSortBy.userId.toString() || ' ')
+        .setValue(InfractionSortBy.userId.toString())
         .setEmoji({ id: userEmoji.id })
         .setDefault(sortBy === InfractionSortBy.userId),
     );
@@ -198,7 +198,7 @@ export function buildInfractionOverview({
     selectSortBy.addOptions(
       new StringSelectMenuOptionBuilder()
         .setLabel(t('infractions.sort-by.prefix', { lng: locale }) + ' ' + t('infractions.sort-by.guild', { lng: locale }))
-        .setValue(InfractionSortBy.guildId.toString() || ' ')
+        .setValue(InfractionSortBy.guildId.toString())
         .setEmoji({ id: serverEmoji.id })
         .setDefault(sortBy === InfractionSortBy.guildId),
     );
@@ -212,12 +212,12 @@ export function buildInfractionOverview({
       .setOptions(
         new StringSelectMenuOptionBuilder()
           .setLabel(t('infractions.sort-order.prefix', { lng: locale }) + ' ' + t('infractions.sort-order.ascending', { lng: locale }))
-          .setValue(InfractionSortOrder.asc.toString() || ' ')
+          .setValue(InfractionSortOrder.asc.toString())
           .setEmoji({ id: ascendingEmoji.id })
           .setDefault(sortOrder === InfractionSortOrder.asc),
         new StringSelectMenuOptionBuilder()
           .setLabel(t('infractions.sort-order.prefix', { lng: locale }) + ' ' + t('infractions.sort-order.descending', { lng: locale }))
-          .setValue(InfractionSortOrder.desc.toString() || ' ')
+          .setValue(InfractionSortOrder.desc.toString())
           .setEmoji({ id: descendingEmoji.id })
           .setDefault(sortOrder === InfractionSortOrder.desc),
       ),
