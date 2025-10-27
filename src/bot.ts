@@ -18,8 +18,13 @@ import { loadModals } from 'loaders/modal';
 import { loadSelectMenus } from 'loaders/select';
 
 const client = new ExtendedClient({
-  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildModeration],
-  partials: [Partials.Message],
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildModeration,
+    GatewayIntentBits.GuildMessageReactions,
+  ],
+  partials: [Partials.Message, Partials.Reaction],
   ws: {
     shardCount: getInfo().TOTAL_SHARDS,
     shardIds: getInfo().SHARD_LIST,
