@@ -6,6 +6,8 @@ import { Collection, Colors, EmbedBuilder, Events, MessageFlags, time, Timestamp
 import { Event } from 'classes/base/event';
 
 import { getBlacklist } from 'database/blacklist';
+import { getGuildOrCreate } from 'database/guild';
+import { getUserOrCreate } from 'database/user';
 
 import { KEYS } from 'utility/keys';
 import { logger } from 'utility/logger';
@@ -115,6 +117,15 @@ export default new Event({
           .catch((e) => console.error('Error while replying to interaction', e));
         return;
       }
+    }
+
+    /**
+     * Making sure user and guild exist in the database
+     */
+
+    await getUserOrCreate(interaction.user.id);
+    if (interaction.inCachedGuild()) {
+      await getGuildOrCreate(interaction.guild.id);
     }
 
     /**
