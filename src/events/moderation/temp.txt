@@ -1,0 +1,344 @@
+
+
+    // if (auditLogEntry.isAction(AuditLogEvent.ChannelOverwriteCreate)) {
+    //   if (!auditLogEntry.targetId) {
+    //     logger.warn('No target ID found for channel overwrite create audit log entry');
+    //     return;
+    //   }
+
+    //   if (!auditLogEntry.executorId) {
+    //     logger.warn('No executor ID found for channel overwrite create audit log entry');
+    //     return;
+    //   }
+
+    //   const target = await client.channels.fetch(auditLogEntry.targetId).catch(() => null);
+    //   const executor = await client.users.fetch(auditLogEntry.executorId).catch(() => null);
+    //   const reason = auditLogEntry.reason || 'No reason provided';
+    //   const extra = auditLogEntry.extra;
+
+    //   const allowedPermissions = auditLogEntry.changes
+    //     .filter((change) => change.key === 'allow')
+    //     .map((change) => new PermissionsBitField(BigInt(change.new ?? 0)).toArray())
+    //     .join(', ');
+    //   const deniedPermissions = auditLogEntry.changes
+    //     .filter((change) => change.key === 'deny')
+    //     .map((change) => new PermissionsBitField(BigInt(change.new ?? 0)).toArray())
+    //     .join(', ');
+
+    //   if (extra instanceof GuildMember) {
+    //     logger.info(
+    //       `Channel ${target} had new permission overwrites for member ${extra.user.username} (${extra.id}) created [allowed: ${allowedPermissions}] [denied: ${deniedPermissions}] by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //     );
+    //     return;
+    //   } else if (extra instanceof Role) {
+    //     logger.info(
+    //       `Channel ${target} had new permission overwrites for role ${extra.name} (${extra.id}) created [allowed: ${allowedPermissions}] [denied: ${deniedPermissions}] by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //     );
+    //     return;
+    //   } else if (typeof extra === 'string') {
+    //     logger.info(
+    //       `Channel ${target} had new permission overwrites created for ID ${extra} [allowed: ${allowedPermissions}] [denied: ${deniedPermissions}] by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //     );
+    //     return;
+    //   } else if ('type' in extra) {
+    //     if (extra.type === AuditLogOptionsType.Role) {
+    //       const role = await guild.roles.fetch(extra.id).catch(() => null);
+    //       logger.info(
+    //         `Channel ${target} had new permission overwrites for role ${role?.name} (${role?.id}) created [allowed: ${allowedPermissions}] [denied: ${deniedPermissions}] by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //       );
+    //     } else if (extra.type === AuditLogOptionsType.Member) {
+    //       const member = await guild.members.fetch(extra.id).catch(() => null);
+    //       logger.info(
+    //         `Channel ${target} had new permission overwrites for member ${member?.user?.username} (${member?.id}) created [allowed: ${allowedPermissions}] [denied: ${deniedPermissions}] by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //       );
+    //     }
+    //   }
+    // } else if (auditLogEntry.isAction(AuditLogEvent.ChannelOverwriteUpdate)) {
+    //   if (!auditLogEntry.targetId) {
+    //     logger.warn('No target ID found for channel overwrite update audit log entry');
+    //     return;
+    //   }
+
+    //   if (!auditLogEntry.executorId) {
+    //     logger.warn('No executor ID found for channel overwrite update audit log entry');
+    //     return;
+    //   }
+
+    //   const target = await client.channels.fetch(auditLogEntry.targetId).catch(() => null);
+    //   const executor = await client.users.fetch(auditLogEntry.executorId).catch(() => null);
+    //   const reason = auditLogEntry.reason || 'No reason provided';
+    //   const extra = auditLogEntry.extra;
+
+    //   const allowedPermissions = auditLogEntry.changes
+    //     .filter((change) => change.key === 'allow')
+    //     .map((change) => new PermissionsBitField(BigInt(change.new ?? 0)).toArray())
+    //     .join(', ');
+    //   const deniedPermissions = auditLogEntry.changes
+    //     .filter((change) => change.key === 'deny')
+    //     .map((change) => new PermissionsBitField(BigInt(change.new ?? 0)).toArray())
+    //     .join(', ');
+
+    //   if (extra instanceof GuildMember) {
+    //     logger.info(
+    //       `Channel ${target} had its permission overwrites for member ${extra.user.username} (${extra.id}) updated [allowed: ${allowedPermissions}] [denied: ${deniedPermissions}] by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //     );
+    //     return;
+    //   } else if (extra instanceof Role) {
+    //     logger.info(
+    //       `Channel ${target} had its permission overwrites for role ${extra.name} (${extra.id}) updated [allowed: ${allowedPermissions}] [denied: ${deniedPermissions}] by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //     );
+    //     return;
+    //   } else if (typeof extra === 'string') {
+    //     logger.info(
+    //       `Channel ${target} had its permission overwrites updated for ID ${extra} [allowed: ${allowedPermissions}] [denied: ${deniedPermissions}] by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //     );
+    //     return;
+    //   } else if ('type' in extra) {
+    //     if (extra.type === AuditLogOptionsType.Role) {
+    //       const role = await guild.roles.fetch(extra.id).catch(() => null);
+    //       logger.info(
+    //         `Channel ${target} had its permission overwrites for role ${role?.name} (${role?.id}) updated [allowed: ${allowedPermissions}] [denied: ${deniedPermissions}] by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //       );
+    //     } else if (extra.type === AuditLogOptionsType.Member) {
+    //       const member = await guild.members.fetch(extra.id).catch(() => null);
+    //       logger.info(
+    //         `Channel ${target} had its permission overwrites for member ${member?.user?.username} (${member?.id}) updated [allowed: ${allowedPermissions}] [denied: ${deniedPermissions}] by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //       );
+    //     }
+    //   }
+    // } else if (auditLogEntry.isAction(AuditLogEvent.ChannelOverwriteDelete)) {
+    //   if (!auditLogEntry.targetId) {
+    //     logger.warn('No target ID found for channel overwrite delete audit log entry');
+    //     return;
+    //   }
+
+    //   if (!auditLogEntry.executorId) {
+    //     logger.warn('No executor ID found for channel overwrite delete audit log entry');
+    //     return;
+    //   }
+
+    //   const target = await client.channels.fetch(auditLogEntry.targetId).catch(() => null);
+    //   const executor = await client.users.fetch(auditLogEntry.executorId).catch(() => null);
+    //   const reason = auditLogEntry.reason || 'No reason provided';
+    //   const extra = auditLogEntry.extra;
+
+    //   const allowedPermissions = auditLogEntry.changes
+    //     .filter((change) => change.key === 'allow')
+    //     .map((change) => new PermissionsBitField(BigInt(change.old ?? 0)).toArray())
+    //     .join(', ');
+    //   const deniedPermissions = auditLogEntry.changes
+    //     .filter((change) => change.key === 'deny')
+    //     .map((change) => new PermissionsBitField(BigInt(change.old ?? 0)).toArray())
+    //     .join(', ');
+
+    //   if (extra instanceof GuildMember) {
+    //     logger.info(
+    //       `Channel ${target} had its permission overwrites for member ${extra.user.username} (${extra.id}) deleted [allowed: ${allowedPermissions}] [denied: ${deniedPermissions}] by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //     );
+    //     return;
+    //   } else if (extra instanceof Role) {
+    //     logger.info(
+    //       `Channel ${target} had its permission overwrites for role ${extra.name} (${extra.id}) deleted [allowed: ${allowedPermissions}] [denied: ${deniedPermissions}] by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //     );
+    //     return;
+    //   } else if (typeof extra === 'string') {
+    //     logger.info(
+    //       `Channel ${target} had its permission overwrites for ID ${extra} deleted [allowed: ${allowedPermissions}] [denied: ${deniedPermissions}] by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //     );
+    //     return;
+    //   } else if ('type' in extra) {
+    //     if (extra.type === AuditLogOptionsType.Role) {
+    //       const role = await guild.roles.fetch(extra.id).catch(() => null);
+    //       logger.info(
+    //         `Channel ${target} had its permission overwrites for role ${role?.name} (${role?.id}) deleted by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //       );
+    //     } else if (extra.type === AuditLogOptionsType.Member) {
+    //       const member = await guild.members.fetch(extra.id).catch(() => null);
+    //       logger.info(
+    //         `Channel ${target} had its permission overwrites for member ${member?.user?.username} (${member?.id}) deleted by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //       );
+    //     }
+    //   }
+    // } else if (auditLogEntry.isAction(AuditLogEvent.ChannelUpdate)) {
+    //   if (!auditLogEntry.targetId) {
+    //     logger.warn('No target ID found for channel update audit log entry');
+    //     return;
+    //   }
+    //   const target = await client.channels.fetch(auditLogEntry.targetId).catch(() => null);
+
+    //   if (!auditLogEntry.executorId) {
+    //     logger.warn('No executor ID found for channel update audit log entry');
+    //     return;
+    //   }
+    //   const executor = await client.users.fetch(auditLogEntry.executorId).catch(() => null);
+
+    //   if (auditLogEntry.changes) {
+    //     for (const change of auditLogEntry.changes) {
+    //       if (change.key === 'name') {
+    //         const oldName = change.old;
+    //         const newName = change.new;
+    //         const reason = auditLogEntry.reason || 'No reason provided';
+
+    //         logger.info(
+    //           `Channel ${target} was renamed from "${oldName}" to "${newName}" by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //         );
+    //       } else if (change.key === 'topic') {
+    //         const oldTopic = change.old || 'No topic';
+    //         const newTopic = change.new || 'No topic';
+    //         const reason = auditLogEntry.reason || 'No reason provided';
+
+    //         logger.info(
+    //           `Channel ${target} had its topic changed from "${oldTopic}" to "${newTopic}" by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //         );
+    //       } else if (change.key === 'nsfw') {
+    //         const oldNsfw = change.old ? 'NSFW' : 'not NSFW';
+    //         const newNsfw = change.new ? 'NSFW' : 'not NSFW';
+    //         const reason = auditLogEntry.reason || 'No reason provided';
+
+    //         logger.info(
+    //           `Channel ${target} was changed from ${oldNsfw} to ${newNsfw} by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //         );
+    //       } else if (change.key === 'rate_limit_per_user') {
+    //         const oldRateLimit = change.old || 0;
+    //         const newRateLimit = change.new || 0;
+    //         const reason = auditLogEntry.reason || 'No reason provided';
+
+    //         logger.info(
+    //           `Channel ${target} had its slowmode changed from ${oldRateLimit}s to ${newRateLimit}s by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //         );
+    //       } else if (change.key === 'bitrate') {
+    //         const oldBitrate = change.old || 0;
+    //         const newBitrate = change.new || 0;
+    //         const reason = auditLogEntry.reason || 'No reason provided';
+
+    //         logger.info(
+    //           `Channel ${target} had its bitrate changed from ${oldBitrate}bps to ${newBitrate}bps by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //         );
+    //       } else if (change.key === 'user_limit') {
+    //         const oldUserLimit = change.old || 0;
+    //         const newUserLimit = change.new || 0;
+    //         const reason = auditLogEntry.reason || 'No reason provided';
+
+    //         logger.info(
+    //           `Channel ${target} had its user limit changed from ${oldUserLimit} to ${newUserLimit} by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //         );
+    //       } else if (change.key === 'permission_overwrites') {
+    //         const reason = auditLogEntry.reason || 'No reason provided';
+
+    //         logger.info(
+    //           `Channel ${target} had its permission overwrites changed by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //         );
+    //       } else if (change.key === 'position') {
+    //         const oldPosition = change.old;
+    //         const newPosition = change.new;
+    //         const reason = auditLogEntry.reason || 'No reason provided';
+
+    //         logger.info(
+    //           `Channel ${target} had its position changed from ${oldPosition} to ${newPosition} by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //         );
+    //       } else if (change.key === 'default_auto_archive_duration') {
+    //         const oldDuration = change.old || 0;
+    //         const newDuration = change.new || 0;
+    //         const reason = auditLogEntry.reason || 'No reason provided';
+
+    //         logger.info(
+    //           `Channel ${target} had its default auto-archive duration changed from ${oldDuration} minutes to ${newDuration} minutes by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //         );
+    //       } else if (change.key === 'region') {
+    //         const oldRegion = change.old || 'Automatic';
+    //         const newRegion = change.new || 'Automatic';
+    //         const reason = auditLogEntry.reason || 'No reason provided';
+
+    //         logger.info(
+    //           `Channel ${target} had its region changed from ${oldRegion} to ${newRegion} by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //         );
+    //       } else if (change.key === 'rtc_region') {
+    //         const oldRtcRegion = change.old || 'Automatic';
+    //         const newRtcRegion = change.new || 'Automatic';
+    //         const reason = auditLogEntry.reason || 'No reason provided';
+
+    //         logger.info(
+    //           `Channel ${target} had its RTC region changed from ${oldRtcRegion} to ${newRtcRegion} by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //         );
+    //       } else if (change.key === 'video_quality_mode') {
+    //         const oldMode = change.old === 1 ? 'Auto' : '720p';
+    //         const newMode = change.new === 1 ? 'Auto' : '720p';
+    //         const reason = auditLogEntry.reason || 'No reason provided';
+
+    //         logger.info(
+    //           `Channel ${target} had its video quality mode changed from ${oldMode} to ${newMode} by ${executor} in ${guild.name} (${guild.id}) because: ${reason}`,
+    //         );
+    //       }
+    //     }
+    //   }
+    // }
+
+    // if (auditLogEntry.isAction(AuditLogEvent.MemberUpdate)) {
+    //   if (!auditLogEntry.targetId) {
+    //     logger.warn('No target ID found for member update audit log entry');
+    //     return;
+    //   }
+
+    //   const target = await client.users.fetch(auditLogEntry.targetId).catch(() => null);
+
+    //   if (auditLogEntry.changes) {
+    //     for (const change of auditLogEntry.changes) {
+    //       if (change.key === 'communication_disabled_until') {
+    //         const oldTime = change.old ? new Date(change.old).getTime() : null;
+    //         const newTime = change.new ? new Date(change.new).getTime() : null;
+    //         const reason = auditLogEntry.reason || 'No reason provided';
+
+    //         let executor: User | null = null;
+    //         if (auditLogEntry.executorId) {
+    //           executor = await client.users.fetch(auditLogEntry.executorId).catch(() => null);
+    //         }
+
+    //         if (oldTime === null && newTime !== null) {
+    //           // User was timed out
+    //           logger.info(
+    //             `User ${target} was timed out ${executor ? `by ${executor} ` : ''}until <t:${Math.floor(newTime / 1_000)}:F> (<t:${Math.floor(
+    //               newTime / 1_000,
+    //             )}:R>) in ${guild.name} (${guild.id}) because: ${reason}`,
+    //           );
+    //         } else if (oldTime !== null && newTime === null) {
+    //           // User was un-timed out
+    //           logger.info(
+    //             `User ${target} was un-timed out ${executor ? `by ${executor} ` : ''}in ${guild.name} (${guild.id}) because: ${reason}`,
+    //           );
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+
+    // if (auditLogEntry.isAction(AuditLogEvent.MessageDelete)) {
+    //   const executor = await client.users.fetch(auditLogEntry.executorId!).catch(() => null);
+    //   const target = await client.users.fetch(auditLogEntry.targetId!).catch(() => null);
+    //   const channel = auditLogEntry.extra.channel;
+    //   logger.info(`A message by ${target} was deleted by ${executor} in ${channel}`);
+    // } else if (auditLogEntry.isAction(AuditLogEvent.MessageBulkDelete)) {
+    //   const executor = await client.users.fetch(auditLogEntry.executorId!).catch(() => null);
+    //   const count = auditLogEntry.extra.count;
+    //   const channel = await client.channels.fetch(auditLogEntry.targetId!).catch(() => null);
+    //   logger.info(`${executor} deleted ${count} messages in ${channel}`);
+    // } else if (auditLogEntry.isAction(AuditLogEvent.MemberKick)) {
+    //   const executor = await client.users.fetch(auditLogEntry.executorId).catch(() => null);
+    //   const target = await client.users.fetch(auditLogEntry.targetId).catch(() => null);
+    //   const reason = auditLogEntry.reason || 'No reason provided';
+    //   logger.info(`User ${target} was kicked by ${executor} for: ${reason}`);
+    // } else if (auditLogEntry.isAction(AuditLogEvent.MemberBanAdd)) {
+    //   const executor = await client.users.fetch(auditLogEntry.executorId).catch(() => null);
+    //   const target = await client.users.fetch(auditLogEntry.targetId).catch(() => null);
+    //   const reason = auditLogEntry.reason || 'No reason provided';
+    //   logger.info(`User ${target} was banned by ${executor} for: ${reason}`);
+    // } else if (auditLogEntry.isAction(AuditLogEvent.MemberBanRemove)) {
+    //   const executor = await client.users.fetch(auditLogEntry.executorId).catch(() => null);
+    //   const target = await client.users.fetch(auditLogEntry.targetId).catch(() => null);
+    //   const reason = auditLogEntry.reason || 'No reason provided';
+    //   logger.info(`User ${target} was unbanned by ${executor} for: ${reason}`);
+    // } else if (auditLogEntry.isAction(AuditLogEvent.AutoModerationUserCommunicationDisabled)) {
+    //   const executor = await client.users.fetch(auditLogEntry.executorId).catch(() => null);
+    //   const target = await client.users.fetch(auditLogEntry.targetId).catch(() => null);
+    //   const reason = auditLogEntry.reason || 'No reason provided';
+    //   logger.info(`User ${target} was timed out by ${executor} for: ${reason}`);
+    // }
