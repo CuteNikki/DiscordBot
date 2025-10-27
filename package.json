@@ -18,35 +18,39 @@
     "printWidth": 140
   },
   "devDependencies": {
-    "@eslint/js": "^9.37.0",
+    "@eslint/js": "^9.38.0",
     "@types/bun": "latest",
     "@types/figlet": "^1.7.0",
     "@types/node-cron": "^3.0.11",
     "@types/react": "18.3.23",
-    "eslint": "^9.37.0",
+    "eslint": "^9.38.0",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^16.4.0",
     "prettier": "^3.6.2",
-    "typescript-eslint": "^8.46.1"
+    "typescript-eslint": "^8.46.2"
   },
   "peerDependencies": {
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@prisma/client": "^6.17.1",
+    "@prisma/client": "^6.18.0",
     "@types/he": "^1.2.3",
-    "canvacord": "^6.0.3",
+    "canvacord": "^6.0.4",
     "canvas": "^3.2.0",
+    "discord-api-types": "^0.38.31",
     "discord-hybrid-sharding": "^2.2.6",
-    "discord.js": "^15.0.0-dev.1760659318-0cc92bd5b",
+    "discord.js": "^15.0.0-djs-file-upload.1761302390-5ae769c9e",
     "figlet": "^1.9.3",
     "globby": "^14.1.0",
     "he": "^1.2.0",
     "i18next": "^25.6.0",
     "i18next-fs-backend": "^2.6.0",
     "node-cron": "^4.2.1",
-    "pino": "^9.13.1",
+    "pino": "^9.14.0",
     "pino-pretty": "^13.1.2",
-    "prisma": "^6.17.1"
+    "prisma": "^6.18.0"
+  },
+  "overrides": {
+    "discord-api-types": "^0.38.31"
   }
 }
