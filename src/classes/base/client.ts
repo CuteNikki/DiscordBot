@@ -1,10 +1,24 @@
-import { ApplicationEmoji, Client, Collection } from 'discord.js';
+import { ClusterClient, getInfo } from 'discord-hybrid-sharding';
+import { ApplicationEmoji, Client, Collection, GatewayIntentBits, Partials } from 'discord.js';
+import { performance } from 'perf_hooks';
 
 import type { Button } from 'classes/base/button';
 import type { Command } from 'classes/base/command';
 import type { Modal } from 'classes/base/modal';
 import type { SelectMenu } from 'classes/base/select';
-import { ClusterClient } from 'discord-hybrid-sharding';
+
+import { prisma } from 'database/index';
+
+import { startCron } from 'utility/cron';
+import { KEYS } from 'utility/keys';
+import { logger } from 'utility/logger';
+import { initializeI18N } from 'utility/translation';
+
+import { loadButtons } from 'loaders/button';
+import { loadCommands } from 'loaders/command';
+import { loadEvents } from 'loaders/event';
+import { loadModals } from 'loaders/modal';
+import { loadSelectMenus } from 'loaders/select';
 
 /**
  * ExtendedClient class that extends the Discord.js Client class.
@@ -57,4 +71,49 @@ export class ExtendedClient extends Client {
   customEmojis: {
     [key: string]: ApplicationEmoji;
   } = {};
+
+  /**
+   * Constructor for ExtendedClient.
+   * @param options - Client options.
+   */
+  constructor() {
+    super({
+      intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildModeration,
+        GatewayIntentBits.GuildMessageReactions,
+      ],
+      partials: [Partials.Message, Partials.Reaction],
+      ws: {
+        shardCount: getInfo().TOTAL_SHARDS,
+        shardIds: getInfo().SHARD_LIST,
+      },
+    });
+    this.initialize();
+  }
+
+  /**
+   * Initialize the client.
+   */
+  private async initialize() {
+    const startTime = performance.now();
+
+    // Running all of this in parallel
+    await Promise.all([
+      prisma.$connect(),
+      initializeI18N(),
+      startCron(),
+      loadCommands(this),
+      loadEvents(this),
+      loadButtons(this),
+      loadModals(this),
+      loadSelectMenus(this),
+    ]);
+
+    const endTime = performance.now();
+    logger.info(`Loaded everything in ${Math.floor(endTime - startTime)}ms!`);
+
+    await this.login(KEYS.DISCORD_BOT_TOKEN);
+  }
 }
