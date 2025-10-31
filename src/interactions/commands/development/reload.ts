@@ -5,7 +5,7 @@ import { Command } from 'classes/base/command';
 
 import { logger } from 'utility/logger';
 
-import { reloadableTypes, typeLabelMap, type ReloadType } from 'types/reload';
+import { isValidComponent, reloadMap, ReloadTypeEnum } from 'types/reload';
 
 export default new Command({
   isDevelopment: true,
@@ -19,51 +19,38 @@ export default new Command({
         .setDescription('Type of file to reload')
         .setRequired(true)
         .setChoices(
-          { name: 'Commands', value: 'command' },
-          { name: 'Buttons', value: 'button' },
-          { name: 'Modals', value: 'modal' },
-          { name: 'Select Menus', value: 'select' },
-          { name: 'Events', value: 'event' },
-          { name: 'Interactions', value: 'interaction' },
-          { name: 'All', value: 'all' },
+          { name: 'All', value: ReloadTypeEnum.All },
+          { name: 'Interaction (cmds, btns, slcs, mdls)', value: ReloadTypeEnum.Interaction },
+          { name: 'Commands', value: ReloadTypeEnum.Commands },
+          { name: 'Buttons', value: ReloadTypeEnum.Buttons },
+          { name: 'Modals', value: ReloadTypeEnum.Modals },
+          { name: 'Selects', value: ReloadTypeEnum.Selects },
+          { name: 'Events', value: ReloadTypeEnum.Events },
+          { name: 'Locales', value: ReloadTypeEnum.Locales },
         ),
     ),
   async execute(interaction) {
     await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
-    const type = interaction.options.getString('type') ?? 'all';
+    const type = interaction.options.getString('type') ?? ReloadTypeEnum.All;
     const client = interaction.client as ExtendedClient;
 
-    if (!(type in typeLabelMap)) {
+    if (!isValidComponent(type)) {
       return await interaction.editReply({
         content: `❌ Invalid type: \`${type}\``,
       });
     }
 
-    const toReload = new Set<ReloadType>();
-
-    if (type === 'all' || type === 'interaction') {
-      toReload.add('command').add('button').add('modal').add('select');
-    }
-    if (type !== 'interaction' && type !== 'all') {
-      toReload.add(type as ReloadType);
-    }
-    if (type === 'all') {
-      toReload.add('event');
-    }
-
     try {
-      for (const reloadType of toReload) {
-        const loader = reloadableTypes[reloadType as keyof typeof reloadableTypes];
-        if (loader) await loader(client);
-      }
+      const loader = reloadMap[type];
+      await loader(client);
 
-      await interaction.editReply({ content: `✅ Reloaded ${typeLabelMap[type as ReloadType]}.` });
+      await interaction.editReply({ content: `✅ Reloaded ${type}.` });
     } catch (err) {
       await interaction.editReply({
-        content: `❌ Failed to reload ${typeLabelMap[type as ReloadType]}. Check the logs for more details.`,
+        content: `❌ Failed to reload ${type}. Check the logs for more details.`,
       });
-      logger.error({ err }, `Failed to reload ${typeLabelMap[type as ReloadType]}`);
+      logger.error({ err }, `Failed to reload ${type}`);
     }
   },
 });

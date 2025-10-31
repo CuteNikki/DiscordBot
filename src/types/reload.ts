@@ -1,25 +1,55 @@
+import type { ExtendedClient } from 'classes/base/client';
+
 import { loadButtons } from 'loaders/button';
 import { loadCommands } from 'loaders/command';
 import { loadEvents } from 'loaders/event';
 import { loadModals } from 'loaders/modal';
 import { loadSelectMenus } from 'loaders/select';
 
-export const reloadableTypes = {
-  command: loadCommands,
-  button: loadButtons,
-  modal: loadModals,
-  select: loadSelectMenus,
-  event: loadEvents,
-} as const;
+import { initializeI18N } from 'utility/translation';
 
-export const typeLabelMap = {
-  command: 'commands',
-  button: 'buttons',
-  modal: 'modals',
-  select: 'select menus',
-  event: 'events',
-  interaction: 'interactions',
-  all: 'everything',
-} as const;
+/**
+ * Enum representing the different types of reloadable components.
+ */
+export enum ReloadTypeEnum {
+  Commands = 'commands',
+  Buttons = 'buttons',
+  Modals = 'modals',
+  Selects = 'selects',
+  Events = 'events',
+  Locales = 'locales',
+  All = 'everything',
+  Interaction = 'interaction',
+}
 
-export type ReloadType = keyof typeof typeLabelMap;
+/**
+ * Type guard to check if a value is a valid ReloadTypeEnum.
+ * @param value - The value to check.
+ * @returns True if the value is a valid ReloadTypeEnum, false otherwise.
+ */
+export function isValidComponent(value: string): value is ReloadTypeEnum {
+  return Object.values(ReloadTypeEnum).includes(value as ReloadTypeEnum);
+}
+
+/**
+ * Map of reloadable components and their corresponding reload functions.
+ */
+export const reloadMap: { [key in ReloadTypeEnum]: (client: ExtendedClient) => Promise<unknown> } = {
+  everything: async (client: ExtendedClient) =>
+    await Promise.all([
+      loadCommands(client),
+      loadButtons(client),
+      loadModals(client),
+      loadSelectMenus(client),
+      loadEvents(client),
+      initializeI18N(),
+    ]),
+  interaction: async (client: ExtendedClient) =>
+    await Promise.all([loadCommands(client), loadButtons(client), loadModals(client), loadSelectMenus(client)]),
+  commands: loadCommands,
+  buttons: loadButtons,
+  modals: loadModals,
+  selects: loadSelectMenus,
+  events: loadEvents,
+  locales: () => initializeI18N(),
+} as const;
