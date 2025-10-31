@@ -3,15 +3,23 @@ import { AuditLogEvent, chatInputApplicationCommandMention, Events, Guild, Guild
 import type { ExtendedClient } from 'classes/base/client';
 import { Event } from 'classes/base/event';
 
+import { getGuild } from 'database/guild';
+
 import { logger } from 'utility/logger';
 
 export default new Event({
   name: Events.GuildAuditLogEntryCreate,
   once: false,
   async execute(client, auditLogEntry, guild) {
+    // Auditlog experimenting
     logger.info({ entry: auditLogEntry.toJSON() }, `Audit log entry created: ${auditLogEntry.action} in ${guild.name} (${guild.id})`);
 
-    // Auditlog experimenting
+    // Ignore if no guild configuration is found
+    const guildConfig = await getGuild(guild.id);
+    if (!guildConfig) return;
+
+    // @todo: check if logging is enabled (bonus: toggling types of audit log entries)
+
     if (auditLogEntry.isAction(AuditLogEvent.GuildUpdate)) {
       handleGuildUpdate(client, auditLogEntry, guild);
     } else if (auditLogEntry.isAction(AuditLogEvent.ChannelCreate)) {
@@ -219,7 +227,6 @@ export default new Event({
   },
 });
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 function handleGuildUpdate(
   _client: ExtendedClient,
   auditLogEntry: GuildAuditLogsEntry<AuditLogEvent.GuildUpdate, 'Update', 'Guild'>,
@@ -227,13 +234,12 @@ function handleGuildUpdate(
 ) {
   const changes = auditLogEntry.changes; // Array of changes made
   const executor = auditLogEntry.executor; // User who made the change
-  const target = auditLogEntry.target; // Guild
   const reason = auditLogEntry.reason; // Reason for the change, if provided
   const extra = auditLogEntry.extra; // Extra information, varies by action type
 
   return logger.info(
     [
-      `Guild updated: ${target.name} (${target.id})`,
+      `Guild updated: ${guild.name} (${guild.id})`,
       executor ? `By: ${executor.tag} (${executor.id})` : 'By: Unknown',
       reason ? `Reason: ${reason}` : '',
       extra ? `Extra Info: ${JSON.stringify(extra, null, 2)}` : '',
