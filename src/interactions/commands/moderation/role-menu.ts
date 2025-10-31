@@ -1,3 +1,4 @@
+import { RoleMenuMode } from '@prisma/client';
 import {
   ActionRowBuilder,
   ApplicationIntegrationType,
@@ -28,8 +29,8 @@ import {
 } from 'discord.js';
 import { t } from 'i18next';
 
-import { RoleMenuMode } from '@prisma/client';
 import { Command } from 'classes/base/command';
+
 import { createRoleMenu, getRoleMenuCount, getRoleMenus } from 'database/role-menu';
 
 export default new Command({
@@ -38,33 +39,7 @@ export default new Command({
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
     .setName('role-menu')
     .setDescription('Manage role menus')
-    .addSubcommands(
-      (cmd) => cmd.setName('create').setDescription('Create a new role menu'),
-      // .addChannelOptions((option) =>
-      //   option
-      //     .setName('channel')
-      //     .setDescription('The channel where the role menu message should be created')
-      //     .setChannelTypes(
-      //       ChannelType.GuildText,
-      //       ChannelType.GuildAnnouncement,
-      //       ChannelType.AnnouncementThread,
-      //       ChannelType.PublicThread,
-      //       ChannelType.GuildVoice,
-      //       ChannelType.GuildStageVoice,
-      //     )
-      //     .setRequired(true),
-      // )
-      // .addStringOptions((option) =>
-      //   option
-      //     .setName('mode')
-      //     .setDescription('Select between single-select or multi-select role menu')
-      //     .setChoices({ name: 'single-select', value: RoleMenuMode.SingleSelect }, { name: 'multi-select', value: RoleMenuMode.MultiSelect })
-      //     .setRequired(true),
-      // )
-      // .addStringOptions((option) =>
-      //   option.setName('description').setDescription('An optional description for the role menu').setRequired(false),
-      // ),
-    )
+    .addSubcommands((cmd) => cmd.setName('create').setDescription('Create a new role menu'))
     .addSubcommands((cmd) => cmd.setName('delete').setDescription('Delete a role menu'))
     .addSubcommands((cmd) => cmd.setName('list').setDescription('List all role menus in the guild'))
     .addSubcommands((cmd) =>
@@ -120,7 +95,7 @@ async function handleMenuList(interaction: ChatInputCommandInteraction, guildId:
   if (roleMenus.length === 0) {
     return await interaction.editReply({
       components: [
-        new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(t('role-menu.list.no-role-menus', { lng }))),
+        new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(t('role-menu.list.no-menus', { lng }))),
       ],
       flags: [MessageFlags.IsComponentsV2],
       allowedMentions: { parse: [] },
@@ -150,7 +125,7 @@ async function handleMenuList(interaction: ChatInputCommandInteraction, guildId:
                 : t('role-menu.list.no-excluded-roles', { lng })
             }`,
             `${t('role-menu.list.roles', { lng })}`,
-            ...roleMenu.roles.map((role) => `- <@&${role.roleId}> | ${t('role-menu.list.emoji', { lng })}  ${role.emoji}`),
+            ...roleMenu.roles.map((role) => `- <@&${role.roleId}> | ${role.emoji}`),
           ].join('\n'),
         ),
       ),
@@ -181,19 +156,14 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
   const startingMessage = await interaction.editReply({
     components: [
       new ContainerBuilder()
-        .addTextDisplayComponents(
-          new TextDisplayBuilder().setContent(
-            // @todo: replace with translation
-            '## Role Menu Setup\nWe will ask you a few questions to get things right.\nGet started by pressing the buttons below.',
-          ),
-        )
+        .addTextDisplayComponents(new TextDisplayBuilder().setContent(t('role-menu.create.intro', { lng })))
         .addActionRowComponents(
           new ActionRowBuilder()
             .addDangerButtonComponents(
-              new DangerButtonBuilder().setCustomId('role-menu-cancel').setLabel(t('role-menu.create.cancel-setup', { lng })),
+              new DangerButtonBuilder().setCustomId('role-menu-cancel').setLabel(t('role-menu.create.cancel', { lng })),
             )
             .addSuccessButtonComponents(
-              new SuccessButtonBuilder().setCustomId('role-menu-create_start').setLabel(t('role-menu.create.start-setup', { lng })),
+              new SuccessButtonBuilder().setCustomId('role-menu-create_start').setLabel(t('role-menu.create.start', { lng })),
             ),
         ),
     ],
@@ -386,9 +356,7 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
   if (selectedRoles.length === 0) {
     return await rolesInteraction.editReply({
       components: [
-        new ContainerBuilder().addTextDisplayComponents(
-          new TextDisplayBuilder().setContent(t('role-menu.create.no-roles-selected', { lng })),
-        ),
+        new ContainerBuilder().addTextDisplayComponents(new TextDisplayBuilder().setContent(t('role-menu.create.no-roles', { lng }))),
       ],
       flags: [MessageFlags.IsComponentsV2],
       allowedMentions: { parse: [] },
@@ -484,7 +452,7 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
     const reactionMessage = await requiredRolesInteraction.editReply({
       components: [
         new ContainerBuilder().addTextDisplayComponents(
-          new TextDisplayBuilder().setContent(t('role-menu.create.setting-emoji-prompt', { lng, role: `${roleMention(roleId)}` })),
+          new TextDisplayBuilder().setContent(t('role-menu.create.emoji-prompt', { lng, role: roleMention(roleId) })),
         ),
       ],
       flags: [MessageFlags.IsComponentsV2],
