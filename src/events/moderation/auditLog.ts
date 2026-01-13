@@ -101,21 +101,6 @@ export default new Event({
   },
 });
 
-function handleChannelCreate(_client: ExtendedClient, auditLogEntry: GuildAuditLogsEntry, guild: Guild) {
-  const entry = auditLogEntry as GuildAuditLogsEntry<AuditLogEvent.ChannelCreate, 'Create', 'Channel'>;
-  const target = entry.target; // Channel
-  const executor = entry.executor; // User who created the channel
-  const reason = entry.reason; // Reason for the creation, if provided
-
-  return logger.info(
-    [
-      `Channel [${target.type}] created: ${target.name} (${target.id}) in Guild: ${guild.name} (${guild.id})`,
-      executor ? `By: ${executor.tag} (${executor.id})` : 'By: Unknown',
-      reason ? `Reason: ${reason}` : '',
-    ].join('\n'),
-  );
-}
-
 function handleChannelUpdate(_client: ExtendedClient, auditLogEntry: GuildAuditLogsEntry, guild: Guild) {
   const entry = auditLogEntry as GuildAuditLogsEntry<AuditLogEvent.ChannelUpdate, 'Update', 'Channel'>;
   const changes = entry.changes; // Array of changes made
