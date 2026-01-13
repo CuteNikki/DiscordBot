@@ -15,7 +15,7 @@ import {
 } from 'discord.js';
 
 /** Resolves the appropriate interaction type based on the provided application command type. */
-type ResolveInteraction<T extends ApplicationCommandType | unknown> = T extends ApplicationCommandType.ChatInput
+type ResolveInteraction<T = ApplicationCommandType> = T extends ApplicationCommandType.ChatInput
   ? ChatInputCommandInteraction
   : T extends ApplicationCommandType.Message
     ? MessageContextMenuCommandInteraction
@@ -28,7 +28,7 @@ type ResolveInteraction<T extends ApplicationCommandType | unknown> = T extends 
  *
  * @template T - The type of the application command, defaults to `ApplicationCommandType.ChatInput`.
  */
-export class Command<T extends ApplicationCommandType | unknown = ApplicationCommandType.ChatInput> {
+export class Command<T = ApplicationCommandType> {
   /**
    * Creates an instance of the command with the specified options.
    *
