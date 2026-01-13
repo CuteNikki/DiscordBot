@@ -5,9 +5,20 @@ import tseslint from 'typescript-eslint';
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
-  { files: ['**/*.{js,mjs,cjs,ts}'] },
-  { languageOptions: { globals: globals.browser } },
+  // Base JavaScript rules
+  { languageOptions: { globals: globals.node } },
   pluginJs.configs.recommended,
+
+  // TypeScript rules
   ...tseslint.configs.recommended,
+
+  // Prettier rules
   eslintConfigPrettier,
+
+  // Custom rules
+  {
+    rules: {
+      'no-warning-comments': ['warn', { terms: ['todo', 'fixme'], location: 'anywhere' }],
+    },
+  },
 ];
