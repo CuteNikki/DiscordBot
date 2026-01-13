@@ -18,7 +18,13 @@ export default [
   // Custom rules
   {
     rules: {
-      'no-warning-comments': ['warn', { terms: ['todo', 'fixme'], location: 'anywhere' }],
+      'no-warning-comments': [
+        'warn',
+        {
+          terms: ['todo', 'fixme', 'eslint-disable', 'eslint-disable-next-line', 'eslint-disable-line'],
+          location: 'anywhere',
+        },
+      ],
     },
   },
 ];
