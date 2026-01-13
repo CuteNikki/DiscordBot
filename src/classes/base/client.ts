@@ -1,7 +1,8 @@
 import { ClusterClient, getInfo } from 'discord-hybrid-sharding';
-import { ApplicationEmoji, Client, Collection, GatewayIntentBits, Partials } from 'discord.js';
+import { ApplicationEmoji, AuditLogEvent, Client, Collection, GatewayIntentBits, Partials } from 'discord.js';
 import { performance } from 'perf_hooks';
 
+import type { AuditLog } from 'classes/base/auditLog';
 import type { Button } from 'classes/base/button';
 import type { Command } from 'classes/base/command';
 import type { Modal } from 'classes/base/modal';
@@ -14,6 +15,7 @@ import { KEYS } from 'utility/keys';
 import { logger } from 'utility/logger';
 import { initializeI18N } from 'utility/translation';
 
+import { loadAuditLogs } from 'loaders/auditLog';
 import { loadButtons } from 'loaders/button';
 import { loadCommands } from 'loaders/command';
 import { loadEvents } from 'loaders/event';
@@ -31,11 +33,19 @@ export class ExtendedClient extends Client {
    * Cluster client.
    */
   cluster = new ClusterClient(this);
+
   /**
    * Collection of commands.
    * Collection<commandName, Command>
    */
   commands = new Collection<string, Command<unknown>>();
+
+  /**
+   * Audit logs collection.
+   * Collection<AuditLogEvent, AuditLog>
+   */
+  auditLogs = new Collection<AuditLogEvent, AuditLog>();
+
   /**
    * Cooldowns collection.
    * Collection<commandName, Collection<userId, removeTimestamp>>
@@ -105,6 +115,7 @@ export class ExtendedClient extends Client {
       startCron(),
       loadCommands(this),
       loadEvents(this),
+      loadAuditLogs(this),
       loadButtons(this),
       loadModals(this),
       loadSelectMenus(this),
