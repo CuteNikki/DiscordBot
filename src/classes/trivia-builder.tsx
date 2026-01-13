@@ -9,6 +9,8 @@
 // Font = The Font class for loading custom fonts
 // FontFactory = The FontFactory for managing fonts
 
+// Unfortunately, we have to disable the no-unused-vars rule here because of JSX
+// eslint-disable-next-line no-warning-comments
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Builder, Font, FontFactory, JSX } from 'canvacord';
 import { ActionRowBuilder, DangerButtonBuilder, PrimaryButtonBuilder, SecondaryButtonBuilder, SuccessButtonBuilder } from 'discord.js';
