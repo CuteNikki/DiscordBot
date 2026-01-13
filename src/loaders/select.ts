@@ -42,10 +42,11 @@ export async function loadSelectMenus(client: ExtendedClient) {
   );
 }
 
-function isValidSelectMenu(selectMenu: SelectMenu): selectMenu is SelectMenu {
+function isValidSelectMenu(selectMenu: unknown): selectMenu is SelectMenu {
   return (
     typeof selectMenu === 'object' &&
     selectMenu !== null &&
+    'options' in selectMenu &&
     typeof selectMenu.options === 'object' &&
     selectMenu.options !== null &&
     'customId' in selectMenu.options &&

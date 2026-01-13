@@ -42,10 +42,11 @@ export async function loadButtons(client: ExtendedClient) {
   );
 }
 
-function isValidButton(button: Button): button is Button {
+function isValidButton(button: unknown): button is Button {
   return (
     typeof button === 'object' &&
     button !== null &&
+    'options' in button &&
     typeof button.options === 'object' &&
     button.options !== null &&
     'customId' in button.options &&

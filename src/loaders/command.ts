@@ -43,10 +43,11 @@ export async function loadCommands(client: ExtendedClient) {
   );
 }
 
-function isValidCommand(command: Command): command is Command {
+function isValidCommand(command: unknown): command is Command {
   return (
     typeof command === 'object' &&
     command !== null &&
+    'options' in command &&
     typeof command.options === 'object' &&
     command.options !== null &&
     'builder' in command.options &&

@@ -42,10 +42,11 @@ export async function loadModals(client: ExtendedClient) {
   );
 }
 
-function isValidModal(modal: Modal): modal is Modal {
+function isValidModal(modal: unknown): modal is Modal {
   return (
     typeof modal === 'object' &&
     modal !== null &&
+    'options' in modal &&
     typeof modal.options === 'object' &&
     modal.options !== null &&
     'customId' in modal.options &&
