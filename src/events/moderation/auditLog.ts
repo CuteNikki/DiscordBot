@@ -1,5 +1,5 @@
+// remove the line below when all handlers are implemented
 /* eslint-disable @typescript-eslint/no-unused-vars */
-// @todo: remove the above line when all handlers are implemented
 import { AuditLogEvent, chatInputApplicationCommandMention, Events, Guild, GuildAuditLogsEntry, roleMention } from 'discord.js';
 
 import type { ExtendedClient } from 'classes/base/client';
