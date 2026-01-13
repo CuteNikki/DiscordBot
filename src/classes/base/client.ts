@@ -35,8 +35,7 @@ export class ExtendedClient extends Client {
    * Collection of commands.
    * Collection<commandName, Command>
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  commands = new Collection<string, Command<any>>();
+  commands = new Collection<string, Command<unknown>>();
   /**
    * Cooldowns collection.
    * Collection<commandName, Collection<userId, removeTimestamp>>

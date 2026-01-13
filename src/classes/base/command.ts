@@ -9,11 +9,13 @@ import {
   ContextMenuCommandBuilder,
   MessageContextMenuCommandInteraction,
   UserContextMenuCommandInteraction,
+  UserContextCommandBuilder,
+  MessageContextCommandBuilder,
   type PermissionsString,
 } from 'discord.js';
 
 /** Resolves the appropriate interaction type based on the provided application command type. */
-type ResolveInteraction<T extends ApplicationCommandType> = T extends ApplicationCommandType.ChatInput
+type ResolveInteraction<T extends ApplicationCommandType | unknown> = T extends ApplicationCommandType.ChatInput
   ? ChatInputCommandInteraction
   : T extends ApplicationCommandType.Message
     ? MessageContextMenuCommandInteraction
@@ -26,7 +28,7 @@ type ResolveInteraction<T extends ApplicationCommandType> = T extends Applicatio
  *
  * @template T - The type of the application command, defaults to `ApplicationCommandType.ChatInput`.
  */
-export class Command<T extends ApplicationCommandType = ApplicationCommandType.ChatInput> {
+export class Command<T extends ApplicationCommandType | unknown = ApplicationCommandType.ChatInput> {
   /**
    * Creates an instance of the command with the specified options.
    *
@@ -49,7 +51,7 @@ export class Command<T extends ApplicationCommandType = ApplicationCommandType.C
       /** The data for the command. */
       builder: T extends ApplicationCommandType.ChatInput
         ? ChatInputCommandBuilder | ChatInputCommandSubcommandBuilder | ChatInputCommandSubcommandGroupBuilder
-        : ContextMenuCommandBuilder;
+        : ContextMenuCommandBuilder | ContextMenuCommandBuilder | UserContextCommandBuilder | MessageContextCommandBuilder;
       /** The function to execute when the command is in autocomplete mode. */
       autocomplete?: (interaction: AutocompleteInteraction) => unknown;
       /** The function to execute when the command is called. */
