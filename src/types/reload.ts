@@ -1,4 +1,5 @@
 import type { ExtendedClient } from 'classes/base/client';
+import { loadAuditLogs } from 'loaders/auditLog';
 
 import { loadButtons } from 'loaders/button';
 import { loadCommands } from 'loaders/command';
@@ -19,7 +20,8 @@ export enum ReloadTypeEnum {
   Events = 'events',
   Locales = 'locales',
   All = 'everything',
-  Interaction = 'interaction',
+  Interactions = 'interactions',
+  AuditLogs = 'auditlogs',
 }
 
 /**
@@ -42,14 +44,16 @@ export const reloadMap: { [key in ReloadTypeEnum]: (client: ExtendedClient) => P
       loadModals(client),
       loadSelectMenus(client),
       loadEvents(client),
+      loadAuditLogs(client),
       initializeI18N(),
     ]),
-  interaction: async (client: ExtendedClient) =>
+  interactions: async (client: ExtendedClient) =>
     await Promise.all([loadCommands(client), loadButtons(client), loadModals(client), loadSelectMenus(client)]),
   commands: loadCommands,
   buttons: loadButtons,
   modals: loadModals,
   selects: loadSelectMenus,
   events: loadEvents,
+  auditlogs: loadAuditLogs,
   locales: () => initializeI18N(),
 } as const;

@@ -18,16 +18,7 @@ export default new Command({
         .setName('type')
         .setDescription('Type of file to reload')
         .setRequired(true)
-        .setChoices(
-          { name: 'All', value: ReloadTypeEnum.All },
-          { name: 'Interaction (cmds, btns, slcs, mdls)', value: ReloadTypeEnum.Interaction },
-          { name: 'Commands', value: ReloadTypeEnum.Commands },
-          { name: 'Buttons', value: ReloadTypeEnum.Buttons },
-          { name: 'Modals', value: ReloadTypeEnum.Modals },
-          { name: 'Selects', value: ReloadTypeEnum.Selects },
-          { name: 'Events', value: ReloadTypeEnum.Events },
-          { name: 'Locales', value: ReloadTypeEnum.Locales },
-        ),
+        .setChoices(Object.entries(ReloadTypeEnum).map(([key, val]) => ({ name: key, value: val }))),
     ),
   async execute(interaction) {
     await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
