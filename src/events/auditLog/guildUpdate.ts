@@ -15,13 +15,15 @@ export default new AuditLog({
     return logger.info(
       [
         `Guild updated: ${guild.name} (${guild.id})`,
-        executor ? `By: ${executor.tag} (${executor.id})` : 'By: Unknown',
-        reason ? `Reason: ${reason}` : '',
-        extra ? `Extra Info: ${JSON.stringify(extra, null, 2)}` : '',
+        executor ? `By: ${executor.tag} (${executor.id})` : null,
+        reason ? `Reason: ${reason}` : null,
+        extra ? `Extra Info: ${JSON.stringify(extra, null, 2)}` : null,
         '',
         `Changes:`,
         ...changes.map((change) => `- **${change.key}**: ${change.old} -> ${change.new}`),
-      ].join('\n'),
+      ]
+        .filter((str) => str !== null)
+        .join('\n'),
     );
   },
 });
