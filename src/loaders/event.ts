@@ -1,3 +1,4 @@
+import type { ClientEventTypes } from 'discord.js';
 import { performance } from 'perf_hooks';
 
 import type { ExtendedClient } from 'classes/base/client';
@@ -18,7 +19,7 @@ export async function loadEvents(client: ExtendedClient) {
       const event = (await import(`${filePath}?update=${Date.now()}`)).default;
 
       if (isValidEvent(event)) {
-        const handler = (...args: unknown[]) => event.options.execute(client, ...args);
+        const handler = (...args: ClientEventTypes[keyof ClientEventTypes]) => event.options.execute(client, ...args);
 
         client[event.options.once ? 'once' : 'on'](event.options.name, handler);
 
@@ -45,11 +46,11 @@ export async function loadEvents(client: ExtendedClient) {
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function isValidEvent(event: Event<any>): event is Event<any> {
+function isValidEvent(event: unknown): event is Event<keyof ClientEventTypes> {
   return (
     typeof event === 'object' &&
     event !== null &&
+    'options' in event &&
     typeof event.options === 'object' &&
     event.options !== null &&
     'name' in event.options &&
