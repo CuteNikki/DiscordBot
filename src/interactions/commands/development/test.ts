@@ -2,7 +2,6 @@
 
 import {
   ActionRowBuilder,
-  AttachmentBuilder,
   ChatInputCommandBuilder,
   Colors,
   ContainerBuilder,
@@ -24,8 +23,6 @@ import { Command } from 'classes/base/command';
 export default new Command({
   builder: new ChatInputCommandBuilder().setName('test').setDescription('Test command'),
   execute(interaction) {
-    const file = new AttachmentBuilder('assets/a.png', { name: 'a.png' });
-
     const container = new ContainerBuilder()
       .setAccentColor(Colors.Blurple)
       .addTextDisplayComponents(new TextDisplayBuilder().setContent('This is a test message above an action row'))
@@ -63,7 +60,7 @@ export default new Command({
     interaction.reply({
       components: [container],
       flags: [MessageFlags.IsComponentsV2],
-      files: [file],
+      files: [{ attachment: 'assets/a.png', name: 'a.png' }],
     });
   },
 });
