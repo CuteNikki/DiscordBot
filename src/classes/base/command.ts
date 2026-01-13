@@ -28,7 +28,7 @@ type ResolveInteraction<T = ApplicationCommandType> = T extends ApplicationComma
  *
  * @template T - The type of the application command, defaults to `ApplicationCommandType.ChatInput`.
  */
-export class Command<T = ApplicationCommandType> {
+export class Command<T extends ApplicationCommandType | unknown = ApplicationCommandType.ChatInput> {
   /**
    * Creates an instance of the command with the specified options.
    *
