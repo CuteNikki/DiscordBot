@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } from 'discord.js';
+import { LabelBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } from 'discord.js';
 import { t } from 'i18next';
 
 import { Button } from 'classes/base/button';
@@ -21,15 +21,12 @@ export default new Button({
       new ModalBuilder()
         .setCustomId(`infractions-custom_${targetUserId}_${sortOrder}_${sortBy}_${showGuild ? '1' : '0'}_${showUser ? '1' : '0'}`)
         .setTitle(t('infractions.custom-page-title', { lng: interaction.locale }))
-        .addComponents(
-          new ActionRowBuilder<TextInputBuilder>().addComponents(
-            new TextInputBuilder()
-              .setCustomId('page')
-              .setLabel(t('infractions.custom-page-label', { lng: interaction.locale }))
-              .setStyle(TextInputStyle.Short)
-              .setPlaceholder('1')
-              .setRequired(true),
-          ),
+        .addLabelComponents(
+          new LabelBuilder()
+            .setLabel(t('infractions.custom-page-label', { lng: interaction.locale }))
+            .setTextInputComponent(
+              new TextInputBuilder().setCustomId('page').setStyle(TextInputStyle.Short).setPlaceholder('1').setRequired(true),
+            ),
         ),
     );
   },
