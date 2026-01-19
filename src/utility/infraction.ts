@@ -149,7 +149,8 @@ export function buildInfractionOverview({
       .setDisabled(page === 0),
     new SecondaryButtonBuilder()
       .setCustomId(`infractions-custom_${target.id}_${sortOrder}_${sortBy}_${showGuild ? 1 : 0}_${showUser ? 1 : 0}`)
-      .setLabel(`${page + 1} / ${totalPages}`),
+      .setLabel(`${page + 1} / ${totalPages}`)
+      .setDisabled(totalPages <= 1),
     new SecondaryButtonBuilder()
       .setCustomId(`infractions-next_${page}_${target.id}_${sortOrder}_${sortBy}_${showGuild ? 1 : 0}_${showUser ? 1 : 0}`)
       .setEmoji({ id: nextEmoji.id })
