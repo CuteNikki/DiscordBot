@@ -86,7 +86,7 @@ export default new Command({
         // Custom page button
         (index, totalPages) => ({
           data: new SecondaryButtonBuilder().setCustomId('pagination_custom').setLabel(`${index + 1} / ${totalPages}`),
-          disableOn: () => false,
+          disableOn: (_, totalPages) => totalPages <= 1,
           onClick: async (clickPageIndex, clickTotalPages, buttonInteraction) => {
             // Show the modal
             await buttonInteraction.showModal(
