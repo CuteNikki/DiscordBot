@@ -159,7 +159,10 @@ export class Pagination {
    * @returns The button props if found
    */
   private isValidButton(interaction: ButtonInteraction): PaginationButtonProps | undefined {
-    return this.getButtonProps().find((button) => String(button.data.toJSON().id) === interaction.customId);
+    return this.getButtonProps().find((button) => {
+      const data = button.data.toJSON();
+      return 'custom_id' in data && data.custom_id === interaction.customId;
+    });
   }
 
   /**
