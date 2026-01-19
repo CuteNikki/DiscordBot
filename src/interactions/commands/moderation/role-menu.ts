@@ -12,6 +12,7 @@ import {
   InteractionContextType,
   MessageFlags,
   messageLink,
+  PrimaryButtonBuilder,
   roleMention,
   RoleSelectMenuBuilder,
   SecondaryButtonBuilder,
@@ -32,6 +33,26 @@ import { t } from 'i18next';
 import { Command } from 'classes/base/command';
 
 import { createRoleMenu, getRoleMenuCount, getRoleMenus } from 'database/role-menu';
+
+enum CustomIds {
+  RoleMenuCancel = 'role-menu-cancel',
+  RoleMenuCreateStart = 'role-menu-create_start',
+  RoleMenuCreateSingle = 'role-menu-create_single',
+  RoleMenuCreateMulti = 'role-menu-create_multi',
+  RoleMenuCreateChannel = 'role-menu-create_channel',
+  RoleMenuCreateRoles = 'role-menu-create_roles',
+  RoleMenuCreateRolesContinue = 'role-menu-create_roles_continue',
+  RoleMenuCreateExcludedRoles = 'role-menu-create_excluded-roles',
+  RoleMenuCreateExcludedRolesSkip = 'role-menu-create_excluded-roles_skip',
+  RoleMenuCreateExcludedRolesContinue = 'role-menu-create_excluded-roles_continue',
+  RoleMenuCreateRequiredRoles = 'role-menu-create_required-roles',
+  RoleMenuCreateRequiredRolesSkip = 'role-menu-create_required-roles_skip',
+  RoleMenuCreateRequiredRolesContinue = 'role-menu-create_required-roles_continue',
+}
+
+function getRoleMenuSelectCustomId(roleId: string) {
+  return `role-menu-select_${roleId}`;
+}
 
 export default new Command({
   builder: new ChatInputCommandBuilder()
@@ -160,10 +181,10 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
         .addActionRowComponents(
           new ActionRowBuilder()
             .addDangerButtonComponents(
-              new DangerButtonBuilder().setCustomId('role-menu-cancel').setLabel(t('role-menu.create.cancel', { lng })),
+              new DangerButtonBuilder().setCustomId(CustomIds.RoleMenuCancel).setLabel(t('role-menu.create.cancel', { lng })),
             )
             .addSuccessButtonComponents(
-              new SuccessButtonBuilder().setCustomId('role-menu-create_start').setLabel(t('role-menu.create.start', { lng })),
+              new SuccessButtonBuilder().setCustomId(CustomIds.RoleMenuCreateStart).setLabel(t('role-menu.create.start', { lng })),
             ),
         ),
     ],
@@ -206,10 +227,10 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
         .addActionRowComponents(
           new ActionRowBuilder()
             .addSuccessButtonComponents(
-              new SuccessButtonBuilder().setCustomId('role-menu-create_single').setLabel(t('role-menu.create.mode-single', { lng })),
+              new SuccessButtonBuilder().setCustomId(CustomIds.RoleMenuCreateSingle).setLabel(t('role-menu.create.mode-single', { lng })),
             )
             .addSuccessButtonComponents(
-              new SuccessButtonBuilder().setCustomId('role-menu-create_multi').setLabel(t('role-menu.create.mode-multiple', { lng })),
+              new SuccessButtonBuilder().setCustomId(CustomIds.RoleMenuCreateMulti).setLabel(t('role-menu.create.mode-multiple', { lng })),
             ),
         ),
     ],
@@ -249,7 +270,7 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
         .addActionRowComponents(
           new ActionRowBuilder().addChannelSelectMenuComponent(
             new ChannelSelectMenuBuilder()
-              .setCustomId('role-menu-create_channel')
+              .setCustomId(CustomIds.RoleMenuCreateChannel)
               .setChannelTypes(
                 ChannelType.GuildText,
                 ChannelType.GuildAnnouncement,
@@ -317,9 +338,12 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
       new ContainerBuilder()
         .addTextDisplayComponents(new TextDisplayBuilder().setContent(t('role-menu.create.roles-prompt', { lng })))
         .addActionRowComponents(
+          new ActionRowBuilder().addPrimaryButtonComponents(
+            new PrimaryButtonBuilder().setCustomId(CustomIds.RoleMenuCreateRolesContinue).setLabel(t('role-menu.create.continue', { lng })),
+          ),
           new ActionRowBuilder().addRoleSelectMenuComponent(
             new RoleSelectMenuBuilder()
-              .setCustomId('role-menu-create_roles')
+              .setCustomId(CustomIds.RoleMenuCreateRoles)
               .setMinValues(1)
               .setMaxValues(20)
               .setPlaceholder(t('role-menu.create.select-roles', { lng })),
@@ -331,9 +355,10 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
   });
   const rolesInteraction = await rolesMessage
     .awaitMessageComponent({
-      filter: (i) => i.user.id === interaction.user.id,
+      filter: (i) =>
+        i.user.id === interaction.user.id &&
+        (i.customId === CustomIds.RoleMenuCreateRolesContinue || i.customId === CustomIds.RoleMenuCreateRoles),
       time: 60_000,
-      componentType: ComponentType.RoleSelect,
     })
     .catch(() => null);
   if (!rolesInteraction) {
@@ -347,11 +372,13 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
   }
   await rolesInteraction.deferUpdate();
 
-  const selectedRoles = rolesInteraction.roles
-    .filter((r) => !r.managed)
-    .sort((a, b) => b.position - a.position)
-    .first(20)
-    .map((r) => r.id);
+  const selectedRoles = rolesInteraction.isRoleSelectMenu()
+    ? rolesInteraction.roles
+        .filter((r) => !r.managed)
+        .sort((a, b) => b.position - a.position)
+        .first(20)
+        .map((r) => r.id)
+    : [];
 
   if (selectedRoles.length === 0) {
     return await rolesInteraction.editReply({
@@ -368,9 +395,15 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
       new ContainerBuilder()
         .addTextDisplayComponents(new TextDisplayBuilder().setContent(t('role-menu.create.excluded-roles-prompt', { lng })))
         .addActionRowComponents(
+          new ActionRowBuilder().addPrimaryButtonComponents(
+            new PrimaryButtonBuilder().setCustomId(CustomIds.RoleMenuCreateExcludedRolesSkip).setLabel(t('role-menu.create.skip', { lng })),
+            new PrimaryButtonBuilder()
+              .setCustomId(CustomIds.RoleMenuCreateExcludedRolesContinue)
+              .setLabel(t('role-menu.create.continue', { lng })),
+          ),
           new ActionRowBuilder().addRoleSelectMenuComponent(
             new RoleSelectMenuBuilder()
-              .setCustomId('role-menu-create_excluded-roles')
+              .setCustomId(CustomIds.RoleMenuCreateExcludedRoles)
               .setDefaultRoles([])
               .setMinValues(0)
               .setMaxValues(20)
@@ -381,13 +414,18 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
     flags: [MessageFlags.IsComponentsV2],
     allowedMentions: { parse: [] },
   });
+
   const excludedRolesInteraction = await excludedRolesMessage
     .awaitMessageComponent({
-      filter: (i) => i.user.id === interaction.user.id,
+      filter: (i) =>
+        i.user.id === interaction.user.id &&
+        (i.customId === CustomIds.RoleMenuCreateExcludedRoles ||
+          i.customId === CustomIds.RoleMenuCreateExcludedRolesSkip ||
+          i.customId === CustomIds.RoleMenuCreateExcludedRolesContinue),
       time: 60_000,
-      componentType: ComponentType.RoleSelect,
     })
     .catch(() => null);
+
   if (!excludedRolesInteraction) {
     return await interaction.editReply({
       components: [
@@ -397,22 +435,33 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
       allowedMentions: { parse: [] },
     });
   }
-  await excludedRolesInteraction.deferUpdate();
 
-  const excludedRoles = excludedRolesInteraction.roles
-    .filter((r) => !r.managed)
-    .sort((a, b) => b.position - a.position)
-    .first(20)
-    .map((r) => r.id);
+  if (excludedRolesInteraction) {
+    await excludedRolesInteraction.deferUpdate();
+  }
+
+  const excludedRoles = excludedRolesInteraction.isRoleSelectMenu()
+    ? excludedRolesInteraction.roles
+        .filter((r) => !r.managed)
+        .sort((a, b) => b.position - a.position)
+        .first(20)
+        .map((r) => r.id)
+    : [];
 
   const requiredRolesMessage = await excludedRolesInteraction.editReply({
     components: [
       new ContainerBuilder()
         .addTextDisplayComponents(new TextDisplayBuilder().setContent(t('role-menu.create.required-roles-prompt', { lng })))
         .addActionRowComponents(
+          new ActionRowBuilder().addPrimaryButtonComponents(
+            new PrimaryButtonBuilder().setCustomId(CustomIds.RoleMenuCreateRequiredRolesSkip).setLabel(t('role-menu.create.skip', { lng })),
+            new PrimaryButtonBuilder()
+              .setCustomId(CustomIds.RoleMenuCreateRequiredRolesContinue)
+              .setLabel(t('role-menu.create.continue', { lng })),
+          ),
           new ActionRowBuilder().addRoleSelectMenuComponent(
             new RoleSelectMenuBuilder()
-              .setCustomId('role-menu-create_required-roles')
+              .setCustomId(CustomIds.RoleMenuCreateRequiredRoles)
               .setDefaultRoles([])
               .setMinValues(0)
               .setMaxValues(20)
@@ -423,13 +472,22 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
     flags: [MessageFlags.IsComponentsV2],
     allowedMentions: { parse: [] },
   });
+
+  if (!requiredRolesMessage) {
+    return;
+  }
+
   const requiredRolesInteraction = await requiredRolesMessage
     .awaitMessageComponent({
-      filter: (i) => i.user.id === interaction.user.id,
+      filter: (i) =>
+        i.user.id === interaction.user.id &&
+        (i.customId === CustomIds.RoleMenuCreateRequiredRoles ||
+          i.customId === CustomIds.RoleMenuCreateRequiredRolesSkip ||
+          i.customId === CustomIds.RoleMenuCreateRequiredRolesContinue),
       time: 60_000,
-      componentType: ComponentType.RoleSelect,
     })
     .catch(() => null);
+
   if (!requiredRolesInteraction) {
     return await interaction.editReply({
       components: [
@@ -439,13 +497,18 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
       allowedMentions: { parse: [] },
     });
   }
-  await requiredRolesInteraction.deferUpdate();
 
-  const requiredRoles = requiredRolesInteraction.roles
-    .filter((r) => !r.managed)
-    .sort((a, b) => b.position - a.position)
-    .first(20)
-    .map((r) => r.id);
+  if (requiredRolesInteraction) {
+    await requiredRolesInteraction.deferUpdate();
+  }
+
+  const requiredRoles = requiredRolesInteraction.isRoleSelectMenu()
+    ? requiredRolesInteraction.roles
+        .filter((r) => !r.managed)
+        .sort((a, b) => b.position - a.position)
+        .first(20)
+        .map((r) => r.id)
+    : [];
 
   const roles: { roleId: string; emoji: string }[] = [];
   for (const roleId of selectedRoles) {
@@ -487,8 +550,8 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
   for (const role of roles) {
     container.addSectionComponents(
       new SectionBuilder()
-        .addTextDisplayComponents(new TextDisplayBuilder().setContent(`${roleMention(role.roleId)}`))
-        .setSecondaryButtonAccessory(new SecondaryButtonBuilder().setCustomId(`role-menu-select_${role.roleId}`).setLabel(role.emoji)),
+        .addTextDisplayComponents(new TextDisplayBuilder().setContent(roleMention(role.roleId)))
+        .setSecondaryButtonAccessory(new SecondaryButtonBuilder().setCustomId(getRoleMenuSelectCustomId(role.roleId)).setLabel(role.emoji)),
     );
   }
 
