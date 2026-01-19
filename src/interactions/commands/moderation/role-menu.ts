@@ -112,8 +112,8 @@ async function handleMenuList(interaction: ChatInputCommandInteraction, guildId:
             `${t('role-menu.list.description', { lng })} ${roleMenu.description ?? t('role-menu.list.no-description', { lng })}`,
             `${t('role-menu.list.channel', { lng })} ${channelMention(roleMenu.channelId)}`,
             `${t('role-menu.list.message', { lng })} ${messageLink(roleMenu.channelId, roleMenu.messageId, guildId)}`,
-            `${t('role-menu.list.created-at', { lng })} ${time(roleMenu.createdAt, TimestampStyles.LongDateTime)} (${time(roleMenu.createdAt, TimestampStyles.RelativeTime)})`,
-            `${t('role-menu.list.updated-at', { lng })} ${time(roleMenu.updatedAt, TimestampStyles.LongDateTime)} (${time(roleMenu.updatedAt, TimestampStyles.RelativeTime)})`,
+            `${t('role-menu.list.created-at', { lng })} ${time(roleMenu.createdAt, TimestampStyles.LongDateShortTime)} (${time(roleMenu.createdAt, TimestampStyles.RelativeTime)})`,
+            `${t('role-menu.list.updated-at', { lng })} ${time(roleMenu.updatedAt, TimestampStyles.LongDateShortTime)} (${time(roleMenu.updatedAt, TimestampStyles.RelativeTime)})`,
             `${t('role-menu.list.required-roles', { lng })} ${
               roleMenu.requiredRoles.length > 0
                 ? roleMenu.requiredRoles.map((roleId) => `<@&${roleId}>`).join(', ')
