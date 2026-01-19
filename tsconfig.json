@@ -32,7 +32,8 @@
       "utility/*": ["./src/utility/*"],
       "types/*": ["./src/types/*"],
       "classes/*": ["./src/classes/*"],
-      "loaders/*": ["./src/loaders/*"]
+      "loaders/*": ["./src/loaders/*"],
+      "generated/*": ["./src/generated/*"]
     }
   }
 }

@@ -177,3 +177,6 @@ dist
 
 # Finder (MacOS) folder config
 .DS_Store
+
+# prisma generated client
+src/generated/

@@ -1,5 +1,5 @@
-import type { Infraction } from '@prisma/client';
 import { MessageFlags } from 'discord.js';
+import type { Infraction } from 'generated/client';
 import { t } from 'i18next';
 
 import type { ExtendedClient } from 'classes/base/client';

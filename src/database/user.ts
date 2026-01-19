@@ -1,4 +1,4 @@
-import type { Prisma, User } from '@prisma/client';
+import type { Prisma, User } from 'generated/client';
 
 import { prisma } from 'database/index';
 

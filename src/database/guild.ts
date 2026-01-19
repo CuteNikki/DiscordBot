@@ -1,4 +1,4 @@
-import type { Guild, Prisma } from '@prisma/client';
+import type { Guild, Prisma } from 'generated/client';
 
 import { prisma } from 'database/index';
 

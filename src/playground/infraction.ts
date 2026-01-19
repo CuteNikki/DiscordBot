@@ -1,6 +1,5 @@
 // random test file to mess around with the database
 
-import { InfractionType } from '@prisma/client';
 import { getGuildOrCreate } from 'database/guild';
 import {
   createInfraction,
@@ -9,6 +8,7 @@ import {
   getInfractionsByUserId,
 } from 'database/infraction';
 import { getUserOrCreate } from 'database/user';
+import { InfractionType } from 'generated/client';
 
 import { logger } from 'utility/logger';
 

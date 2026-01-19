@@ -1,5 +1,5 @@
-import type { RoleMenuMode } from '@prisma/client';
 import { prisma } from 'database/index';
+import type { RoleMenuMode } from 'generated/client';
 
 /**
  * Get all RoleMenus for a guild

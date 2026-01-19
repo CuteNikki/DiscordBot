@@ -147,16 +147,16 @@ CREATE INDEX "infraction_type" ON "Infraction"("type");
 ALTER TABLE "Blacklist" ADD CONSTRAINT "Blacklist_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "RoleMenu" ADD CONSTRAINT "RoleMenu_guildId_fkey" FOREIGN KEY ("guildId") REFERENCES "Guild"("guildId") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "RoleMenu" ADD CONSTRAINT "RoleMenu_guildId_fkey" FOREIGN KEY ("guildId") REFERENCES "Guild"("guildId") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "RoleMenuRole" ADD CONSTRAINT "RoleMenuRole_roleMenuId_fkey" FOREIGN KEY ("roleMenuId") REFERENCES "RoleMenu"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "RoleMenuRole" ADD CONSTRAINT "RoleMenuRole_roleMenuId_fkey" FOREIGN KEY ("roleMenuId") REFERENCES "RoleMenu"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "MessageBuilder" ADD CONSTRAINT "MessageBuilder_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "MessageBuilder" ADD CONSTRAINT "MessageBuilder_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Infraction" ADD CONSTRAINT "Infraction_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Infraction" ADD CONSTRAINT "Infraction_guildId_fkey" FOREIGN KEY ("guildId") REFERENCES "Guild"("guildId") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Infraction" ADD CONSTRAINT "Infraction_guildId_fkey" FOREIGN KEY ("guildId") REFERENCES "Guild"("guildId") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -1,4 +1,4 @@
-import type { Blacklist } from '@prisma/client';
+import type { Blacklist } from 'generated/client';
 import type { APIUser } from 'discord.js';
 
 import { discordRestClient, prisma } from 'database/index';

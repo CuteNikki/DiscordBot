@@ -1,4 +1,3 @@
-import { RoleMenuMode } from '@prisma/client';
 import {
   ActionRowBuilder,
   ApplicationIntegrationType,
@@ -27,6 +26,7 @@ import {
   type Channel,
   type GuildTextBasedChannel,
 } from 'discord.js';
+import { RoleMenuMode } from 'generated/client';
 import { t } from 'i18next';
 
 import { Command } from 'classes/base/command';

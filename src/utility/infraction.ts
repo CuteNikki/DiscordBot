@@ -1,4 +1,3 @@
-import { InfractionType, type Infraction } from '@prisma/client';
 import {
   ActionRowBuilder,
   Colors,
@@ -15,6 +14,7 @@ import {
   userMention,
   type InteractionEditReplyOptions,
 } from 'discord.js';
+import { InfractionType, type Infraction } from 'generated/client';
 import { t } from 'i18next';
 
 import type { ExtendedClient } from 'classes/base/client';

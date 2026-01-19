@@ -1,4 +1,4 @@
-import { InfractionType, type Infraction } from '@prisma/client';
+import { InfractionType, type Infraction } from 'generated/client';
 import { Routes } from 'discord.js';
 
 import { discordRestClient, prisma } from 'database/index';

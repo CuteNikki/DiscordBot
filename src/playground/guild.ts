@@ -1,6 +1,6 @@
 // random test file to mess around with the database
 
-import type { Guild } from '@prisma/client';
+import type { Guild } from 'generated/client';
 
 import { createGuild, getGuild } from 'database/guild';
 

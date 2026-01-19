@@ -1,32 +1,14 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { PrismaClient } from 'generated/client';
+
 import { REST } from 'discord.js';
 
 import { KEYS } from 'utility/keys';
-import { logger } from 'utility/logger';
 
 export const discordRestClient = new REST({ version: '10' }).setToken(KEYS.DISCORD_BOT_TOKEN);
 
-export const prisma = new PrismaClient({
-  log: [
-    {
-      level: 'query',
-      emit: 'event',
-    },
-    {
-      level: 'info',
-      emit: 'stdout',
-    },
-    {
-      level: 'warn',
-      emit: 'stdout',
-    },
-    {
-      level: 'error',
-      emit: 'stdout',
-    },
-  ],
+const adapter = new PrismaPg({
+  connectionString: process.env.DATABASE_URL,
 });
 
-prisma.$on('query', (event) => {
-  logger.debug({ ...event }, 'Prisma Query');
-});
+export const prisma = new PrismaClient({ adapter });
