@@ -5,14 +5,23 @@ export type PaginationButtonResult = {
   locate?: string;
 };
 
+export type PaginationButtonOnClick = (
+  index: number,
+  totalPages: number,
+  buttonInteraction: ButtonInteraction,
+) => Promise<PaginationButtonResult> | PaginationButtonResult;
+
+export type PaginationButtonDisableOn = (index: number, totalPages: number) => boolean;
+
+export type PaginationButtonPreset = {
+  disableOn: PaginationButtonDisableOn;
+  onClick: PaginationButtonOnClick;
+};
+
 export type PaginationButtonProps = {
   data: ButtonBuilder;
-  disableOn: (index: number, totalPages: number) => boolean;
-  onClick: (
-    index: number,
-    totalPages: number,
-    buttonInteraction: ButtonInteraction,
-  ) => Promise<PaginationButtonResult> | PaginationButtonResult;
+  disableOn: PaginationButtonDisableOn;
+  onClick: PaginationButtonOnClick;
 };
 
 export type PaginationButtons = Array<(index: number, totalPages: number) => PaginationButtonProps>;

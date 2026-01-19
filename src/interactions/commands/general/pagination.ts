@@ -3,18 +3,21 @@ import {
   ChatInputCommandBuilder,
   EmbedBuilder,
   InteractionContextType,
-  LabelBuilder,
-  MessageFlags,
-  ModalBuilder,
   SecondaryButtonBuilder,
-  TextInputBuilder,
-  TextInputStyle,
+  userMention,
 } from 'discord.js';
 
 import { Command } from 'classes/base/command';
 import { Pagination } from 'classes/pagination';
 
-import { logger } from 'utility/logger';
+import {
+  customPagePreset,
+  firstPagePreset,
+  lastPagePreset,
+  nextPagePreset,
+  previousPagePreset,
+  refreshButtonPreset,
+} from 'utility/pagination';
 
 export default new Command({
   builder: new ChatInputCommandBuilder()
@@ -64,7 +67,9 @@ export default new Command({
           new EmbedBuilder().setDescription(
             items
               .map((item) =>
-                locate === item.userId ? `**XP: ${item.xp} | ID: <@${item.userId}>** 📍` : `XP: ${item.xp} | ID: <@${item.userId}>`,
+                locate === item.userId
+                  ? `**XP: ${item.xp} | User: ${userMention(item.userId)}** 📍`
+                  : `XP: ${item.xp} | User: ${userMention(item.userId)}`,
               )
               .join('\n'),
           ),
@@ -74,87 +79,27 @@ export default new Command({
         // First page button
         () => ({
           data: new SecondaryButtonBuilder().setCustomId('pagination_first').setEmoji({ name: '⏪' }),
-          disableOn: (index) => index === 0,
-          onClick: () => ({ newIndex: 0 }),
+          ...firstPagePreset,
         }),
         // Previous page button
         () => ({
           data: new SecondaryButtonBuilder().setCustomId('pagination_previous').setEmoji({ name: '⬅️' }),
-          disableOn: (index) => index === 0,
-          onClick: (index) => ({ newIndex: index > 0 ? index - 1 : index }),
+          ...previousPagePreset,
         }),
         // Custom page button
         (index, totalPages) => ({
           data: new SecondaryButtonBuilder().setCustomId('pagination_custom').setLabel(`${index + 1} / ${totalPages}`),
-          disableOn: (_, totalPages) => totalPages <= 1,
-          onClick: async (clickPageIndex, clickTotalPages, buttonInteraction) => {
-            // Show the modal
-            await buttonInteraction.showModal(
-              new ModalBuilder()
-                .setCustomId('pagination_modal')
-                .setTitle('Custom Page')
-                .addLabelComponents(
-                  new LabelBuilder().setLabel('Enter the page number you want to go to.').setTextInputComponent(
-                    new TextInputBuilder()
-                      .setCustomId('pagination_input')
-                      .setStyle(TextInputStyle.Short)
-                      .setPlaceholder(`${clickPageIndex + 1}`),
-                  ),
-                ),
-            );
-
-            try {
-              // Await the modal submission
-              const modalInteraction = await buttonInteraction.awaitModalSubmit({
-                time: 60_000,
-                idle: 60_000,
-                filter: (modalInteraction) => modalInteraction.customId === 'pagination_modal',
-              });
-
-              // Get the input value from the modal
-              const newPage = parseInt(modalInteraction.components.getTextInputValue('pagination_input'));
-
-              // Validate the page number
-              if (newPage > 0 && newPage <= clickTotalPages) {
-                await modalInteraction.deferUpdate(); // Acknowledge the modal submission
-
-                // Return the valid new page index (adjusted for 0-indexing)
-                return { newIndex: newPage - 1 };
-              } else {
-                // If the page is invalid, show an error message
-                await modalInteraction.reply({
-                  content: `Please enter a valid page number between 1 and ${clickTotalPages}.`,
-                  flags: [MessageFlags.Ephemeral],
-                });
-              }
-            } catch (error) {
-              // Log and handle modal errors (e.g., timeout or invalid input)
-              logger.debug({ err: error }, 'Error processing modal submission');
-
-              // Provide feedback to the user if the modal interaction failed
-              if (error instanceof Error && error.message.toLowerCase().includes('timed out')) {
-                await buttonInteraction.followUp({
-                  content: 'You took too long to respond. Please try again.',
-                  flags: [MessageFlags.Ephemeral],
-                });
-              }
-            }
-
-            // Return the current page index if there's an error or invalid input
-            return { newIndex: clickPageIndex };
-          },
+          ...customPagePreset,
         }),
         // Next page button
         () => ({
           data: new SecondaryButtonBuilder().setCustomId('pagination_next').setEmoji({ name: '➡️' }),
-          disableOn: (index, totalPages) => index === totalPages - 1,
-          onClick: (index, totalPages) => ({ newIndex: index < totalPages - 1 ? index + 1 : index }),
+          ...nextPagePreset,
         }),
         // Last page button
         () => ({
           data: new SecondaryButtonBuilder().setCustomId('pagination_last').setEmoji({ name: '⏩' }),
-          disableOn: (index, totalPages) => index === totalPages - 1,
-          onClick: (_index, totalPages) => ({ newIndex: totalPages - 1 }),
+          ...lastPagePreset,
         }),
         () => ({
           data: new SecondaryButtonBuilder().setCustomId('pagination_locate').setEmoji({ name: '📍' }),
@@ -180,11 +125,7 @@ export default new Command({
         }),
         () => ({
           data: new SecondaryButtonBuilder().setCustomId('pagination_refresh').setEmoji({ name: '🔄' }),
-          disableOn: () => false,
-          onClick: (index) => {
-            // Refresh the pagination to the current index
-            return { newIndex: index };
-          },
+          ...refreshButtonPreset,
         }),
       ],
     });
