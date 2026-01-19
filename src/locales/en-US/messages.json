@@ -66,5 +66,58 @@
       "code-placeholder": "console.log(\"Hello, world!\");\nreturn 1+1;",
       "inspect-depth": "🔍 Inspect Depth"
     }
+  },
+  "role-menu": {
+    "select": {
+      "no-menu": "No role menu is associated with this message!",
+      "no-found": "The selected role was not found in this guild!",
+      "missing-roles": "You are missing the required roles to use this role menu!\n{{roles}}",
+      "excluded-roles": "You have roles that exclude you from using this role menu!\n{{roles}}",
+      "added": "You have been given the {{role}} role!",
+      "removed": "The {{role}} role has been removed from you!"
+    },
+    "list": {
+      "no-menus": "No role menus have been set up in this guild!",
+      "description": "Description:",
+      "no-description": "No description provided.",
+      "channel": "Channel:",
+      "message": "Message:",
+      "created-at": "Created At:",
+      "updated-at": "Updated At:",
+      "required-roles": "Required Roles:",
+      "no-required-roles": "None",
+      "excluded-roles": "Excluded Roles:",
+      "no-excluded-roles": "None",
+      "roles": "Roles:"
+    },
+    "create": {
+      "max-menus": "You have reached the maximum number of role menus ({{max}})!",
+      "intro": "## Role Menu Setup\nWe will ask you a few questions to get things right.\nGet started by pressing the buttons below.",
+      "cancel": "Cancel",
+      "start": "Start",
+      "timeout": "Role menu setup timed out!",
+      "cancelled": "Role menu setup has been cancelled.",
+      "mode-prompt": "Please choose between single-role or multi-role assignment mode.",
+      "mode-single": "Single",
+      "mode-multiple": "Multiple",
+      "channel-prompt": "Please select the channel where the role menu message should be sent.",
+      "select-channel": "Select Channel",
+      "invalid-channel": "The selected channel is invalid! Please select a valid text channel.",
+      "roles-prompt": "Please select the roles that members can assign to themselves using this role menu.",
+      "select-roles": "Select Roles",
+      "selected-roles": "Selected Roles:",
+      "no-roles": "You must select at least one role!",
+      "excluded-roles-prompt": "Please select any roles that disallows members from using this role menu.",
+      "select-excluded-roles": "Select Excluded Roles",
+      "required-roles-prompt": "Please select any roles that are required for members to use this role menu.",
+      "select-required-roles": "Select Required Roles",
+      "emoji-prompt": "Please react with an emoji for the role: {{role}}",
+      "default-description": "Press the buttons below to assign or remove roles!",
+      "cant-send-message": "I couldn't send the role menu message in the selected channel! Please make sure I have the necessary permissions.",
+      "error-creating-menu": "An error occurred while creating the role menu!",
+      "success": "Role menu has been created successfully! Message link: {{link}}",
+      "skip": "Skip",
+      "continue": "Continue"
+    }
   }
 }

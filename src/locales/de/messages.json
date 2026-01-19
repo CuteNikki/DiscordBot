@@ -66,5 +66,58 @@
       "code-placeholder": "console.log(\"Hallo, Welt!\");\nreturn 1+1;",
       "inspect-depth": "🔍 Inspektions-Tiefe"
     }
+  },
+  "role-menu": {
+    "select": {
+      "no-menu": "Kein Rollenmenü ist mit dieser Nachricht verknüpft!",
+      "no-found": "Die ausgewählte Rolle wurde in diesem Server nicht gefunden!",
+      "missing-roles": "Dir fehlen die erforderlichen Rollen, um dieses Rollenmenü zu verwenden!\n{{roles}}",
+      "excluded-roles": "Du hast Rollen, die dich von der Verwendung dieses Rollenmenüs ausschließen!\n{{roles}}",
+      "added": "Dir wurde die Rolle {{role}} zugewiesen!",
+      "removed": "Die Rolle {{role}} wurde dir entfernt!"
+    },
+    "list": {
+      "no-menus": "Es wurden keine Rollenmenüs in diesem Server eingerichtet!",
+      "description": "Beschreibung:",
+      "no-description": "Keine Beschreibung angegeben.",
+      "channel": "Kanal:",
+      "message": "Nachricht:",
+      "created-at": "Erstellt am:",
+      "updated-at": "Aktualisiert am:",
+      "required-roles": "Erforderliche Rollen:",
+      "no-required-roles": "Keine",
+      "excluded-roles": "Ausgeschlossene Rollen:",
+      "no-excluded-roles": "Keine",
+      "roles": "Rollen:"
+    },
+    "create": {
+      "max-menus": "Du hast die maximale Anzahl an Rollenmenüs erreicht ({{max}})!",
+      "intro": "## Rollenmenü Einrichtung\nWir werden dir ein paar Fragen stellen, um alles richtig einzurichten.\nBeginne, indem du die untenstehenden Buttons drückst.",
+      "cancel": "Abbrechen",
+      "start": "Start",
+      "timeout": "Die Einrichtung des Rollenmenüs ist abgelaufen!",
+      "cancelled": "Die Einrichtung des Rollenmenüs wurde abgebrochen.",
+      "mode-prompt": "Bitte wähle zwischen Einzelrollen- oder Mehrfachrollen-Zuweisungsmodus.",
+      "mode-single": "Einzel",
+      "mode-multiple": "Mehrfach",
+      "channel-prompt": "Bitte wähle den Kanal aus, in dem die Rollenmenü-Nachricht gesendet werden soll.",
+      "select-channel": "Kanal auswählen",
+      "invalid-channel": "Der ausgewählte Kanal ist ungültig! Bitte wähle einen gültigen Textkanal aus.",
+      "roles-prompt": "Bitte wähle die Rollen aus, die Mitglieder sich mit diesem Rollenmenü selbst zuweisen können.",
+      "select-roles": "Rollen auswählen",
+      "selected-roles": "Ausgewählte Rollen:",
+      "no-roles": "Du musst mindestens eine Rolle auswählen!",
+      "excluded-roles-prompt": "Bitte wähle Rollen aus, die Mitglieder von der Verwendung dieses Rollenmenüs ausschließen.",
+      "select-excluded-roles": "Ausgeschlossene Rollen auswählen",
+      "required-roles-prompt": "Bitte wähle Rollen aus, die Mitglieder für die Verwendung dieses Rollenmenüs benötigen.",
+      "select-required-roles": "Erforderliche Rollen auswählen",
+      "emoji-prompt": "Bitte reagiere mit einem Emoji für die Rolle: {{role}}",
+      "default-description": "Drücke die untenstehenden Buttons, um Rollen zuzuweisen oder zu entfernen!",
+      "cant-send-message": "Ich konnte die Rollenmenü-Nachricht im ausgewählten Kanal nicht senden! Bitte stelle sicher, dass ich die notwendigen Berechtigungen habe.",
+      "error-creating-menu": "Beim Erstellen des Rollenmenüs ist ein Fehler aufgetreten!",
+      "success": "Das Rollenmenü wurde erfolgreich erstellt! Nachrichtenlink: {{link}}",
+      "skip": "Überspringen",
+      "continue": "Weiter"
+    }
   }
 }
