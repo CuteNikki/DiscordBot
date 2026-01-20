@@ -1,9 +1,10 @@
-import { InfractionType, type Infraction } from 'generated/client';
 import { Routes } from 'discord.js';
 
 import { discordRestClient, prisma } from 'database/index';
+import { InfractionType, type Infraction } from 'generated/client';
 
 import { InfractionSortBy, InfractionSortOrder } from 'types/infraction';
+import { logger } from 'utility/logger';
 
 export const createInfraction = async (
   infraction: Omit<Infraction, 'id' | 'createdAt' | 'expiresAt' | 'isActive'> & { expiresAt?: Date; isActive?: boolean },
@@ -93,17 +94,21 @@ export const deleteInfraction = async (id: string) =>
     // If the infraction doesn't exist, return null
     .catch(() => null);
 
-export const handleExpiredInfractions = async (): Promise<void> => {
+export const handleExpiredInfractions = async (cron?: boolean): Promise<void> => {
   const expiredInfractions = await getExpiredInfractions();
 
-  if (!expiredInfractions.length) return;
+  if (!expiredInfractions.length) {
+    return logger.debug((cron ? '[CRON] ' : '') + 'No expired infractions found');
+  } else {
+    logger.debug({ data: expiredInfractions }, (cron ? '[CRON] ' : '') + `${expiredInfractions.length} Expired infractions:`);
 
-  for (const infraction of expiredInfractions) {
-    // If the infraction is a tempban, unban the user
-    if (infraction.type === InfractionType.Tempban) {
-      await discordRestClient.delete(Routes.guildBan(infraction.guildId, infraction.userId)).catch(() => null);
+    for (const infraction of expiredInfractions) {
+      // If the infraction is a tempban, unban the user
+      if (infraction.type === InfractionType.Tempban) {
+        await discordRestClient.delete(Routes.guildBan(infraction.guildId, infraction.userId)).catch(() => null);
+      }
+
+      await updateInfraction(infraction.id, { isActive: false });
     }
-
-    await updateInfraction(infraction.id, { isActive: false });
   }
 };

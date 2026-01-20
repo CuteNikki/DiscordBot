@@ -1,5 +1,6 @@
 import { Events, PresenceUpdateStatus } from 'discord.js';
 import figlet from 'figlet';
+import { performance } from 'perf_hooks';
 
 import { Event } from 'classes/base/event';
 
@@ -13,16 +14,15 @@ export default new Event({
     //
     // Log the bot's information
     //
-    figlet(readyClient.user.displayName, { font: 'Big', horizontalLayout: 'fitted', verticalLayout: 'default' }, (err, data) => {
-      if (err || !data) {
+    figlet(readyClient.user.displayName, { font: 'Big', horizontalLayout: 'fitted', verticalLayout: 'default' }, (err, art) => {
+      if (err || !art) {
         logger.error('Error generating ASCII art');
-        return;
       }
 
       logger.info(
         [
           'Logged in as:',
-          data,
+          art,
           table([
             {
               username: readyClient.user.tag,
@@ -39,11 +39,13 @@ export default new Event({
     //
     // Get the custom emojis from the application and store them in the client
     //
+    const startTime = performance.now();
     const emojis = await readyClient.application.emojis.fetch();
-    logger.debug(`Fetched ${emojis.size} custom emojis from the application`);
     for (const emoji of emojis.values()) {
       extendedClient.customEmojis[emoji.name as keyof typeof extendedClient.customEmojis] = emoji;
     }
+    const endTime = performance.now();
+    logger.debug(`Fetching ${emojis.size} custom emojis took ${Math.floor(endTime - startTime)}ms`);
 
     if (!KEYS.PRESENCE_LIST.length || !KEYS.PRESENCE_INITIAL || !KEYS.PRESENCE_UPDATE_INTERVAL) return;
 

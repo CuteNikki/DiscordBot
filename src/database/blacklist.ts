@@ -1,5 +1,5 @@
-import type { Blacklist } from 'generated/client';
 import type { APIUser } from 'discord.js';
+import type { Blacklist } from 'generated/client';
 
 import { discordRestClient, prisma } from 'database/index';
 
@@ -127,17 +127,17 @@ export const unblacklistUsers = async (blacklists: Blacklist[]) => {
   return result;
 };
 
-export const deleteExpiredBlacklist = async () => {
+export const deleteExpiredBlacklist = async (cron?: boolean) => {
   const blacklistedUsers = await prisma.blacklist.findMany({
     where: { expiresAt: { lt: new Date() } },
   });
 
   if (blacklistedUsers.length) {
-    logger.debug({ data: blacklistedUsers }, 'Expired blacklist entries');
+    logger.debug({ data: blacklistedUsers }, (cron ? '[CRON] ' : '') + `${blacklistedUsers.length} Expired blacklist entries:`);
 
     await unblacklistUsers(blacklistedUsers);
   } else {
-    logger.debug('No expired blacklist entries found');
+    logger.debug((cron ? '[CRON] ' : '') + 'No expired blacklist entries found');
   }
 };
 
