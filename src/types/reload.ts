@@ -40,13 +40,13 @@ export function isReloadable(value: string): value is ReloadTypeEnum {
 export const reloadMap: { [key in ReloadTypeEnum]: (client: ExtendedClient) => Promise<unknown> } = {
   everything: async (client: ExtendedClient) =>
     await Promise.all([
+      initializeI18N(),
       loadCommands(client),
       loadButtons(client),
       loadModals(client),
       loadSelectMenus(client),
       loadEvents(client),
       loadAuditLogs(client),
-      initializeI18N(),
       deployCommands(),
     ]),
   interactions: async (client: ExtendedClient) =>

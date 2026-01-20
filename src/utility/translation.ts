@@ -9,10 +9,10 @@ import I18NextFsBackend from 'i18next-fs-backend';
 import { KEYS } from 'utility/keys';
 import { logger } from 'utility/logger';
 
-export async function initializeI18N(defaultNameSpace?: string, prefix?: string) {
+export async function initializeI18N(prefix?: string) {
   await use(I18NextFsBackend).init({
     debug: process.argv.includes('--debug-lang'),
-    defaultNS: defaultNameSpace ?? 'messages',
+    defaultNS: 'messages',
     ns: ['messages', 'commands'],
     preload: KEYS.LOCALES_SUPPORTED,
     fallbackLng: KEYS.LOCALES_FALLBACK,
@@ -44,7 +44,7 @@ export function translateCommand(
   const setLocalization = (key: string): Record<string, string> => {
     return KEYS.LOCALES_SUPPORTED.reduce(
       (acc, locale) => {
-        acc[locale] = t(`${key}`, { lng: locale });
+        acc[locale] = t(`${key}`, { lng: locale, ns: 'commands' });
         return acc;
       },
       {} as Record<string, string>,

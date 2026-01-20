@@ -13,8 +13,6 @@ import { initializeI18N, translateCommand } from 'utility/translation';
  * Deploys all commands to Discord.
  */
 export const deployCommands = async () => {
-  await initializeI18N('commands', '[DEPLOY]');
-
   const commands: RESTPostAPIChatInputApplicationCommandsJSONBody[] = [];
   const tableData: { file: string; name: string; valid: string }[] = [];
   const startTime = performance.now();
@@ -91,5 +89,6 @@ export const deployCommands = async () => {
 // --- THIS RUNS THE FILE IF CALLED DIRECTLY ---
 const isMain = process.argv[1] === fileURLToPath(import.meta.url);
 if (isMain) {
-  deployCommands();
+  await initializeI18N('[DEPLOY]');
+  await deployCommands();
 }
