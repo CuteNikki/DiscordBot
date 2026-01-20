@@ -30,15 +30,15 @@ schedule('0 0 * * 0', () => {
 export function startCron() {
   // Run every minute
   schedule('* * * * *', async () => {
-    logger.debug('[CRON] Minutely job starting...');
+    logger.cron('Minutely job starting...');
     const start = performance.now();
 
-    await deleteExpiredBlacklist(true); // Clear expired user bans
-    await handleExpiredInfractions(true); // Clear expired infractions
+    await deleteExpiredBlacklist(); // Clear expired user bans
+    await handleExpiredInfractions(); // Clear expired infractions
     // coming soon... // Clear expired reminders
 
     const end = performance.now();
 
-    logger.debug(`[CRON] Minutely job completed in ${Math.floor(end - start)}ms`);
+    logger.cron(`Minutely job completed in ${Math.floor(end - start)}ms`);
   });
 }

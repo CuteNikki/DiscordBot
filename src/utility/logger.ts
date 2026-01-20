@@ -1,5 +1,27 @@
 import pino from 'pino';
 
+const customLevels = {
+  trace: 10,
+  debug: 20,
+  cron: 25,
+  info: 30,
+  warn: 40,
+  error: 50,
+  fatal: 60,
+};
+const customLevelColors = {
+  trace: 'blue',
+  debug: 'cyan',
+  cron: 'magenta',
+  info: 'green',
+  warn: 'yellow',
+  error: 'red',
+  fatal: 'redBright',
+};
+const customLevelsStr = Object.entries(customLevels)
+  .map(([key, value]) => `${key}:${value}`)
+  .join(',');
+
 /**
  * Logger utility using Pino for structured logging.
  * This logger is configured to log to both console and file.
@@ -9,6 +31,8 @@ import pino from 'pino';
 export const logger = pino(
   {
     level: process.argv.includes('--debug') ? 'debug' : 'info',
+    customLevels: customLevels,
+    useOnlyCustomLevels: true,
   },
   pino.transport({
     targets: [
@@ -17,6 +41,8 @@ export const logger = pino(
         level: process.argv.includes('--debug') ? 'debug' : 'info',
         options: {
           colorize: true,
+          customLevels: customLevelsStr,
+          customColors: customLevelColors,
           ignore: 'pid,hostname',
           translateTime: 'SYS:yyyy/mm/dd HH:MM:ss',
         },

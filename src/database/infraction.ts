@@ -98,9 +98,9 @@ export const handleExpiredInfractions = async (cron?: boolean): Promise<void> =>
   const expiredInfractions = await getExpiredInfractions();
 
   if (!expiredInfractions.length) {
-    return logger.debug((cron ? '[CRON] ' : '') + 'No expired infractions found');
+    return logger[cron ? 'cron' : 'debug']('No expired infractions found');
   } else {
-    logger.debug({ data: expiredInfractions }, (cron ? '[CRON] ' : '') + `${expiredInfractions.length} Expired infractions:`);
+    logger[cron ? 'cron' : 'debug']({ data: expiredInfractions }, `${expiredInfractions.length} Expired infractions:`);
 
     for (const infraction of expiredInfractions) {
       // If the infraction is a tempban, unban the user

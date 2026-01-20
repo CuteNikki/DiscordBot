@@ -133,11 +133,11 @@ export const deleteExpiredBlacklist = async (cron?: boolean) => {
   });
 
   if (blacklistedUsers.length) {
-    logger.debug({ data: blacklistedUsers }, (cron ? '[CRON] ' : '') + `${blacklistedUsers.length} Expired blacklist entries:`);
+    logger[cron ? 'cron' : 'debug']({ data: blacklistedUsers }, `${blacklistedUsers.length} Expired blacklist entries:`);
 
     await unblacklistUsers(blacklistedUsers);
   } else {
-    logger.debug((cron ? '[CRON] ' : '') + 'No expired blacklist entries found');
+    logger[cron ? 'cron' : 'debug']('No expired blacklist entries found');
   }
 };
 
