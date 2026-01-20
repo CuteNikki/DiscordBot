@@ -68,6 +68,10 @@ export default new Event({
         userCount: client.users.cache.size,
         channelCount: client.channels.cache.size,
       }));
+      const guildCount = infos.reduce((total, info) => total + info.guildCount, 0);
+      const userCount = infos.reduce((total, info) => total + info.userCount, 0);
+      const channelCount = infos.reduce((total, info) => total + info.channelCount, 0);
+      logger.debug({ guildCount, userCount, channelCount }, `Fetched total counts from all shards:`);
 
       // Get a random presence from the array
       let presenceIndex = Math.floor(Math.random() * KEYS.PRESENCE_LIST.length);
@@ -86,9 +90,9 @@ export default new Event({
         activities: [
           {
             name: presence.name
-              .replace('{{guildCount}}', `${infos.reduce((total, info) => total + info.guildCount, 0)}`)
-              .replace('{{userCount}}', `${infos.reduce((total, info) => total + info.userCount, 0)}`)
-              .replace('{{channelCount}}', `${infos.reduce((total, info) => total + info.channelCount, 0)}`),
+              .replace('{{guildCount}}', guildCount.toString())
+              .replace('{{userCount}}', userCount.toString())
+              .replace('{{channelCount}}', channelCount.toString()),
             type: presence.type,
           },
         ],
