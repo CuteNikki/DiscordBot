@@ -62,10 +62,10 @@ export default new Button({
     // Add or remove the role
     if (member.roles.cache.has(selectedRoleId)) {
       await member.roles.remove(selectedRoleId);
-      return interaction.editReply({ content: t('role-menu.select.removed', { role: role.name, lng }) });
+      return interaction.editReply({ content: t('role-menu.select.removed', { role: role.toString(), lng }) });
     } else {
       await member.roles.add(selectedRoleId);
-      return interaction.editReply({ content: t('role-menu.select.added', { role: role.name, lng }) });
+      return interaction.editReply({ content: t('role-menu.select.added', { role: role.toString(), lng }) });
     }
   },
 });
