@@ -4,10 +4,10 @@ import { Event } from 'classes/base/event';
 import { logger } from 'utility/logger';
 
 export default new Event({
-  name: RESTEvents.RateLimited,
-  rest: true,
+  name: RESTEvents.Debug,
   once: false,
-  async execute(_, rateLimitData) {
-    logger.warn({ rateLimitData }, 'RateLimited event triggered');
+  async execute(_, message) {
+    // message: string - Informational debug message
+    logger.debug({ message }, 'REST Debug event triggered');
   },
 });
