@@ -32,6 +32,8 @@ import { t } from 'i18next';
 
 import { Command } from 'classes/base/command';
 
+import { KEYS } from 'utility/keys';
+
 import {
   createRoleMenu,
   deleteRoleMenu,
@@ -61,12 +63,8 @@ enum CustomIds {
 function getRoleMenuSelectCustomId(roleId: string) {
   return `role-menu-select_${roleId}`;
 }
-// Constants:
-const TIMEOUT_DURATION = 60_000; // 60 seconds
-const MAX_ROLE_MENUS_PER_GUILD = 5;
-const MAX_ROLES_PER_MENU_PER_MENU = 20;
-const MAX_REQUIRED_ROLES_PER_MENU = 10;
-const MAX_EXCLUDED_ROLES_PER_MENU = 10;
+
+const { ROLE_MENU_TIMEOUT, ROLE_MENU_MAX_PER_GUILD, ROLE_MENU_MAX_ROLES, ROLE_MENU_MAX_REQ_ROLES, ROLE_MENU_MAX_EXC_ROLES } = KEYS;
 
 export default new Command({
   builder: new ChatInputCommandBuilder()
@@ -190,14 +188,14 @@ async function handleMenuList(interaction: ChatInputCommandInteraction, guildId:
 
 async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildId: string, lng: string) {
   const count = await getRoleMenuCount(guildId);
-  if (count >= MAX_ROLE_MENUS_PER_GUILD) {
+  if (count >= ROLE_MENU_MAX_PER_GUILD) {
     return await interaction.editReply({
       components: [
         new ContainerBuilder().addTextDisplayComponents(
           new TextDisplayBuilder().setContent(
             t('role-menu.create.max-role-menus', {
               lng,
-              max: MAX_ROLE_MENUS_PER_GUILD,
+              max: ROLE_MENU_MAX_PER_GUILD,
             }),
           ),
         ),
@@ -228,7 +226,7 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
   const startingInteraction = await startingMessage
     .awaitMessageComponent({
       filter: (i) => i.user.id === interaction.user.id,
-      time: TIMEOUT_DURATION,
+      time: ROLE_MENU_TIMEOUT,
       componentType: ComponentType.Button,
     })
     .catch(() => null);
@@ -274,7 +272,7 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
   const modeInteraction = await modeMessage
     .awaitMessageComponent({
       filter: (i) => i.user.id === interaction.user.id,
-      time: TIMEOUT_DURATION,
+      time: ROLE_MENU_TIMEOUT,
       componentType: ComponentType.Button,
     })
     .catch(() => null);
@@ -324,7 +322,7 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
   const channelInteraction = await channelMessage
     .awaitMessageComponent({
       filter: (i) => i.user.id === interaction.user.id,
-      time: TIMEOUT_DURATION,
+      time: ROLE_MENU_TIMEOUT,
       componentType: ComponentType.ChannelSelect,
     })
     .catch(() => null);
@@ -378,7 +376,7 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
             new RoleSelectMenuBuilder()
               .setCustomId(CustomIds.RoleMenuCreateRoles)
               .setMinValues(1)
-              .setMaxValues(MAX_ROLES_PER_MENU_PER_MENU)
+              .setMaxValues(ROLE_MENU_MAX_ROLES)
               .setPlaceholder(t('role-menu.create.select-roles', { lng })),
           ),
         ),
@@ -391,7 +389,7 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
       filter: (i) =>
         i.user.id === interaction.user.id &&
         (i.customId === CustomIds.RoleMenuCreateRolesContinue || i.customId === CustomIds.RoleMenuCreateRoles),
-      time: TIMEOUT_DURATION,
+      time: ROLE_MENU_TIMEOUT,
     })
     .catch(() => null);
   if (!rolesInteraction) {
@@ -409,7 +407,7 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
     ? rolesInteraction.roles
         .filter((r) => !r.managed)
         .sort((a, b) => b.position - a.position)
-        .first(MAX_ROLES_PER_MENU_PER_MENU)
+        .first(ROLE_MENU_MAX_ROLES)
         .map((r) => r.id)
     : [];
 
@@ -439,7 +437,7 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
               .setCustomId(CustomIds.RoleMenuCreateExcludedRoles)
               .setDefaultRoles([])
               .setMinValues(0)
-              .setMaxValues(MAX_EXCLUDED_ROLES_PER_MENU)
+              .setMaxValues(ROLE_MENU_MAX_EXC_ROLES)
               .setPlaceholder(t('role-menu.create.select-excluded-roles', { lng })),
           ),
         ),
@@ -455,7 +453,7 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
         (i.customId === CustomIds.RoleMenuCreateExcludedRoles ||
           i.customId === CustomIds.RoleMenuCreateExcludedRolesSkip ||
           i.customId === CustomIds.RoleMenuCreateExcludedRolesContinue),
-      time: TIMEOUT_DURATION,
+      time: ROLE_MENU_TIMEOUT,
     })
     .catch(() => null);
 
@@ -477,7 +475,7 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
     ? excludedRolesInteraction.roles
         .filter((r) => !r.managed)
         .sort((a, b) => b.position - a.position)
-        .first(MAX_EXCLUDED_ROLES_PER_MENU)
+        .first(ROLE_MENU_MAX_EXC_ROLES)
         .map((r) => r.id)
     : [];
 
@@ -497,7 +495,7 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
               .setCustomId(CustomIds.RoleMenuCreateRequiredRoles)
               .setDefaultRoles([])
               .setMinValues(0)
-              .setMaxValues(MAX_REQUIRED_ROLES_PER_MENU)
+              .setMaxValues(ROLE_MENU_MAX_REQ_ROLES)
               .setPlaceholder(t('role-menu.create.select-required-roles', { lng })),
           ),
         ),
@@ -517,7 +515,7 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
         (i.customId === CustomIds.RoleMenuCreateRequiredRoles ||
           i.customId === CustomIds.RoleMenuCreateRequiredRolesSkip ||
           i.customId === CustomIds.RoleMenuCreateRequiredRolesContinue),
-      time: TIMEOUT_DURATION,
+      time: ROLE_MENU_TIMEOUT,
     })
     .catch(() => null);
 
@@ -539,7 +537,7 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
     ? requiredRolesInteraction.roles
         .filter((r) => !r.managed)
         .sort((a, b) => b.position - a.position)
-        .first(MAX_REQUIRED_ROLES_PER_MENU)
+        .first(ROLE_MENU_MAX_REQ_ROLES)
         .map((r) => r.id)
     : [];
 
@@ -558,7 +556,7 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
 
     const reactions = await reactionMessage.awaitReactions({
       max: 1,
-      time: TIMEOUT_DURATION,
+      time: ROLE_MENU_TIMEOUT,
       filter: (_, user) => user.id === interaction.user.id,
     });
 

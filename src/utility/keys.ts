@@ -99,4 +99,14 @@ export const KEYS = {
       type: ActivityType.Playing,
     },
   ] satisfies CustomPresence[],
+
+  //
+  // Role Menu settings
+  //
+  ROLE_MENU_TIMEOUT: (60 * 1000) satisfies number, // 1 minute
+  ROLE_MENU_MAX_PER_GUILD: 10 satisfies number, // 10 active role menus per guild
+  ROLE_MENU_MAX_ROLES: 20 satisfies number, // 20 roles per role menu
+  // max menus * max roles = total of 200 roles per guild
+  ROLE_MENU_MAX_REQ_ROLES: 10 satisfies number, // max of 10 roles, required to use the role menu
+  ROLE_MENU_MAX_EXC_ROLES: 10 satisfies number, // max of 10 roles, excluded from using the role menu
 } as const;
