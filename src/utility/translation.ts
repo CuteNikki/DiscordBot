@@ -9,7 +9,7 @@ import I18NextFsBackend from 'i18next-fs-backend';
 import { KEYS } from 'utility/keys';
 import { logger } from 'utility/logger';
 
-export async function initializeI18N(defaultNameSpace?: string) {
+export async function initializeI18N(defaultNameSpace?: string, prefix?: string) {
   await use(I18NextFsBackend).init({
     debug: process.argv.includes('--debug-lang'),
     defaultNS: defaultNameSpace ?? 'messages',
@@ -23,7 +23,7 @@ export async function initializeI18N(defaultNameSpace?: string) {
       loadPath: './src/locales/{{lng}}/{{ns}}.json',
     },
   });
-  logger.info(`i18next initialized! Languages loaded: ${KEYS.LOCALES_SUPPORTED.join(', ')}`);
+  logger.info((prefix ? `${prefix} ` : '') + `i18next initialized! Languages loaded: ${KEYS.LOCALES_SUPPORTED.join(', ')}`);
 }
 
 function translateLocalizationPath(commandName: string, pathParts: (string | number)[]): string {

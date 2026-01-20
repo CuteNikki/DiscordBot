@@ -7,6 +7,7 @@ import { loadEvents } from 'loaders/event';
 import { loadModals } from 'loaders/modal';
 import { loadSelectMenus } from 'loaders/select';
 
+import { deployCommands } from 'utility/register';
 import { initializeI18N } from 'utility/translation';
 
 /**
@@ -46,10 +47,11 @@ export const reloadMap: { [key in ReloadTypeEnum]: (client: ExtendedClient) => P
       loadEvents(client),
       loadAuditLogs(client),
       initializeI18N(),
+      deployCommands(),
     ]),
   interactions: async (client: ExtendedClient) =>
     await Promise.all([loadCommands(client), loadButtons(client), loadModals(client), loadSelectMenus(client)]),
-  commands: loadCommands,
+  commands: async (client: ExtendedClient) => await loadCommands(client).then(() => deployCommands()),
   buttons: loadButtons,
   modals: loadModals,
   selects: loadSelectMenus,
