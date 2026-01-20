@@ -29,7 +29,7 @@ export enum ReloadTypeEnum {
  * @param value - The value to check.
  * @returns True if the value is a valid ReloadTypeEnum, false otherwise.
  */
-export function isValidComponent(value: string): value is ReloadTypeEnum {
+export function isReloadable(value: string): value is ReloadTypeEnum {
   return Object.values(ReloadTypeEnum).includes(value as ReloadTypeEnum);
 }
 

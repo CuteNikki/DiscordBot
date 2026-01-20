@@ -5,7 +5,7 @@ import { Command } from 'classes/base/command';
 
 import { logger } from 'utility/logger';
 
-import { isValidComponent, reloadMap, ReloadTypeEnum } from 'types/reload';
+import { isReloadable, reloadMap, ReloadTypeEnum } from 'types/reload';
 
 export default new Command({
   isDevelopment: true,
@@ -26,7 +26,7 @@ export default new Command({
     const type = interaction.options.getString('type') ?? ReloadTypeEnum.All;
     const client = interaction.client as ExtendedClient;
 
-    if (!isValidComponent(type)) {
+    if (!isReloadable(type)) {
       return await interaction.editReply({
         content: `❌ Invalid type: \`${type}\``,
       });
