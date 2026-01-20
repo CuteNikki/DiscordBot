@@ -5,7 +5,7 @@ import { logger } from 'utility/logger';
 
 const manager = new ClusterManager('src/bot.ts', {
   totalShards: 'auto',
-  shardsPerClusters: 10,
+  shardsPerClusters: KEYS.SHARDS_PER_CLUSTERS,
   execArgv: [...process.execArgv],
   shardArgs: process.argv,
   mode: 'process',
@@ -15,8 +15,8 @@ const manager = new ClusterManager('src/bot.ts', {
 manager.extend(
   new HeartbeatManager({
     // If shard is not responding for 60 seconds
-    interval: 10000,
-    maxMissedHeartbeats: 6,
+    interval: KEYS.HEARTBEAT_INTERVAL,
+    maxMissedHeartbeats: KEYS.HEARTBEAT_MAX_MISSES,
   }),
 );
 

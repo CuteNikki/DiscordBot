@@ -27,6 +27,15 @@ export const KEYS = {
   DISCORD_DEV_OWNER_ID: process.env.DISCORD_DEV_OWNER_ID, // Optional
 
   //
+  // Sharding settings
+  //
+  SHARDS_PER_CLUSTERS: 10 satisfies number,
+  // Heartbeat settings
+  HEARTBEAT_INTERVAL: 10_000 satisfies number, // 10 seconds
+  HEARTBEAT_MAX_MISSES: 6 satisfies number, // 6 misses
+  // Total allowed downtime is HEARTBEAT_INTERVAL * HEARTBEAT_MAX_MISSES = 60 seconds
+
+  //
   // Webhook settings
   //
   WEBHOOK_BLACKLIST: process.env.WEBHOOK_BLACKLIST, // Optional
