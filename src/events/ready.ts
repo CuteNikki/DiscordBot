@@ -39,12 +39,15 @@ export default new Event({
     //
     // Get the custom emojis from the application and store them in the client
     //
-    await readyClient.application.emojis.fetch();
-    for (const emoji of readyClient.application.emojis.cache.values()) {
+    const emojis = await readyClient.application.emojis.fetch();
+    logger.debug(`Fetched ${emojis.size} custom emojis from the application`);
+    for (const emoji of emojis.values()) {
       extendedClient.customEmojis[emoji.name as keyof typeof extendedClient.customEmojis] = emoji;
     }
 
     if (!KEYS.PRESENCE_LIST.length || !KEYS.PRESENCE_INITIAL || !KEYS.PRESENCE_UPDATE_INTERVAL) return;
+
+    logger.debug(`Presence feature is enabled. Setting initial presence and updating every ${KEYS.PRESENCE_UPDATE_INTERVAL}ms.`);
 
     //
     // Setting an initial presence
@@ -90,6 +93,7 @@ export default new Event({
           },
         ],
       });
+      logger.debug({ presence }, `Presence has been updated to:`);
     }, KEYS.PRESENCE_UPDATE_INTERVAL);
   },
 });

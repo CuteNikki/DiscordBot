@@ -61,33 +61,33 @@ export const KEYS = {
     },
     {
       status: PresenceUpdateStatus.Online,
-      name: /* Playing */ `in {{guildCount}} guilds`,
-      type: ActivityType.Playing,
+      name: `Listening in {{guildCount}} guilds`,
+      type: ActivityType.Listening,
     },
     {
       status: PresenceUpdateStatus.Online,
-      name: /* Watching */ `{{channelCount}} channels`,
+      name: `Watching {{channelCount}} channels`,
       type: ActivityType.Watching,
     },
     {
       status: PresenceUpdateStatus.Online,
-      name: /* Playing */ `with {{userCount}} users`,
+      name: `Playing with {{userCount}} users`,
       type: ActivityType.Playing,
     },
     {
       status: PresenceUpdateStatus.Online,
-      name: /* Listening to */ 'your commands',
+      name: 'Listening to your commands',
       type: ActivityType.Listening,
     },
     {
       status: PresenceUpdateStatus.Idle,
-      name: /* Competing in */ 'the bot wars!',
+      name: 'Competing in the bot wars!',
       type: ActivityType.Competing,
     },
     {
       status: PresenceUpdateStatus.Idle,
-      name: /* Listening to */ 'my creators',
-      type: ActivityType.Listening,
+      name: 'Playing with my creators',
+      type: ActivityType.Playing,
     },
   ] satisfies CustomPresence[],
 } as const;
