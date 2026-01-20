@@ -70,7 +70,7 @@
   "role-menu": {
     "select": {
       "no-menu": "Kein Rollenmenü ist mit dieser Nachricht verknüpft!",
-      "no-found": "Die ausgewählte Rolle wurde in diesem Server nicht gefunden!",
+      "not-found": "Die ausgewählte Rolle wurde in diesem Server nicht gefunden!",
       "missing-roles": "Dir fehlen die erforderlichen Rollen, um dieses Rollenmenü zu verwenden!\n{{roles}}",
       "excluded-roles": "Du hast Rollen, die dich von der Verwendung dieses Rollenmenüs ausschließen!\n{{roles}}",
       "added": "Dir wurde die Rolle {{role}} zugewiesen!",
@@ -90,7 +90,11 @@
       "no-excluded-roles": "Keine",
       "roles": "Rollen:"
     },
+    "delete": {
+      "success": "Das Rollenmenü wurde erfolgreich gelöscht!"
+    },
     "create": {
+      "not-found": "Das Rollenmenü mit der ID `{{roleMenuId}}` wurde nicht gefunden!",
       "max-menus": "Du hast die maximale Anzahl an Rollenmenüs erreicht ({{max}})!",
       "intro": "## Rollenmenü Einrichtung\nWir werden dir ein paar Fragen stellen, um alles richtig einzurichten.\nBeginne, indem du die untenstehenden Buttons drückst.",
       "cancel": "Abbrechen",

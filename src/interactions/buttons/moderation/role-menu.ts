@@ -26,7 +26,7 @@ export default new Button({
     // Fetch the role to ensure it exists
     const role = await interaction.guild.roles.fetch(selectedRoleId).catch(() => null);
     if (!role) {
-      return interaction.editReply({ content: t('role-menu.select.no-found', { lng }) });
+      return interaction.editReply({ content: t('role-menu.select.not-found', { lng }) });
     }
 
     const member = await interaction.guild.members.fetch(interaction.user.id);

@@ -80,18 +80,25 @@ export const createRoleMenu = (
 
 /**
  * Delete a RoleMenu and its associated RoleMenuRole entries
- * @param roleMenuId the id of the RoleMenu to delete
- * @returns a transaction that deletes the RoleMenu and its roles
+ * @param id the id of the RoleMenu to delete
+ * @returns the deleted RoleMenu entry
  */
-export const deleteRoleMenu = (roleMenuId: string) =>
-  prisma.$transaction([
-    prisma.roleMenuRole.deleteMany({
-      where: { roleMenuId },
-    }),
-    prisma.roleMenu.delete({
-      where: { id: roleMenuId },
-    }),
-  ]);
+export const deleteRoleMenu = (id: string) =>
+  prisma.roleMenu.delete({
+    where: { id },
+  });
+
+/**
+ * Update the messageId of a RoleMenu
+ * @param id the id of the RoleMenu
+ * @param messageId the new messageId to set
+ * @returns the updated RoleMenu entry
+ */
+export const updateRoleMenuMessageId = (id: string, messageId: string) =>
+  prisma.roleMenu.update({
+    where: { id },
+    data: { messageId },
+  });
 
 /**
  * Add a role to a RoleMenu

@@ -70,7 +70,7 @@
   "role-menu": {
     "select": {
       "no-menu": "No role menu is associated with this message!",
-      "no-found": "The selected role was not found in this guild!",
+      "not-found": "The selected role was not found in this guild!",
       "missing-roles": "You are missing the required roles to use this role menu!\n{{roles}}",
       "excluded-roles": "You have roles that exclude you from using this role menu!\n{{roles}}",
       "added": "You have been given the {{role}} role!",
@@ -90,7 +90,11 @@
       "no-excluded-roles": "None",
       "roles": "Roles:"
     },
+    "delete": {
+      "success": "Role menu has been deleted successfully!"
+    },
     "create": {
+      "not-found": "The role menu with ID `{{roleMenuId}}` was not found!",
       "max-menus": "You have reached the maximum number of role menus ({{max}})!",
       "intro": "## Role Menu Setup\nWe will ask you a few questions to get things right.\nGet started by pressing the buttons below.",
       "cancel": "Cancel",
