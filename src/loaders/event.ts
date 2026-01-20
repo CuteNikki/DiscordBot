@@ -10,7 +10,7 @@ import { logger, table } from 'utility/logger';
 export async function loadEvents(client: ExtendedClient) {
   client.removeAllListeners();
 
-  const tableData: { file: string; name: string; valid: string }[] = [];
+  const tableData: { file: string; name: string; valid: string; rest: string }[] = [];
   const startTime = performance.now();
   const filePaths = await getEventFiles();
 
@@ -21,11 +21,16 @@ export async function loadEvents(client: ExtendedClient) {
       if (isValidEvent(event)) {
         const handler = (...args: ClientEventTypes[keyof ClientEventTypes]) => event.options.execute(client, ...args);
 
-        client[event.options.once ? 'once' : 'on'](event.options.name, handler);
+        if (event.options.rest) {
+          client.rest[event.options.once ? 'once' : 'on'](event.options.name, handler);
+        } else {
+          client[event.options.once ? 'once' : 'on'](event.options.name, handler);
+        }
 
         tableData.push({
           file: filePath.split('/').slice(-2).join('/'),
           name: event.options.name,
+          rest: event.options.rest ? '✅' : '❌',
           valid: '✅',
         });
         logger.debug(`Loaded event file ${filePath.split('/').slice(-2).join('/')} (${event.options.name})`);
@@ -33,6 +38,7 @@ export async function loadEvents(client: ExtendedClient) {
         tableData.push({
           file: filePath.split('/').slice(-2).join('/'),
           name: event?.options?.name || 'undefined',
+          rest: event?.options?.rest ? '✅' : '❌',
           valid: '❌',
         });
         logger.warn(`Event file ${filePath} is missing name or execute`);
