@@ -88,7 +88,11 @@
       "no-required-roles": "None",
       "excluded-roles": "Excluded Roles:",
       "no-excluded-roles": "None",
-      "roles": "Roles:"
+      "roles": "Roles:",
+      "delete-button": "Delete",
+      "add-button": "Add Role",
+      "remove-button": "Remove Role",
+      "resend-button": "Resend"
     },
     "delete": {
       "success": "Role menu has been deleted successfully!"

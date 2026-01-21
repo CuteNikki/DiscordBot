@@ -7,6 +7,7 @@ import { getRoleMenuByMessageId } from 'database/role-menu';
 
 export default new Button({
   customId: 'role-menu-select',
+  botPermissions: ['ManageRoles'],
   includeCustomId: true,
   async execute(interaction) {
     if (!interaction.inCachedGuild()) return;
@@ -19,7 +20,7 @@ export default new Button({
 
     // If no role menu is found, inform the user
     const roleMenu = await getRoleMenuByMessageId(interaction.guildId, messageId);
-    if (!roleMenu) {
+    if (!roleMenu || roleMenu.guildId !== interaction.guildId) {
       return interaction.editReply({ content: t('role-menu.select.no-menu', { lng }) });
     }
 

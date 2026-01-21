@@ -12,6 +12,7 @@ import {
   InteractionContextType,
   MessageFlags,
   messageLink,
+  PermissionFlagsBits,
   PrimaryButtonBuilder,
   roleMention,
   RoleSelectMenuBuilder,
@@ -58,10 +59,11 @@ enum CustomIds {
   RoleMenuCreateRequiredRoles = 'role-menu-create_required-roles',
   RoleMenuCreateRequiredRolesSkip = 'role-menu-create_required-roles_skip',
   RoleMenuCreateRequiredRolesContinue = 'role-menu-create_required-roles_continue',
+  RoleMenuSelectRole = 'role-menu-select',
 }
 
-function getRoleMenuSelectCustomId(roleId: string) {
-  return `role-menu-select_${roleId}`;
+export function getRoleMenuSelectCustomId(roleId: string) {
+  return `${CustomIds.RoleMenuSelectRole}_${roleId}`;
 }
 
 const { ROLE_MENU_TIMEOUT, ROLE_MENU_MAX_PER_GUILD, ROLE_MENU_MAX_ROLES, ROLE_MENU_MAX_REQ_ROLES, ROLE_MENU_MAX_EXC_ROLES } = KEYS;
@@ -70,6 +72,7 @@ export default new Command({
   builder: new ChatInputCommandBuilder()
     .setContexts(InteractionContextType.Guild)
     .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageRoles)
     .setName('role-menu')
     .setDescription('Manage role menus')
     .addSubcommands((cmd) => cmd.setName('create').setDescription('Create a new role menu'))
@@ -152,30 +155,55 @@ async function handleMenuList(interaction: ChatInputCommandInteraction, guildId:
   const containers = [];
   for (const roleMenu of roleMenus) {
     containers.push(
-      new ContainerBuilder().addTextDisplayComponents(
-        new TextDisplayBuilder().setContent(
-          [
-            `**${roleMenu.id}**`,
-            `${t('role-menu.list.description', { lng })} ${roleMenu.description ?? t('role-menu.list.no-description', { lng })}`,
-            `${t('role-menu.list.channel', { lng })} ${channelMention(roleMenu.channelId)}`,
-            `${t('role-menu.list.message', { lng })} ${messageLink(roleMenu.channelId, roleMenu.messageId, guildId)}`,
-            `${t('role-menu.list.created-at', { lng })} ${time(roleMenu.createdAt, TimestampStyles.LongDateShortTime)} (${time(roleMenu.createdAt, TimestampStyles.RelativeTime)})`,
-            `${t('role-menu.list.updated-at', { lng })} ${time(roleMenu.updatedAt, TimestampStyles.LongDateShortTime)} (${time(roleMenu.updatedAt, TimestampStyles.RelativeTime)})`,
-            `${t('role-menu.list.required-roles', { lng })} ${
-              roleMenu.requiredRoles.length > 0
-                ? roleMenu.requiredRoles.map((roleId) => `<@&${roleId}>`).join(', ')
-                : t('role-menu.list.no-required-roles', { lng })
-            }`,
-            `${t('role-menu.list.excluded-roles', { lng })} ${
-              roleMenu.excludedRoles.length > 0
-                ? roleMenu.excludedRoles.map((roleId) => `<@&${roleId}>`).join(', ')
-                : t('role-menu.list.no-excluded-roles', { lng })
-            }`,
-            `${t('role-menu.list.roles', { lng })}`,
-            ...roleMenu.roles.map((role) => `- <@&${role.roleId}> | ${role.emoji}`),
-          ].join('\n'),
+      new ContainerBuilder()
+        .addTextDisplayComponents(
+          new TextDisplayBuilder().setContent(
+            [
+              `**${roleMenu.id}**`,
+              `${t('role-menu.list.description', { lng })} ${roleMenu.description ?? t('role-menu.list.no-description', { lng })}`,
+              `${t('role-menu.list.channel', { lng })} ${channelMention(roleMenu.channelId)}`,
+              `${t('role-menu.list.message', { lng })} ${messageLink(roleMenu.channelId, roleMenu.messageId, guildId)}`,
+              `${t('role-menu.list.created-at', { lng })} ${time(roleMenu.createdAt, TimestampStyles.LongDateShortTime)} (${time(roleMenu.createdAt, TimestampStyles.RelativeTime)})`,
+              `${t('role-menu.list.updated-at', { lng })} ${time(roleMenu.updatedAt, TimestampStyles.LongDateShortTime)} (${time(roleMenu.updatedAt, TimestampStyles.RelativeTime)})`,
+              `${t('role-menu.list.required-roles', { lng })} ${
+                roleMenu.requiredRoles.length > 0
+                  ? roleMenu.requiredRoles.map((roleId) => `<@&${roleId}>`).join(', ')
+                  : t('role-menu.list.no-required-roles', { lng })
+              }`,
+              `${t('role-menu.list.excluded-roles', { lng })} ${
+                roleMenu.excludedRoles.length > 0
+                  ? roleMenu.excludedRoles.map((roleId) => `<@&${roleId}>`).join(', ')
+                  : t('role-menu.list.no-excluded-roles', { lng })
+              }`,
+              `${t('role-menu.list.roles', { lng })}`,
+              ...roleMenu.roles.map((role) => `- <@&${role.roleId}> | ${role.emoji}`),
+            ].join('\n'),
+          ),
+        )
+        .addActionRowComponents(
+          new ActionRowBuilder().addSecondaryButtonComponents(
+            new SecondaryButtonBuilder()
+              .setCustomId(`role-menu-add-role_${roleMenu.id}`)
+              .setEmoji({ name: '➕' })
+              .setLabel(t('role-menu.list.add-button', { lng })),
+            new SecondaryButtonBuilder()
+              .setEmoji({ name: '➖' })
+              .setCustomId(`role-menu-remove-role_${roleMenu.id}`)
+              .setLabel(t('role-menu.list.remove-button', { lng })),
+          ),
+          new ActionRowBuilder().addPrimaryButtonComponents(
+            new PrimaryButtonBuilder()
+              .setCustomId(`role-menu-resend_${roleMenu.id}`)
+              .setEmoji({ name: '🔄' })
+              .setLabel(t('role-menu.list.resend-button', { lng })),
+          ),
+          new ActionRowBuilder().addDangerButtonComponents(
+            new DangerButtonBuilder()
+              .setCustomId(`role-menu-delete_${roleMenu.id}`)
+              .setEmoji({ name: '🗑️' })
+              .setLabel(t('role-menu.list.delete-button', { lng })),
+          ),
         ),
-      ),
     );
   }
 
