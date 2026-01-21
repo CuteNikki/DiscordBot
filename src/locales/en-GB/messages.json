@@ -126,6 +126,25 @@
       "success": "Role menu has been created successfully! Message link: {{link}}",
       "skip": "Skip",
       "continue": "Continue"
+    },
+    "add": {
+      "title": "Add Role to Role Menu",
+      "role-label": "Select Role",
+      "emoji-label": "Emoji",
+      "no-role-selected": "No role was selected!",
+      "invalid-emoji": "The provided emoji is invalid! Please provide a valid emoji.",
+      "role-already-exists": "The selected role is already in the role menu!",
+      "emoji-already-exists": "The provided emoji is already used for another role in the role menu!",
+      "max-roles-reached": "The role menu has reached the maximum number of roles ({{max}})!",
+      "success": "The role has been added to the role menu successfully!\nYou may resend the role menu message for the changes to take effect."
+    },
+    "remove": {
+      "title": "Remove Role from Role Menu",
+      "role-label": "Select Role",
+      "role-option-description": "Emoji: {{emoji}} | Role ID: {{roleId}}",
+      "no-role-selected": "No role was selected!",
+      "role-not-found": "The selected role was not found in the role menu!",
+      "success": "The role has been removed from the role menu successfully!\nYou may resend the role menu message for the changes to take effect."
     }
   }
 }

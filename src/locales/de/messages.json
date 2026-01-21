@@ -126,6 +126,25 @@
       "success": "Das Rollenmenü wurde erfolgreich erstellt! Nachrichtenlink: {{link}}",
       "skip": "Überspringen",
       "continue": "Weiter"
+    },
+    "add": {
+      "title": "Rolle zum Rollenmenü hinzufügen",
+      "role-label": "Rolle auswählen",
+      "emoji-label": "Emoji",
+      "no-role-selected": "Es wurde keine Rolle ausgewählt!",
+      "invalid-emoji": "Das angegebene Emoji ist ungültig! Bitte gib ein gültiges Emoji an.",
+      "role-already-exists": "Die ausgewählte Rolle ist bereits im Rollenmenü!",
+      "emoji-already-exists": "Das angegebene Emoji wird bereits für eine andere Rolle im Rollenmenü verwendet!",
+      "max-roles-reached": "Das Rollenmenü hat die maximale Anzahl an Rollen erreicht ({{max}})!",
+      "success": "Die Rolle wurde erfolgreich zum Rollenmenü hinzugefügt!\nDu kannst die Rollenmenü-Nachricht erneut senden, damit die Änderungen wirksam werden."
+    },
+    "remove": {
+      "title": "Rolle aus dem Rollenmenü entfernen",
+      "role-label": "Rolle auswählen",
+      "role-option-description": "Emoji: {{emoji}} | Rollen-ID: {{roleId}}",
+      "no-role-selected": "Es wurde keine Rolle ausgewählt!",
+      "role-not-found": "Die ausgewählte Rolle wurde im Rollenmenü nicht gefunden!",
+      "success": "Die Rolle wurde erfolgreich aus dem Rollenmenü entfernt!\nDu kannst die Rollenmenü-Nachricht erneut senden, damit die Änderungen wirksam werden."
     }
   }
 }

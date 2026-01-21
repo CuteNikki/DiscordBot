@@ -26,9 +26,9 @@ export default new Button({
     await interaction.showModal(
       new ModalBuilder()
         .setCustomId(getRoleMenuRemoveModalCustomId(roleMenuId))
-        .setTitle(t('role-menu.remove-role.modal.title', { lng }))
+        .setTitle(t('role-menu.remove.title', { lng }))
         .addLabelComponents(
-          new LabelBuilder().setLabel(t('role-menu.remove-role.modal.role-id-label', { lng })).setStringSelectMenuComponent(
+          new LabelBuilder().setLabel(t('role-menu.remove.role-label', { lng })).setStringSelectMenuComponent(
             new StringSelectMenuBuilder()
               .setCustomId('role-select')
               .setOptions(
@@ -36,7 +36,7 @@ export default new Button({
                   new StringSelectMenuOptionBuilder()
                     .setLabel(interaction.guild.roles.cache.get(role.roleId)?.name || role.roleId)
                     .setDescription(
-                      t('role-menu.remove-role.modal.role-option-description', { lng, emoji: role.emoji, roleId: role.roleId }),
+                      t('role-menu.remove.role-option-description', { lng, emoji: role.emoji, roleId: role.roleId }),
                     )
                     .setValue(role.roleId),
                 ),

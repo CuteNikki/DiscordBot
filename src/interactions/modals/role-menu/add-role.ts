@@ -31,27 +31,27 @@ export default new Modal({
     const emojiInput = interaction.components.getTextInputValue('role-emoji');
 
     if (!selectedRoleId) {
-      return interaction.editReply({ content: t('role-menu.add-role.modal.no-role-selected', { lng }) });
+      return interaction.editReply({ content: t('role-menu.add.no-role-selected', { lng }) });
     }
 
     if (!emojiInput.length || emojiInput.length > 2 || !/^[\p{Emoji}\u200d]+$/u.test(emojiInput)) {
-      return interaction.editReply({ content: t('role-menu.add-role.modal.invalid-emoji', { lng }) });
+      return interaction.editReply({ content: t('role-menu.add.invalid-emoji', { lng }) });
     }
 
     // Check if the role is already in the role menu
     if (roleMenu.roles.map((role) => role.roleId).includes(selectedRoleId)) {
-      return interaction.editReply({ content: t('role-menu.add-role.modal.role-already-exists', { lng }) });
+      return interaction.editReply({ content: t('role-menu.add.role-already-exists', { lng }) });
     }
 
     if (roleMenu.roles.map((role) => role.emoji).includes(emojiInput)) {
-      return interaction.editReply({ content: t('role-menu.add-role.modal.emoji-already-exists', { lng }) });
+      return interaction.editReply({ content: t('role-menu.add.emoji-already-exists', { lng }) });
     }
 
     if (roleMenu.roles.length >= KEYS.ROLE_MENU_MAX_ROLES) {
-      return interaction.editReply({ content: t('role-menu.add-role.modal.max-roles-reached', { lng, max: KEYS.ROLE_MENU_MAX_ROLES }) });
+      return interaction.editReply({ content: t('role-menu.add.max-roles-reached', { lng, max: KEYS.ROLE_MENU_MAX_ROLES }) });
     }
 
     await addRoleMenuRole(roleMenuId, selectedRoleId, emojiInput);
-    return interaction.editReply({ content: t('role-menu.add-role.modal.success', { lng }) });
+    return interaction.editReply({ content: t('role-menu.add.success', { lng }) });
   },
 });

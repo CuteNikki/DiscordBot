@@ -26,15 +26,15 @@ export default new Button({
     await interaction.showModal(
       new ModalBuilder()
         .setCustomId(getRoleMenuAddModalCustomId(roleMenuId))
-        .setTitle(t('role-menu.add-role.modal.title', { lng }))
+        .setTitle(t('role-menu.add.title', { lng }))
         .addLabelComponents(
           new LabelBuilder()
-            .setLabel(t('role-menu.add-role.modal.role-id-label', { lng }))
+            .setLabel(t('role-menu.add.role-label', { lng }))
             .setRoleSelectMenuComponent(
               new RoleSelectMenuBuilder().setCustomId('role-select').setMinValues(1).setMaxValues(1).setRequired(true),
             ),
           new LabelBuilder()
-            .setLabel(t('role-menu.add-role.modal.role-emoji-label', { lng }))
+            .setLabel(t('role-menu.add.emoji-label', { lng }))
             .setTextInputComponent(
               new TextInputBuilder()
                 .setCustomId('role-emoji')

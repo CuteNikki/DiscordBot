@@ -28,15 +28,15 @@ export default new Modal({
     const selectedRoleId = selectedRoles[0];
 
     if (!selectedRoleId) {
-      return interaction.editReply({ content: t('role-menu.remove-role.modal.no-role-selected', { lng }) });
+      return interaction.editReply({ content: t('role-menu.remove.no-role-selected', { lng }) });
     }
 
     // Check if the role exists in the role menu
     if (!roleMenu.roles.map((role) => role.roleId).includes(selectedRoleId)) {
-      return interaction.editReply({ content: t('role-menu.remove-role.modal.role-not-found', { lng }) });
+      return interaction.editReply({ content: t('role-menu.remove.role-not-found', { lng }) });
     }
 
     await removeRoleMenuRole(roleMenuId, selectedRoleId);
-    return interaction.editReply({ content: t('role-menu.remove-role.modal.success', { lng }) });
+    return interaction.editReply({ content: t('role-menu.remove.success', { lng }) });
   },
 });
