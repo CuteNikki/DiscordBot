@@ -45,23 +45,47 @@ import {
 } from 'database/role-menu';
 
 // IDs for custom components used in the role menu creation process
-enum CustomIds {
-  RoleMenuCancel = 'role-menu-cancel',
-  RoleMenuCreateStart = 'role-menu-create_start',
-  RoleMenuCreateSingle = 'role-menu-create_single',
-  RoleMenuCreateMulti = 'role-menu-create_multi',
-  RoleMenuCreateChannel = 'role-menu-create_channel',
-  RoleMenuCreateRoles = 'role-menu-create_roles',
-  RoleMenuCreateRolesContinue = 'role-menu-create_roles_continue',
-  RoleMenuCreateExcludedRoles = 'role-menu-create_excluded-roles',
-  RoleMenuCreateExcludedRolesSkip = 'role-menu-create_excluded-roles_skip',
-  RoleMenuCreateExcludedRolesContinue = 'role-menu-create_excluded-roles_continue',
-  RoleMenuCreateRequiredRoles = 'role-menu-create_required-roles',
-  RoleMenuCreateRequiredRolesSkip = 'role-menu-create_required-roles_skip',
-  RoleMenuCreateRequiredRolesContinue = 'role-menu-create_required-roles_continue',
-  RoleMenuSelectRole = 'role-menu-select',
+export enum CustomIds {
+  RoleMenuCancel = 'rmenu-cancel',
+  RoleMenuCreateStart = 'rmenu-create_start',
+  RoleMenuCreateSingle = 'rmenu-create_single',
+  RoleMenuCreateMulti = 'rmenu-create_multi',
+  RoleMenuCreateChannel = 'rmenu-create_channel',
+  RoleMenuCreateRoles = 'rmenu-create_roles',
+  RoleMenuCreateRolesContinue = 'rmenu-create_roles_continue',
+  RoleMenuCreateExcludedRoles = 'rmenu-create_excluded-roles',
+  RoleMenuCreateExcludedRolesSkip = 'rmenu-create_excluded-roles_skip',
+  RoleMenuCreateExcludedRolesContinue = 'rmenu-create_excluded-roles_continue',
+  RoleMenuCreateRequiredRoles = 'rmenu-create_required-roles',
+  RoleMenuCreateRequiredRolesSkip = 'rmenu-create_required-roles_skip',
+  RoleMenuCreateRequiredRolesContinue = 'rmenu-create_required-roles_continue',
+  RoleMenuSelectRole = 'rmenu-select',
+  RoleMenuAddRole = 'rmenu-add',
+  RoleMenuRemoveRole = 'rmenu-remove',
+  RoleMenuAddModal = 'rmenu-add-modal',
+  RoleMenuRemoveModal = 'rmenu-remove-modal',
+  RoleMenuResend = 'rmenu-resend',
+  RoleMenuDelete = 'rmenu-delete',
 }
 
+export function getRoleMenuAddCustomId(roleMenuId: string) {
+  return `${CustomIds.RoleMenuAddRole}_${roleMenuId}`;
+}
+export function getRoleMenuRemoveCustomId(roleMenuId: string) {
+  return `${CustomIds.RoleMenuRemoveRole}_${roleMenuId}`;
+}
+export function getRoleMenuResendCustomId(roleMenuId: string) {
+  return `${CustomIds.RoleMenuResend}_${roleMenuId}`;
+}
+export function getRoleMenuDeleteCustomId(roleMenuId: string) {
+  return `${CustomIds.RoleMenuDelete}_${roleMenuId}`;
+}
+export function getRoleMenuAddModalCustomId(roleMenuId: string) {
+  return `${CustomIds.RoleMenuAddModal}_${roleMenuId}`;
+}
+export function getRoleMenuRemoveModalCustomId(roleMenuId: string) {
+  return `${CustomIds.RoleMenuRemoveModal}_${roleMenuId}`;
+}
 export function getRoleMenuSelectCustomId(roleId: string) {
   return `${CustomIds.RoleMenuSelectRole}_${roleId}`;
 }
@@ -183,23 +207,23 @@ async function handleMenuList(interaction: ChatInputCommandInteraction, guildId:
         .addActionRowComponents(
           new ActionRowBuilder().addSecondaryButtonComponents(
             new SecondaryButtonBuilder()
-              .setCustomId(`role-menu-add-role_${roleMenu.id}`)
+              .setCustomId(getRoleMenuAddCustomId(roleMenu.id))
               .setEmoji({ name: '➕' })
               .setLabel(t('role-menu.list.add-button', { lng })),
             new SecondaryButtonBuilder()
               .setEmoji({ name: '➖' })
-              .setCustomId(`role-menu-remove-role_${roleMenu.id}`)
+              .setCustomId(getRoleMenuRemoveCustomId(roleMenu.id))
               .setLabel(t('role-menu.list.remove-button', { lng })),
           ),
           new ActionRowBuilder().addPrimaryButtonComponents(
             new PrimaryButtonBuilder()
-              .setCustomId(`role-menu-resend_${roleMenu.id}`)
+              .setCustomId(getRoleMenuResendCustomId(roleMenu.id))
               .setEmoji({ name: '🔄' })
               .setLabel(t('role-menu.list.resend-button', { lng })),
           ),
           new ActionRowBuilder().addDangerButtonComponents(
             new DangerButtonBuilder()
-              .setCustomId(`role-menu-delete_${roleMenu.id}`)
+              .setCustomId(getRoleMenuDeleteCustomId(roleMenu.id))
               .setEmoji({ name: '🗑️' })
               .setLabel(t('role-menu.list.delete-button', { lng })),
           ),

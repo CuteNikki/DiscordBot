@@ -1,18 +1,18 @@
-import { MessageFlags } from 'discord.js';
+import { LabelBuilder, ModalBuilder, RoleSelectMenuBuilder, TextInputBuilder, TextInputStyle } from 'discord.js';
 import { t } from 'i18next';
 
 import { Button } from 'classes/base/button';
 
 import { getRoleMenuById } from 'database/role-menu';
 
+import { CustomIds, getRoleMenuAddModalCustomId } from '../../commands/moderation/role-menu';
+
 export default new Button({
-  customId: 'role-menu-add-role',
+  customId: CustomIds.RoleMenuAddRole,
   userPermissions: ['ManageRoles'],
   includeCustomId: true,
   async execute(interaction) {
     if (!interaction.inCachedGuild()) return;
-
-    await interaction.deferReply({ flags: [MessageFlags.Ephemeral] });
 
     const lng = interaction.locale;
     const roleMenuId = interaction.customId.split('_')[1];
@@ -23,6 +23,27 @@ export default new Button({
       return interaction.editReply({ content: t('role-menu.select.no-menu', { lng }) });
     }
 
-    return interaction.editReply({ content: 'Method not implemented yet.' });
+    await interaction.showModal(
+      new ModalBuilder()
+        .setCustomId(getRoleMenuAddModalCustomId(roleMenuId))
+        .setTitle(t('role-menu.add-role.modal.title', { lng }))
+        .addLabelComponents(
+          new LabelBuilder()
+            .setLabel(t('role-menu.add-role.modal.role-id-label', { lng }))
+            .setRoleSelectMenuComponent(
+              new RoleSelectMenuBuilder().setCustomId('role-select').setMinValues(1).setMaxValues(1).setRequired(true),
+            ),
+          new LabelBuilder()
+            .setLabel(t('role-menu.add-role.modal.role-emoji-label', { lng }))
+            .setTextInputComponent(
+              new TextInputBuilder()
+                .setCustomId('role-emoji')
+                .setStyle(TextInputStyle.Short)
+                .setMinLength(0)
+                .setMaxLength(2)
+                .setRequired(true),
+            ),
+        ),
+    );
   },
 });

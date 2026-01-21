@@ -4,9 +4,10 @@ import { t } from 'i18next';
 import { Button } from 'classes/base/button';
 
 import { getRoleMenuByMessageId } from 'database/role-menu';
+import { CustomIds } from '../../commands/moderation/role-menu';
 
 export default new Button({
-  customId: 'role-menu-select',
+  customId: CustomIds.RoleMenuSelectRole,
   botPermissions: ['ManageRoles'],
   includeCustomId: true,
   async execute(interaction) {

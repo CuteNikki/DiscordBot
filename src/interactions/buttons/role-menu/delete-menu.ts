@@ -4,9 +4,10 @@ import { t } from 'i18next';
 import { Button } from 'classes/base/button';
 
 import { deleteRoleMenu, getRoleMenuById } from 'database/role-menu';
+import { CustomIds } from '../../commands/moderation/role-menu';
 
 export default new Button({
-  customId: 'role-menu-delete',
+  customId: CustomIds.RoleMenuDelete,
   userPermissions: ['ManageRoles'],
   includeCustomId: true,
   async execute(interaction) {

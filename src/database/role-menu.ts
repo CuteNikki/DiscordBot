@@ -113,6 +113,17 @@ export const addRoleMenuRole = (roleMenuId: string, roleId: string, emoji: strin
   });
 
 /**
+ * Remove a role from a RoleMenu
+ * @param roleMenuId the id of the RoleMenu
+ * @param roleId the id of the role to remove
+ * @returns the deleted RoleMenuRole entry
+ */
+export const removeRoleMenuRole = (roleMenuId: string, roleId: string) =>
+  prisma.roleMenuRole.deleteMany({
+    where: { roleMenuId, roleId },
+  });
+
+/**
  * Update the emoji of a RoleMenuRole entry
  * @param id the id of the RoleMenuRole entry
  * @param emoji the new emoji to set

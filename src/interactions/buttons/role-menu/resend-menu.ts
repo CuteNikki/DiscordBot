@@ -16,10 +16,10 @@ import { Button } from 'classes/base/button';
 
 import { getRoleMenuById, updateRoleMenuMessageId } from 'database/role-menu';
 
-import { getRoleMenuSelectCustomId } from '../../commands/moderation/role-menu';
+import { CustomIds, getRoleMenuSelectCustomId } from '../../commands/moderation/role-menu';
 
 export default new Button({
-  customId: 'role-menu-resend',
+  customId: CustomIds.RoleMenuResend,
   userPermissions: ['ManageRoles'],
   includeCustomId: true,
   async execute(interaction) {
