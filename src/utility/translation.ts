@@ -36,7 +36,13 @@ export function translateCommand(
     | APIApplicationCommandSubcommandOption
     | RESTPostAPIChatInputApplicationCommandsJSONBody,
 ) {
-  if (t(`${command.name}.name`) === `${command.name}.name`) {
+  const translateDynamic = (key: string, locale?: string): string =>
+    (t as (k: string, options?: Record<string, unknown>) => string)(key, {
+      ns: 'commands',
+      ...(locale ? { lng: locale } : {}),
+    });
+
+  if (translateDynamic(`${command.name}.name`) === `${command.name}.name`) {
     // If the translation key does not exist, return the command as is
     return command;
   }
@@ -44,7 +50,7 @@ export function translateCommand(
   const setLocalization = (key: string): Record<string, string> => {
     return KEYS.LOCALES_SUPPORTED.reduce(
       (acc, locale) => {
-        acc[locale] = t(`${key}`, { lng: locale, ns: 'commands' });
+        acc[locale] = translateDynamic(key, locale);
         return acc;
       },
       {} as Record<string, string>,
