@@ -33,7 +33,8 @@
       "types/*": ["./src/types/*"],
       "classes/*": ["./src/classes/*"],
       "loaders/*": ["./src/loaders/*"],
-      "generated/*": ["./src/generated/*"]
+      "generated/*": ["./src/generated/*"],
+      "locales/*": ["./src/locales/*"],
     }
   }
 }
