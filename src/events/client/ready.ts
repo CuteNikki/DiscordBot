@@ -41,9 +41,8 @@ export default new Event({
     //
     const startTime = performance.now();
     const emojis = await readyClient.application.emojis.fetch();
-    for (const emoji of emojis.values()) {
-      extendedClient.customEmojis[emoji.name as keyof typeof extendedClient.customEmojis] = emoji;
-    }
+    extendedClient.initializeCustomEmojis(emojis.values().toArray());
+
     const endTime = performance.now();
     logger.debug(`Fetching ${emojis.size} custom emojis took ${Math.floor(endTime - startTime)}ms`);
 

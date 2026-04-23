@@ -111,7 +111,7 @@ All custom emojis are fetched in the `clientReady` event and populate `client.cu
 
 So in order to access an emoji with the name `globe` you'd do this:
 
-`client.customEmojis.globe`
+`client.getCustomEmoji('globe')`
 
 This will give you the ApplicationEmoji object, which looks like this:
 
@@ -133,7 +133,7 @@ This will give you the ApplicationEmoji object, which looks like this:
 
 If you want to use this emoji in a message, I highly recommend to call `.toString()` on it:
 <br />
-`client.customEmojis.globe.toString()`
+`client.getCustomEmoji('globe').toString()`
 <br />
 which will output:
 <br />
@@ -142,7 +142,10 @@ which will output:
 To use it on a button you will need to do this:
 
 ```ts
-new SecondaryButtonBuilder().setCustomId('some-id').setEmoji({ id: client.customEmojis.globe.id }).setDisabled(false);
+new SecondaryButtonBuilder()
+  .setCustomId('some-id')
+  .setEmoji({ id: client.getCustomEmoji('globe').id })
+  .setDisabled(false);
 ```
 
 ### Creating Slash Commands

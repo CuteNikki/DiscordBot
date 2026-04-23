@@ -27,10 +27,10 @@ export class TriviaBuilder extends Builder<TriviaProps> {
     super();
 
     this.options.set('answerLabels', [
-      { text: 'A', emoji: client.customEmojis.a_.id },
-      { text: 'B', emoji: client.customEmojis.b_.id },
-      { text: 'C', emoji: client.customEmojis.c_.id },
-      { text: 'D', emoji: client.customEmojis.d_.id },
+      { text: 'A', emoji: client.getCustomEmoji('a_').id },
+      { text: 'B', emoji: client.getCustomEmoji('b_').id },
+      { text: 'C', emoji: client.getCustomEmoji('c_').id },
+      { text: 'D', emoji: client.getCustomEmoji('d_').id },
     ]);
 
     if (!FontFactory.size) Font.loadDefault();

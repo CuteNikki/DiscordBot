@@ -77,9 +77,23 @@ export class ExtendedClient extends Client {
    * This is used to store custom emojis that are fetched from the Discord API.
    * The emojis are fetched in src/events/client/ready.ts on client ready.
    */
-  customEmojis: {
+  private customEmojis: {
     [key: string]: ApplicationEmoji;
   } = {};
+
+  initializeCustomEmojis(emojis: ApplicationEmoji[]) {
+    this.customEmojis = Object.fromEntries(emojis.map((emoji) => [emoji.name, emoji]));
+  }
+
+  getCustomEmoji(name: string) {
+    const emoji = this.customEmojis[name];
+
+    if (!emoji) {
+      throw new Error(`Custom emoji with name "${name}" not found.`);
+    }
+
+    return emoji;
+  }
 
   /**
    * Constructor for ExtendedClient.

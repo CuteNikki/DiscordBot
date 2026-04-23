@@ -50,26 +50,26 @@ export function buildInfractionOverview({
   showGuild,
   showUser,
 }: OverviewOptions): InteractionEditReplyOptions {
-  const staffEmoji = client.customEmojis.staff;
-  const dateEmoji = client.customEmojis.date;
-  const calendarEmoji = client.customEmojis.calendar;
-  const receiptEmoji = client.customEmojis.receipt;
-  const pencilEmoji = client.customEmojis.pencil;
-  const infinityEmoji = client.customEmojis.infinity;
-  const banEmoji = client.customEmojis.ban;
-  const hammerEmoji = client.customEmojis.hammer;
-  const exclamationEmoji = client.customEmojis.exclamation;
-  const clockEmoji = client.customEmojis.clock;
-  const backwardsEmoji = client.customEmojis.backwards;
-  const forwardsEmoji = client.customEmojis.forwards;
-  const nextEmoji = client.customEmojis.forwardstep;
-  const previousEmoji = client.customEmojis.backwardstep;
-  const userEmoji = client.customEmojis.user;
-  const serverEmoji = client.customEmojis.server;
-  const ascendingEmoji = client.customEmojis.ascending;
-  const descendingEmoji = client.customEmojis.descending;
-  const emptyEmoji = client.customEmojis.empty;
-  const deleteEmoji = client.customEmojis.trash;
+  const staffEmoji = client.getCustomEmoji('staff');
+  const dateEmoji = client.getCustomEmoji('date');
+  const calendarEmoji = client.getCustomEmoji('calendar');
+  const receiptEmoji = client.getCustomEmoji('receipt');
+  const pencilEmoji = client.getCustomEmoji('pencil');
+  const infinityEmoji = client.getCustomEmoji('infinity');
+  const banEmoji = client.getCustomEmoji('ban');
+  const hammerEmoji = client.getCustomEmoji('hammer');
+  const exclamationEmoji = client.getCustomEmoji('exclamation');
+  const clockEmoji = client.getCustomEmoji('clock');
+  const backwardsEmoji = client.getCustomEmoji('backwards');
+  const forwardsEmoji = client.getCustomEmoji('forwards');
+  const nextEmoji = client.getCustomEmoji('forwardstep');
+  const previousEmoji = client.getCustomEmoji('backwardstep');
+  const userEmoji = client.getCustomEmoji('user');
+  const serverEmoji = client.getCustomEmoji('server');
+  const ascendingEmoji = client.getCustomEmoji('ascending');
+  const descendingEmoji = client.getCustomEmoji('descending');
+  const emptyEmoji = client.getCustomEmoji('empty');
+  const deleteEmoji = client.getCustomEmoji('trash');
 
   const totalPages = Math.ceil(infractions.length / itemsPerPage);
   const paged = infractions.slice(page * itemsPerPage, (page + 1) * itemsPerPage);

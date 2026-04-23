@@ -102,18 +102,18 @@ export default new Command({
             .setTitle(`Cluster ${cluster.clusterId + 1}`)
             .setDescription(
               [
-                `${extendedClient.customEmojis.clock} Uptime: ${cluster.uptime ? time(Math.floor((Date.now() - cluster.uptime) / 1000), TimestampStyles.RelativeTime) : 'N/A'}`,
-                `${extendedClient.customEmojis.bars} Ping: ${cluster.ping ? `${Math.round(cluster.ping)}ms` : 'N/A'}`,
-                `${extendedClient.customEmojis.memory} Memory: ${cluster.memoryUsage.rss}MB`,
-                `${extendedClient.customEmojis.processor} CPU: ${cluster.cpuUsage}%`,
-                `${extendedClient.customEmojis.server} Total Guilds: ${cluster.guildCount}`,
-                `${extendedClient.customEmojis.user} Total Users: ${cluster.memberCount}`,
+                `${extendedClient.getCustomEmoji('clock')} Uptime: ${cluster.uptime ? time(Math.floor((Date.now() - cluster.uptime) / 1000), TimestampStyles.RelativeTime) : 'N/A'}`,
+                `${extendedClient.getCustomEmoji('bars')} Ping: ${cluster.ping ? `${Math.round(cluster.ping)}ms` : 'N/A'}`,
+                `${extendedClient.getCustomEmoji('memory')} Memory: ${cluster.memoryUsage.rss}MB`,
+                `${extendedClient.getCustomEmoji('processor')} CPU: ${cluster.cpuUsage}%`,
+                `${extendedClient.getCustomEmoji('server')} Total Guilds: ${cluster.guildCount}`,
+                `${extendedClient.getCustomEmoji('user')} Total Users: ${cluster.memberCount}`,
               ].join('\n'),
             )
             .addFields(
               cluster.perShardData.map((shard) => ({
                 name: `Shard ${shard.shardId + 1}`,
-                value: `${extendedClient.customEmojis.server} Guilds: ${shard.guildCount}\n${extendedClient.customEmojis.user} Users: ${shard.members}\n${shard.shardId === currentShard ? '📍 You are here' : ''}`,
+                value: `${extendedClient.getCustomEmoji('server')} Guilds: ${shard.guildCount}\n${extendedClient.getCustomEmoji('user')} Users: ${shard.members}\n${shard.shardId === currentShard ? '📍 You are here' : ''}`,
                 inline: true,
               })),
             ),
@@ -122,12 +122,12 @@ export default new Command({
       buttons: [
         // First page button
         () => ({
-          data: new SecondaryButtonBuilder().setCustomId('pagination_first').setEmoji({ id: extendedClient.customEmojis.backwards.id }),
+          data: new SecondaryButtonBuilder().setCustomId('pagination_first').setEmoji({ id: extendedClient.getCustomEmoji('backwards').id }),
           ...firstPagePreset,
         }),
         // Previous page button
         () => ({
-          data: new SecondaryButtonBuilder().setCustomId('pagination_prev').setEmoji({ id: extendedClient.customEmojis.backwardstep.id }),
+          data: new SecondaryButtonBuilder().setCustomId('pagination_prev').setEmoji({ id: extendedClient.getCustomEmoji('backwardstep').id }),
           ...previousPagePreset,
         }),
         (i, total) => ({
@@ -136,12 +136,12 @@ export default new Command({
         }),
         // Next page button
         () => ({
-          data: new SecondaryButtonBuilder().setCustomId('pagination_next').setEmoji({ id: extendedClient.customEmojis.forwardstep.id }),
+          data: new SecondaryButtonBuilder().setCustomId('pagination_next').setEmoji({ id: extendedClient.getCustomEmoji('forwardstep').id }),
           ...nextPagePreset,
         }),
         // Last page button
         () => ({
-          data: new SecondaryButtonBuilder().setCustomId('pagination_last').setEmoji({ id: extendedClient.customEmojis.forwards.id }),
+          data: new SecondaryButtonBuilder().setCustomId('pagination_last').setEmoji({ id: extendedClient.getCustomEmoji('forwards').id }),
           ...lastPagePreset,
         }),
       ],
