@@ -245,7 +245,7 @@ async function handleMenuCreate(interaction: ChatInputCommandInteraction, guildI
       components: [
         new ContainerBuilder().addTextDisplayComponents(
           new TextDisplayBuilder().setContent(
-            t('role-menu.create.max-role-menus', {
+            t('role-menu.create.max-menus', {
               lng,
               max: ROLE_MENU_MAX_PER_GUILD,
             }),

@@ -27,23 +27,25 @@
       "expires": "Läuft ab: {{expires}}",
       "expired": "Abgelaufen: {{expired}}",
       "date": "Datum: {{date}}",
-      "user": "User: {{user}}",
+      "user": "Benutzer: {{user}}",
       "guild": "Server: {{guild}}",
       "delete": "Löschen"
     },
     "sort-by": {
-      "prefix": "Sortiere nach",
+      "prefix": "Sortieren nach",
       "created": "Erstellungsdatum",
       "expires": "Ablaufdatum",
       "type": "Typ",
       "moderator": "Moderator",
-      "user": "User",
-      "guild": "Guild"
+      "user": "Benutzer",
+      "guild": "Server",
+      "placeholder": "Sortierung auswählen"
     },
     "sort-order": {
-      "prefix": "Sortiere nach",
+      "prefix": "Sortierreihenfolge",
       "ascending": "Aufsteigend",
-      "descending": "Absteigend"
+      "descending": "Absteigend",
+      "placeholder": "Sortierreihenfolge auswählen"
     }
   },
   "eval": {
@@ -58,7 +60,9 @@
       "output": "📤 Ausgabe",
       "console": "📝 Konsole",
       "inspect-depth": "🔍 Inspektions-Tiefe",
-      "execution-time": "⏱️ Ausführungszeit"
+      "execution-time": "⏱️ Ausführungszeit",
+      "edit": "Bearbeiten",
+      "rerun": "Erneut ausführen"
     },
     "modal": {
       "title": "Eval",
@@ -70,14 +74,14 @@
   "role-menu": {
     "select": {
       "no-menu": "Kein Rollenmenü ist mit dieser Nachricht verknüpft!",
-      "not-found": "Die ausgewählte Rolle wurde in diesem Server nicht gefunden!",
+      "not-found": "Die ausgewählte Rolle wurde auf diesem Server nicht gefunden!",
       "missing-roles": "Dir fehlen die erforderlichen Rollen, um dieses Rollenmenü zu verwenden!\n{{roles}}",
       "excluded-roles": "Du hast Rollen, die dich von der Verwendung dieses Rollenmenüs ausschließen!\n{{roles}}",
       "added": "Dir wurde die Rolle {{role}} zugewiesen!",
       "removed": "Die Rolle {{role}} wurde dir entfernt!"
     },
     "list": {
-      "no-menus": "Es wurden keine Rollenmenüs in diesem Server eingerichtet!",
+      "no-menus": "Es wurden keine Rollenmenüs auf diesem Server eingerichtet!",
       "description": "Beschreibung:",
       "no-description": "Keine Beschreibung angegeben.",
       "channel": "Kanal:",
@@ -106,21 +110,21 @@
       "timeout": "Die Einrichtung des Rollenmenüs ist abgelaufen!",
       "cancelled": "Die Einrichtung des Rollenmenüs wurde abgebrochen.",
       "mode-prompt": "Bitte wähle zwischen Einzelrollen- oder Mehrfachrollen-Zuweisungsmodus.",
-      "mode-single": "Einzel",
+      "mode-single": "Einzeln",
       "mode-multiple": "Mehrfach",
       "channel-prompt": "Bitte wähle den Kanal aus, in dem die Rollenmenü-Nachricht gesendet werden soll.",
       "select-channel": "Kanal auswählen",
       "invalid-channel": "Der ausgewählte Kanal ist ungültig! Bitte wähle einen gültigen Textkanal aus.",
-      "roles-prompt": "Bitte wähle die Rollen aus, die Mitglieder sich mit diesem Rollenmenü selbst zuweisen können.",
+      "roles-prompt": "Bitte wähle die Rollen aus, die Mitglieder sich über dieses Rollenmenü selbst zuweisen können.",
       "select-roles": "Rollen auswählen",
       "selected-roles": "Ausgewählte Rollen:",
       "no-roles": "Du musst mindestens eine Rolle auswählen!",
       "excluded-roles-prompt": "Bitte wähle Rollen aus, die Mitglieder von der Verwendung dieses Rollenmenüs ausschließen.",
       "select-excluded-roles": "Ausgeschlossene Rollen auswählen",
-      "required-roles-prompt": "Bitte wähle Rollen aus, die Mitglieder für die Verwendung dieses Rollenmenüs benötigen.",
+      "required-roles-prompt": "Bitte wähle Rollen aus, die erforderlich sind, um dieses Rollenmenü zu verwenden.",
       "select-required-roles": "Erforderliche Rollen auswählen",
       "emoji-prompt": "Bitte reagiere mit einem Emoji für die Rolle: {{role}}",
-      "default-description": "Drücke die untenstehenden Buttons, um Rollen zuzuweisen oder zu entfernen!",
+      "default-description": "Klicke auf die untenstehenden Buttons, um dir Rollen zuzuweisen oder zu entfernen!",
       "cant-send-message": "Ich konnte die Rollenmenü-Nachricht im ausgewählten Kanal nicht senden! Bitte stelle sicher, dass ich die notwendigen Berechtigungen habe.",
       "error-creating-menu": "Beim Erstellen des Rollenmenüs ist ein Fehler aufgetreten!",
       "success": "Das Rollenmenü wurde erfolgreich erstellt! Nachrichtenlink: {{link}}",
@@ -133,7 +137,7 @@
       "emoji-label": "Emoji",
       "no-role-selected": "Es wurde keine Rolle ausgewählt!",
       "invalid-emoji": "Das angegebene Emoji ist ungültig! Bitte gib ein gültiges Emoji an.",
-      "role-already-exists": "Die ausgewählte Rolle ist bereits im Rollenmenü!",
+      "role-already-exists": "Die ausgewählte Rolle ist bereits im Rollenmenü vorhanden!",
       "emoji-already-exists": "Das angegebene Emoji wird bereits für eine andere Rolle im Rollenmenü verwendet!",
       "max-roles-reached": "Das Rollenmenü hat die maximale Anzahl an Rollen erreicht ({{max}})!",
       "success": "Die Rolle wurde erfolgreich zum Rollenmenü hinzugefügt!\nDu kannst die Rollenmenü-Nachricht erneut senden, damit die Änderungen wirksam werden."
@@ -145,6 +149,13 @@
       "no-role-selected": "Es wurde keine Rolle ausgewählt!",
       "role-not-found": "Die ausgewählte Rolle wurde im Rollenmenü nicht gefunden!",
       "success": "Die Rolle wurde erfolgreich aus dem Rollenmenü entfernt!\nDu kannst die Rollenmenü-Nachricht erneut senden, damit die Änderungen wirksam werden."
-    }
+    },
+    "add-option": {
+      "not-implemented": "Diese Funktion ist noch nicht implementiert!"
+    },
+    "remove-option": {
+      "not-implemented": "Diese Funktion ist noch nicht implementiert!"
+    },
+    "unknown-cmd": "Unbekannter Unterbefehl!"
   }
 }

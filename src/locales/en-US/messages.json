@@ -38,12 +38,14 @@
       "type": "Type",
       "moderator": "Moderator",
       "user": "User",
-      "guild": "Guild"
+      "guild": "Guild",
+      "placeholder": "Select sort by"
     },
     "sort-order": {
       "prefix": "Sort Order",
       "ascending": "Ascending",
-      "descending": "Descending"
+      "descending": "Descending",
+      "placeholder": "Select sort order"
     }
   },
   "eval": {
@@ -58,7 +60,9 @@
       "output": "📤 Output",
       "console": "📝 Console",
       "inspect-depth": "🔍 Inspect Depth",
-      "execution-time": "⏱️ Execution Time"
+      "execution-time": "⏱️ Execution Time",
+      "edit": "Edit",
+      "rerun": "Rerun"
     },
     "modal": {
       "title": "Eval",
@@ -145,6 +149,13 @@
       "no-role-selected": "No role was selected!",
       "role-not-found": "The selected role was not found in the role menu!",
       "success": "The role has been removed from the role menu successfully!\nYou may resend the role menu message for the changes to take effect."
-    }
+    },
+    "add-option": {
+      "not-implemented": "This functionality is not implemented yet!"
+    },
+    "remove-option": {
+      "not-implemented": "This functionality is not implemented yet!"
+    },
+    "unknown-cmd": "Unknown subcommand!"
   }
 }

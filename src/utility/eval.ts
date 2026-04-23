@@ -24,6 +24,8 @@ export async function evaluateCode(interaction: BaseInteraction, code: string, d
     await interaction.deferReply();
   }
 
+  const lng = interaction.locale;
+
   const startTime = performance.now();
   try {
     // Create context with the custom console
@@ -71,22 +73,19 @@ export async function evaluateCode(interaction: BaseInteraction, code: string, d
       embeds: [
         new EmbedBuilder()
           .setColor(Colors.Green)
-          .setTitle(t('eval.embed.success-title', { lng: interaction.locale }))
-          // .setDescription(t('eval.embed.success-message', { lng: interaction.locale }))
+          .setTitle(t('eval.embed.success-title', { lng }))
           .setDescription(`\`\`\`js\n${truncatedCode}\n\`\`\``)
           .addFields(
-            // { name: t('eval.embed.input', { lng: interaction.locale }), value: `\`\`\`js\n${truncatedCode}\n\`\`\`` },
-            { name: t('eval.embed.output', { lng: interaction.locale }), value: `\`\`\`${truncatedResult || 'No output'}\`\`\`` },
-            { name: t('eval.embed.console', { lng: interaction.locale }), value: `\`\`\`${truncatedLogs || 'No console output'}\`\`\`` },
-            { name: t('eval.embed.inspect-depth', { lng: interaction.locale }), value: `\`${depth}\`` },
-            { name: t('eval.embed.execution-time', { lng: interaction.locale }), value: `\`${Math.floor(endTime - startTime)}ms\`` },
+            { name: t('eval.embed.output', { lng }), value: `\`\`\`${truncatedResult || 'No output'}\`\`\`` },
+            { name: t('eval.embed.console', { lng }), value: `\`\`\`${truncatedLogs || 'No console output'}\`\`\`` },
+            { name: t('eval.embed.inspect-depth', { lng }), value: `\`${depth}\`` },
+            { name: t('eval.embed.execution-time', { lng }), value: `\`${Math.floor(endTime - startTime)}ms\`` },
           ),
       ],
       components: [
         new ActionRowBuilder().addComponents(
-          // @todo: add translations
-          new PrimaryButtonBuilder().setCustomId('eval').setLabel('Edit').setEmoji({ name: '✏️' }),
-          new SuccessButtonBuilder().setCustomId('eval-rerun').setLabel('Rerun').setEmoji({ name: '🔁' }),
+          new PrimaryButtonBuilder().setCustomId('eval').setLabel(t('eval.embed.edit', { lng })).setEmoji({ name: '✏️' }),
+          new SuccessButtonBuilder().setCustomId('eval-rerun').setLabel(t('eval.embed.rerun', { lng })).setEmoji({ name: '🔁' }),
         ),
       ],
     });
@@ -101,20 +100,18 @@ export async function evaluateCode(interaction: BaseInteraction, code: string, d
       embeds: [
         new EmbedBuilder()
           .setColor(Colors.Red)
-          .setTitle(t('eval.embed.error-title', { lng: interaction.locale }))
-          // .setDescription(t('eval.embed.error-message', { lng: interaction.locale }))
+          .setTitle(t('eval.embed.error-title', { lng }))
           .setDescription(`\`\`\`js\n${truncatedCode}\n\`\`\``)
           .addFields(
-            { name: t('eval.embed.output', { lng: interaction.locale }), value: `\`${truncatedError || 'No output'}\`` },
-            { name: t('eval.embed.execution-time', { lng: interaction.locale }), value: `\`${Math.floor(endTime - startTime)}ms\`` },
-            { name: t('eval.embed.inspect-depth', { lng: interaction.locale }), value: `\`${depth}\`` },
+            { name: t('eval.embed.output', { lng }), value: `\`${truncatedError || 'No output'}\`` },
+            { name: t('eval.embed.execution-time', { lng }), value: `\`${Math.floor(endTime - startTime)}ms\`` },
+            { name: t('eval.embed.inspect-depth', { lng }), value: `\`${depth}\`` },
           ),
       ],
       components: [
         new ActionRowBuilder().addComponents(
-          // @todo: add translations
-          new PrimaryButtonBuilder().setCustomId('eval').setLabel('Edit').setEmoji({ name: '✏️' }),
-          new SuccessButtonBuilder().setCustomId('eval-rerun').setLabel('Rerun').setEmoji({ name: '🔁' }),
+          new PrimaryButtonBuilder().setCustomId('eval').setLabel(t('eval.embed.edit', { lng })).setEmoji({ name: '✏️' }),
+          new SuccessButtonBuilder().setCustomId('eval-rerun').setLabel(t('eval.embed.rerun', { lng })).setEmoji({ name: '🔁' }),
         ),
       ],
     });
