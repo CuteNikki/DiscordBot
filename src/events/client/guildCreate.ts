@@ -31,7 +31,7 @@ export default new Event({
         new EmbedBuilder()
           .setColor(Colors.Green)
           .setAuthor({ name: guild.name, iconURL: guild.iconURL() ?? undefined })
-          .setDescription(guild.description)
+          .setDescription(guild.description || 'no description')
           .addFields(
             {
               name: 'Owner',
