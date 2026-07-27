@@ -1538,6 +1538,7 @@
     }
   },
   "timeout": {
+    "timed-out": "Es gab keine rechtzeitige Antwort! Der User wird nicht gestummt.",
     "confirm": "Bist du sicher, dass du {{user}} eine Auszeit geben möchtest?",
     "cancelled": "Abgebrochen! Der User wird nicht gestummt.",
     "failed": "Fehlgeschlagen... Der User konnte nicht gestummt werden!",

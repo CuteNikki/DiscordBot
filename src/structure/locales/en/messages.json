@@ -1547,6 +1547,7 @@
     }
   },
   "timeout": {
+    "timed-out": "There was no response in time! User will not be timed out.",
     "confirm": "Are you sure you want to timeout {{user}}?",
     "cancelled": "Cancelled! User will not be timed out.",
     "failed": "Failed... Could not timeout user!",
