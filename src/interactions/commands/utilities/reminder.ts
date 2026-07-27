@@ -1,6 +1,6 @@
 import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, MessageFlags, SlashCommandBuilder, time, TimestampStyles } from 'discord.js';
 import { t } from 'i18next';
-import ms from 'ms';
+import ms, { type StringValue } from 'ms';
 
 import { Command } from 'classes/command';
 
@@ -46,16 +46,22 @@ export default new Command({
           }
 
           const message = options.getString('message', true);
-          const time = options.getString('time', true);
+          const duration = options.getString('time', true);
 
-          const milliseconds = ms(time);
-          if (!milliseconds || milliseconds > ms('31d')) {
+          let milliseconds: number | undefined;
+          try {
+            milliseconds = ms(duration as StringValue);
+          } catch {
+            milliseconds = undefined;
+          }
+
+          if (!milliseconds || milliseconds <= 0 || milliseconds > ms('31d')) {
             await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reminder.invalid-time', { lng }))] });
             return;
           }
           const remindAt = Date.now() + milliseconds;
 
-          const reminder = await createReminder(user.id, channelId, remindAt, message);
+          const reminder = await createReminder(user.id, channelId ?? user.id, remindAt, message);
 
           await interaction.editReply({
             embeds: [
@@ -75,7 +81,7 @@ export default new Command({
         {
           const reminderId = options.getString('reminder-id', true);
 
-          if (!reminders.map((reminder) => reminder._id.toString()).includes(reminderId)) {
+          if (!reminders.some((reminder) => reminder._id.toString() === reminderId)) {
             await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('reminder.invalid-id', { lng }))] });
             return;
           }
