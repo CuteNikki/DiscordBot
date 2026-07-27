@@ -1,5 +1,5 @@
 import { CronJob } from 'cron';
-import { Colors, EmbedBuilder, roleMention, type MessageCreateOptions } from 'discord.js';
+import { Colors, EmbedBuilder, Events, roleMention, type MessageCreateOptions } from 'discord.js';
 import { t } from 'i18next';
 import { connect } from 'mongoose';
 import { performance } from 'perf_hooks';
@@ -37,7 +37,7 @@ export async function initDatabase(client: DiscordClient) {
       const endTime = performance.now(); // This is used for logging the time it takes to connect to the database
       logger.info(`[${client.cluster.id}] Connected to DB (${Math.floor(endTime - startTime)}ms)`);
 
-      client.once('ready', () => {
+      client.once(Events.ClientReady, () => {
         CronJob.from({
           cronTime: '*/10 * * * * *', // every 10 seconds
           onTick: async () => {
