@@ -31,7 +31,7 @@ export default new Command({
       .setThumbnail(invite.guild.iconURL({ size: 2048, extension: 'webp' }))
       .setTitle(invite.guild.name)
       .addFields(
-        { name: t('vanity.members', { lng }), value: invite.memberCount.toString() },
+        { name: t('vanity.members', { lng }), value: invite.memberCount?.toString() ?? '0' },
         {
           name: t('vanity.created-at', { lng }),
           value: `${time(Math.floor(invite.guild.createdTimestamp / 1000), TimestampStyles.ShortDate)} | ${time(Math.floor(invite.guild.createdTimestamp / 1000), TimestampStyles.RelativeTime)}`
