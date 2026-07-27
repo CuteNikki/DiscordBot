@@ -80,8 +80,7 @@ export async function addStarboardMessage(guildId: string, messageId: string, re
   const starboardMessage = await starboardMessageModel.create({ guildId, messageId, reactedUsers });
 
   await starboardModel
-    .updateOne({ guildId }, { $push: { messages: starboardMessage._id } }, { new: true })
-    .lean()
+    .updateOne({ guildId }, { $push: { messages: starboardMessage._id } })
     .exec();
 
   return starboardMessage;
