@@ -178,3 +178,6 @@ dist
 
 # Finder (MacOS) folder config
 .DS_Store
+
+# Ignore generated source files
+src/generated
