@@ -12,7 +12,7 @@ import {
   TimestampStyles
 } from 'discord.js';
 import { t } from 'i18next';
-import ms from 'ms';
+import ms, { type StringValue } from 'ms';
 
 import { Command } from 'classes/command';
 
@@ -24,6 +24,15 @@ import { logger } from 'utils/logger';
 import { ModuleType } from 'types/interactions';
 
 const MAX_GIVEAWAYS = 6;
+
+function safeMs(input: string): number | undefined {
+  try {
+    const result = ms(input as StringValue);
+    return typeof result === 'number' && !isNaN(result) && result > 0 ? result : undefined;
+  } catch {
+    return undefined;
+  }
+}
 
 export default new Command({
   module: ModuleType.Config,
@@ -89,12 +98,12 @@ export default new Command({
       case 'create':
         {
           const prize = options.getString('prize', true);
-          const duration = options.getString('duration', true);
+          const durationInput = options.getString('duration', true);
           const winners = options.getInteger('winners', false) ?? 1;
           const channel = options.getChannel('channel', false, [ChannelType.GuildText]) ?? interaction.channel;
           const NOW = Date.now();
 
-          const parsedDuration = ms(duration);
+          const parsedDuration = safeMs(durationInput);
 
           if (!parsedDuration) {
             await interaction.editReply({
@@ -180,12 +189,23 @@ export default new Command({
           }
 
           const prize = options.getString('prize', false);
-          const duration = options.getString('duration', false);
+          const durationInput = options.getString('duration', false);
           const winners = options.getInteger('winners', false);
 
-          if (!prize && !duration && !winners) {
+          if (!prize && !durationInput && !winners) {
             await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.edit.none', { lng }))] });
             return;
+          }
+
+          let parsedDuration: number | undefined;
+          if (durationInput) {
+            parsedDuration = safeMs(durationInput);
+            if (!parsedDuration) {
+              await interaction.editReply({
+                embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.create.invalid-duration', { lng }))]
+              });
+              return;
+            }
           }
 
           const response: string[] = [];
@@ -194,24 +214,21 @@ export default new Command({
             response.push(t('giveaway.edit.prize', { lng, prize, count: winners ?? giveaway.winnerCount }));
           }
 
-          if (duration) {
-            response.push(t('giveaway.edit.duration', { lng, duration: ms(giveaway.createdAt + ms(duration) - Date.now(), { long: true }) }));
+          if (parsedDuration) {
+            const newEndsAt = giveaway.createdAt + parsedDuration;
+            const remaining = newEndsAt - Date.now();
+            response.push(t('giveaway.edit.duration', { lng, duration: remaining > 0 ? ms(remaining, { long: true }) : t('none', { lng }) }));
           }
 
           if (winners) {
             response.push(t('giveaway.edit.winner', { lng, winners: winners.toString(), count: winners }));
           }
 
-          if (!response.length) {
-            await interaction.editReply({ embeds: [new EmbedBuilder().setColor(client.colors.error).setDescription(t('giveaway.edit.none', { lng }))] });
-            return;
-          }
-
           const updatedGiveaway = await updateGiveawayById(id, {
             $set: {
               winnerCount: winners ?? giveaway.winnerCount,
-              endsAt: duration ? giveaway.createdAt + ms(duration) : giveaway.endsAt,
-              duration: duration ?? giveaway.duration,
+              endsAt: parsedDuration ? giveaway.createdAt + parsedDuration : giveaway.endsAt,
+              duration: parsedDuration ?? giveaway.duration,
               prize: prize ?? giveaway.prize
             }
           });
