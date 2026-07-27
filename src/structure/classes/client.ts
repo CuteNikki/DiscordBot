@@ -1,5 +1,5 @@
 import { ClusterClient, getInfo } from 'discord-hybrid-sharding';
-import { ActivityType, Client, Collection, Colors, GatewayIntentBits, Partials, PresenceUpdateStatus } from 'discord.js';
+import { ActivityType, ApplicationCommandType, Client, Collection, Colors, GatewayIntentBits, Partials, PresenceUpdateStatus } from 'discord.js';
 
 import type { Button } from 'classes/button';
 import type { Command } from 'classes/command';
@@ -22,7 +22,7 @@ import { initTranslation } from 'utils/language';
 export class DiscordClient extends Client {
   // Collections for loading and running commands, buttons and modals
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public commands = new Collection<string, Command<any>>(); // Collection<commandName, commandData>
+  public commands = new Collection<string, Command<ApplicationCommandType>>(); // Collection<commandName, commandData>
   public buttons = new Collection<string, Button>(); // Collection<customId, buttonData>
   public modals = new Collection<string, Modal>(); // Collection<customId, modalData>
   public selections = new Collection<string, Selection>(); // Collection<customId, selectionData
