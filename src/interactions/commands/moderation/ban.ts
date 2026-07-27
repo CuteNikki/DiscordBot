@@ -12,7 +12,7 @@ import {
   SlashCommandBuilder
 } from 'discord.js';
 import { t } from 'i18next';
-import ms from 'ms';
+import ms, { type StringValue } from 'ms';
 
 import { Command } from 'classes/command';
 
@@ -87,20 +87,34 @@ export default new Command({
     }
 
     const userDuration = options.getString('duration', false);
-    const duration = ms(userDuration ?? '0');
-    const durationText = ms(duration, { long: true });
+    let duration: number | undefined;
+
+    if (userDuration) {
+      try {
+        duration = ms(userDuration as StringValue);
+      } catch {
+        duration = undefined;
+      }
+
+      if (!duration || duration <= 0) {
+        await interaction.editReply(t('ban.invalid-duration', { lng }));
+        return;
+      }
+    }
+
+    const durationText = duration ? ms(duration, { long: true }) : undefined;
 
     const history = options.getInteger('history', false) ?? 604800;
     const historyOptions = {
-      0: t('ban.history.none', { lng }), // 'Delete none'
-      1800: t('ban.history.minutes-30', { lng }), // 'Previous 30 minutes'
-      3600: t('ban.history.minutes-60', { lng }), // 'Previous 60 minutes'
-      10800: t('ban.history.hours-3', { lng }), // 'Previous 3 hours'
-      21600: t('ban.history.hours-6', { lng }), //'Previous 6 hours'
-      43200: t('ban.history.hours-12', { lng }), // 'Previous 12 hours'
-      86400: t('ban.history.hours-24', { lng }), // 'Previous 24 hours'
-      259200: t('ban.history.days-3', { lng }), // 'Previous 3 days'
-      604800: t('ban.history.days-7', { lng }) // 'Previous 7 days'
+      0: t('ban.history.none', { lng }),
+      1800: t('ban.history.minutes-30', { lng }),
+      3600: t('ban.history.minutes-60', { lng }),
+      10800: t('ban.history.hours-3', { lng }),
+      21600: t('ban.history.hours-6', { lng }),
+      43200: t('ban.history.hours-12', { lng }),
+      86400: t('ban.history.hours-24', { lng }),
+      259200: t('ban.history.days-3', { lng }),
+      604800: t('ban.history.days-7', { lng })
     };
 
     const targetRolePos = targetMember?.roles.highest.position ?? 0;
@@ -139,37 +153,53 @@ export default new Command({
       ]
     });
 
-    const collector = await msg.awaitMessageComponent({
-      filter: (i) => i.user.id === interaction.user.id,
-      componentType: ComponentType.Button,
-      time: 30_000
-    });
+    const collector = await msg
+      .awaitMessageComponent({
+        filter: (i) => i.user.id === interaction.user.id,
+        componentType: ComponentType.Button,
+        time: 30_000
+      })
+      .catch(() => null);
+
+    if (!collector) {
+      await interaction.editReply({
+        content: t('moderation.expired', { lng }),
+        components: []
+      });
+      return;
+    }
 
     if (collector.customId === CustomIds.Cancel) {
       await collector.update({
         content: t('ban.cancelled', { lng }),
         components: []
       });
-    } else if (collector.customId === CustomIds.Confirm) {
-      const banned = await guild.bans
-        .create(target.id, { reason: reason ?? undefined, deleteMessageSeconds: history })
-        .catch((err) => logger.debug({ err, userId: target.id }, 'Could not ban user'));
+      return;
+    }
 
-      if (!banned) {
-        await collector.update(t('ban.failed', { lng }));
-        return;
-      }
-
+    if (collector.customId === CustomIds.Confirm) {
       const receivedDM = await client.users
         .send(target.id, {
           content: t('ban.target-dm', {
             lng: targetLng,
             guild: inlineCode(guild.name),
             reason: inlineCode(reason ?? t('none', { lng })),
-            duration: duration ? durationText : t('none', { lng })
+            duration: durationText ?? t('none', { lng })
           })
         })
         .catch((err) => logger.debug({ err, userId: target.id }, 'Could not send DM'));
+
+      const banned = await guild.bans
+        .create(target.id, { reason: reason ?? undefined, deleteMessageSeconds: history })
+        .catch((err) => logger.debug({ err, userId: target.id }, 'Could not ban user'));
+
+      if (!banned) {
+        await collector.update({
+          content: t('ban.failed', { lng }),
+          components: []
+        });
+        return;
+      }
 
       await collector.update({
         content: [
@@ -183,7 +213,7 @@ export default new Command({
             deleted: historyOptions[history as keyof typeof historyOptions]
           }),
           receivedDM ? t('ban.dm-received', { lng }) : t('ban.dm-not-received', { lng }),
-          duration ? t('ban.duration', { lng, duration: durationText }) : t('ban.permanent', { lng })
+          durationText ? t('ban.duration', { lng, duration: durationText }) : t('ban.permanent', { lng })
         ].join('\n'),
         components: []
       });
@@ -200,7 +230,7 @@ export default new Command({
         reason ?? undefined,
         duration ? Date.now() + duration : undefined,
         Date.now(),
-        duration ? false : true
+        !duration
       );
     }
   }

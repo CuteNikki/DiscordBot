@@ -1567,6 +1567,7 @@
     "target-not-banned": "Der User ist nicht gebannt!"
   },
   "ban": {
+    "timed-out": "Es gab keine rechtzeitige Antwort! Der User wird nicht gebannt.",
     "confirm": "Bist du sicher, dass du {{user}} bannen möchtest?",
     "cancelled": "Abgebrochen! Der User wird nicht gebannt.",
     "failed": "Fehlgeschlagen... Der User konnte nicht gebannt werden!",

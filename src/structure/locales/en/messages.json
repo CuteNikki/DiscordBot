@@ -1576,6 +1576,7 @@
     "target-not-banned": "The user is not banned!"
   },
   "ban": {
+    "timed-out": "There was no response in time! User will not be banned.",
     "confirm": "Are you sure you want to ban {{user}}?",
     "cancelled": "Cancelled! User will not be banned.",
     "failed": "Failed... Could not ban user!",
