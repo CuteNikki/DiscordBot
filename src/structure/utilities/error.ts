@@ -112,10 +112,14 @@ export async function listenToErrors(client: DiscordClient) {
       url: 'https://nodejs.org/api/process.html#event-unhandledrejection'
     })
   );
-  process.on('warning', (err) => {
+  process.on('warning', (warn) => {
+    // Ignore deprecation warning for ready event, as it is a known issue with discord.js
+    if (warn.name === 'DeprecationWarning' && warn.message.includes('The ready event has been renamed to clientReady')) {
+      return;
+    }
     sendError({
       client,
-      err,
+      err: warn,
       location: 'NodeJS Warning',
       url: 'https://nodejs.org/api/process.html#event-warning'
     });
