@@ -13,7 +13,7 @@ import {
   TimestampStyles
 } from 'discord.js';
 import { t } from 'i18next';
-import ms from 'ms';
+import ms, { type StringValue } from 'ms';
 
 import { Command } from 'classes/command';
 
@@ -74,14 +74,20 @@ export default new Command({
     }
 
     const userDuration = options.getString('duration', true);
-    const duration = ms(userDuration);
+    let milliseconds: number | undefined;
+    try {
+      milliseconds = ms(userDuration as StringValue);
+    } catch {
+      milliseconds = undefined;
+    }
 
-    if (!duration) {
+    // Discord imposes a maximum timeout duration of 28 days, so we will enforce that here as well
+    if (!milliseconds || milliseconds <= 0 || milliseconds > ms('28d')) {
       await interaction.editReply(t('timeout.invalid-duration', { lng }));
       return;
     }
 
-    const durationText = ms(duration, { long: true });
+    const durationText = ms(milliseconds, { long: true });
 
     const targetRolePos = targetMember?.roles.highest.position ?? 0;
     const staffRolePos = member.roles.highest.position ?? 0;
@@ -124,27 +130,31 @@ export default new Command({
       ]
     });
 
-    const collector = await msg.awaitMessageComponent({
-      filter: (i) => i.user.id === interaction.user.id,
-      componentType: ComponentType.Button,
-      time: 30_000
-    });
+    const collector = await msg
+      .awaitMessageComponent({
+        filter: (i) => i.user.id === interaction.user.id,
+        componentType: ComponentType.Button,
+        time: 30_000
+      })
+      .catch(() => null);
+
+    if (!collector) {
+      await interaction.editReply({
+        content: t('moderation.expired', { lng }),
+        components: []
+      });
+      return;
+    }
 
     if (collector.customId === CustomIds.Cancel) {
       await collector.update({
         content: t('timeout.cancelled', { lng }),
         components: []
       });
-    } else if (collector.customId === CustomIds.Confirm) {
-      const timeout = await targetMember
-        .disableCommunicationUntil(Date.now() + duration, reason ?? undefined)
-        .catch((err) => logger.debug({ err, target }, 'Could not timeout user'));
+      return;
+    }
 
-      if (!timeout) {
-        await collector.update(t('timeout.failed', { lng }));
-        return;
-      }
-
+    if (collector.customId === CustomIds.Confirm) {
       const receivedDM = await client.users
         .send(target.id, {
           content: t('timeout.target-dm', {
@@ -155,6 +165,18 @@ export default new Command({
           })
         })
         .catch((err) => logger.debug({ err, userId: target.id }, 'Could not send DM'));
+
+      const timeout = await targetMember
+        .disableCommunicationUntil(Date.now() + milliseconds, reason ?? undefined)
+        .catch((err) => logger.debug({ err, target }, 'Could not timeout user'));
+
+      if (!timeout) {
+        await collector.update({
+          content: t('timeout.failed', { lng }),
+          components: []
+        });
+        return;
+      }
 
       await collector.update({
         content: [
@@ -169,11 +191,9 @@ export default new Command({
         components: []
       });
 
-      if (target.bot) {
-        return;
+      if (!target.bot) {
+        await createInfraction(guild.id, target.id, user.id, InfractionType.Timeout, reason ?? undefined, undefined, Date.now(), false);
       }
-
-      await createInfraction(guild.id, target.id, user.id, InfractionType.Timeout, reason ?? undefined, undefined, Date.now(), false);
     }
   }
 });
