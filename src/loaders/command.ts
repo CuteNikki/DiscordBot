@@ -15,24 +15,37 @@ export async function loadCommands(client: ExtendedClient) {
 
   await Promise.all(
     filePaths.map(async (filePath) => {
-      const command = (await import(`${filePath}?update=${Date.now()}`)).default;
+      const shortPath = filePath.split('/').slice(-2).join('/');
 
-      if (isValidCommand(command)) {
-        const commandData = command.options.builder.toJSON();
-        client.commands.set(commandData.name, command);
+      try {
+        const command = (await import(`${filePath}?update=${Date.now()}`)).default;
+
+        if (isValidCommand(command)) {
+          const commandData = command.options.builder.toJSON();
+
+          client.commands.set(commandData.name, command);
+          tableData.push({
+            file: shortPath,
+            name: commandData.name,
+            valid: '✅',
+          });
+          logger.debug(`Loaded command file ${shortPath} (${commandData.name})`);
+        } else {
+          tableData.push({
+            file: shortPath,
+            name: command?.options?.builder?.name || 'undefined',
+            valid: '❌',
+          });
+          logger.warn(`Command file ${filePath} is missing data or execute`);
+        }
+      } catch (error) {
+        logger.error(`❌ Failed to load command at file: ${shortPath}`);
         tableData.push({
-          file: filePath.split('/').slice(-2).join('/'),
-          name: commandData.name,
-          valid: '✅',
-        });
-        logger.debug(`Loaded command file ${filePath.split('/').slice(-2).join('/')} (${commandData.name})`);
-      } else {
-        tableData.push({
-          file: filePath.split('/').slice(-2).join('/'),
-          name: command?.options?.builder?.name || 'undefined',
+          file: shortPath,
+          name: 'ERROR',
           valid: '❌',
         });
-        logger.warn(`Command file ${filePath} is missing data or execute`);
+        throw error;
       }
     }),
   );
