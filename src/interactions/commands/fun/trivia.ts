@@ -30,9 +30,9 @@ export default new Command({
         .setName('difficulty')
         .setDescription('Select the difficulty level')
         .setChoices(
-          { name: 'Easy', value: TriviaDifficulty.Easy },
-          { name: 'Medium', value: TriviaDifficulty.Medium },
-          { name: 'Hard', value: TriviaDifficulty.Hard },
+          { name: 'easy', value: TriviaDifficulty.Easy },
+          { name: 'medium', value: TriviaDifficulty.Medium },
+          { name: 'hard', value: TriviaDifficulty.Hard },
         )
         .setRequired(false),
     )
