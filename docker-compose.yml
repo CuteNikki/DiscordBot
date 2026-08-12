@@ -5,9 +5,19 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - default
+      - postgres_network
 
     labels:
       homepage.group: 'Discord Bots'
-      homepage.name: 'Yanera'
+      homepage.name: 'Yanera Development'
       homepage.icon: 'si-discord'
       homepage.href: 'https://github.com/CuteNikki/DiscordBot/tree/v2'
+
+networks:
+  postgres_network:
+    external: true
+    name: postgres_default
