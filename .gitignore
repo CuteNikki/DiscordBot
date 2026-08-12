@@ -179,4 +179,4 @@ dist
 .DS_Store
 
 # prisma generated client
-src/generated/
+generated/

@@ -1,0 +1,13 @@
+services:
+  yanera-development:
+    build: .
+    container_name: yanera-development
+    restart: unless-stopped
+    env_file:
+      - .env
+
+    labels:
+      homepage.group: 'Discord Bots'
+      homepage.name: 'Yanera'
+      homepage.icon: 'si-discord'
+      homepage.href: 'https://github.com/CuteNikki/DiscordBot/tree/v2'
