@@ -15,7 +15,7 @@ WORKDIR /app
 COPY package.json bun.lockb* ./
 COPY prisma ./prisma/
 
-RUN bun install --frozen-lockfile --production
+RUN bun install --frozen-lockfile
 RUN bunx prisma generate
 
 COPY . .
