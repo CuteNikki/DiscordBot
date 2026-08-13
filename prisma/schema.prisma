@@ -12,12 +12,15 @@ model User {
   blacklisted     Blacklist? // Blacklist record if the user is blacklisted
   infractions     Infraction[] // Infractions received
   messageBuilders MessageBuilder[] // MessageBuilder records created by the user
+  tempVoices      TempVoice[] // TempVoice records owned by the user
 }
 
 model Guild {
-  guildId     String       @id @unique
-  infractions Infraction[] // Infractions issued in this guild
-  roleMenus   RoleMenu[] // RoleMenu records in this guild
+  guildId                 String                   @id @unique
+  infractions             Infraction[] // Infractions issued in this guild
+  roleMenus               RoleMenu[] // RoleMenu records in this guild
+  tempVoiceConfigurations TempVoiceConfiguration[]
+  tempVoices              TempVoice[] // TempVoice records in this guild
 }
 
 model Blacklist {
@@ -34,6 +37,45 @@ model Blacklist {
   expiresAt DateTime? // When the blacklist expires
 
   @@index([moderatorId], name: "blacklist_moderator")
+}
+
+model TempVoiceConfiguration {
+  // Identifiers
+  id      String @id @default(uuid())
+  guild   Guild  @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
+  guildId String @unique // GuildId where the temp voice configuration is located
+
+  // Temp voice configuration details
+  categoryChannelId String // CategoryChannelId where the temp voice channels will be created
+  voiceChannelId    String // VoiceChannelId that will be used to create temp voice channels
+  publicByDefault   Boolean // Whether temp voice channels are public by default
+
+  // Timestamps
+  createdAt DateTime @default(now()) // When the temp voice configuration was created
+  updatedAt DateTime @updatedAt // When the temp voice configuration was last updated
+
+  @@index([guildId], name: "tempvoiceconfig_guild")
+}
+
+model TempVoice {
+  // Identifiers
+  id      String @id @default(uuid())
+  guild   Guild  @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
+  guildId String // GuildId where the temp voice channel is located
+  owner   User   @relation(fields: [ownerId], references: [userId], onDelete: Cascade)
+  ownerId String // UserId of the owner of the temp voice channel
+
+  // Temp voice channel details
+  channelId String // ChannelId of the temp voice channel
+
+  // Timestamps
+  createdAt DateTime @default(now()) // When the temp voice channel was created
+  updatedAt DateTime @updatedAt // When the temp voice channel was last updated
+
+  @@index([guildId], name: "tempvoice_guild")
+  @@index([channelId], name: "tempvoice_channel")
+  @@index([ownerId], name: "tempvoice_owner")
+  @@index([guildId, channelId], name: "tempvoice_guild_channel")
 }
 
 model RoleMenu {
