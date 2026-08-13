@@ -106,8 +106,11 @@ export class ExtendedClient extends Client {
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildModeration,
         GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.GuildVoiceStates,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.MessageContent,
       ],
-      partials: [Partials.Message, Partials.Reaction],
+      partials: [Partials.Message, Partials.Reaction, Partials.Channel, Partials.GuildMember, Partials.User],
       ws: {
         shardCount: getInfo().TOTAL_SHARDS,
         shardIds: getInfo().SHARD_LIST,
