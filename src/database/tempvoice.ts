@@ -34,10 +34,13 @@ export const deleteTempVoiceConfiguration = async (guildId: string) =>
 
 export const getAllTempVoices = async () => prisma.tempVoice.findMany();
 
-export const createTempVoice = async (guildId: string, ownerId: string, channelId: string) =>
-  prisma.tempVoice.create({
+export const createTempVoice = async (guildId: string, ownerId: string, channelId: string) => {
+  await getUserOrCreate(ownerId).catch(() => null);
+
+  return prisma.tempVoice.create({
     data: { guildId, ownerId, channelId },
   });
+};
 
 export const updateTempVoiceOwner = async (guildId: string, channelId: string, newOwnerId: string) => {
   // Ensure the new owner exists in the database
