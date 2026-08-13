@@ -1,4 +1,5 @@
-import { REST, Routes, type RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord.js';
+import { disableValidators, REST, Routes, type RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord.js';
+
 import { performance } from 'perf_hooks';
 
 import type { Command } from 'classes/base/command';
@@ -8,6 +9,8 @@ import { getCommandFiles } from 'utility/files';
 import { KEYS } from 'utility/keys';
 import { logger, table } from 'utility/logger';
 import { initializeI18N, translateCommand } from 'utility/translation';
+
+disableValidators();
 
 /**
  * Deploys all commands to Discord.
