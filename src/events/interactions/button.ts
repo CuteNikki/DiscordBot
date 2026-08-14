@@ -1,11 +1,11 @@
-// @todo: add translations
-// @todo: use containers for replies
-
-import { Collection, Colors, EmbedBuilder, Events, MessageFlags } from 'discord.js';
+import { Collection, Colors, ContainerBuilder, Events, MessageFlags, TextDisplayBuilder, time, TimestampStyles } from 'discord.js';
+import { t } from 'i18next';
 
 import { Event } from 'classes/base/event';
 
 import { getBlacklist } from 'database/blacklist';
+import { getGuildOrCreate } from 'database/guild';
+import { getUserOrCreate } from 'database/user';
 
 import { KEYS } from 'utility/keys';
 import { logger } from 'utility/logger';
@@ -30,6 +30,8 @@ export default new Event({
       return;
     }
 
+    const lng = interaction.locale;
+
     /**
      * Handling blacklisted users
      */
@@ -39,12 +41,20 @@ export default new Event({
     if (blacklist) {
       await interaction
         .reply({
-          content: blacklist.expiresAt
-            ? `You are blacklisted from using this bot until <t:${Math.floor(blacklist.expiresAt.getTime() / 1_000)}>!`
-            : 'You are blacklisted from using this bot!',
-          flags: [MessageFlags.Ephemeral],
+          components: [
+            new ContainerBuilder()
+              .setAccentColor(Colors.Red)
+              .addTextDisplayComponents(
+                new TextDisplayBuilder().setContent(
+                  blacklist.expiresAt
+                    ? t('interactions.blacklisted-timed', { lng, timestamp: time(Math.floor(blacklist.expiresAt.getTime() / 1_000)) })
+                    : t('interactions.blacklisted-permanent', { lng }),
+                ),
+              ),
+          ],
+          flags: [MessageFlags.Ephemeral, MessageFlags.IsComponentsV2],
         })
-        .catch((e) => console.error('Error while replying to interaction', e));
+        .catch((err) => logger.error({ err }, 'Error while replying to interaction'));
       return;
     }
 
@@ -55,10 +65,14 @@ export default new Event({
     if (button.options.isDevelopment && KEYS.DISCORD_DEV_OWNER_ID !== interaction.user.id) {
       await interaction
         .reply({
-          content: 'This button is only available to the bot owner.',
-          flags: [MessageFlags.Ephemeral],
+          components: [
+            new ContainerBuilder()
+              .setAccentColor(Colors.Red)
+              .addTextDisplayComponents(new TextDisplayBuilder().setContent(t('interactions.development-only', { lng }))),
+          ],
+          flags: [MessageFlags.Ephemeral, MessageFlags.IsComponentsV2],
         })
-        .catch((err) => logger.debug({ err }, 'Error while replying to interaction'));
+        .catch((err) => logger.error({ err }, 'Error while replying to interaction'));
       return;
     }
 
@@ -72,14 +86,19 @@ export default new Event({
       if (missingPermissions?.length) {
         return interaction
           .reply({
-            embeds: [
-              new EmbedBuilder()
-                .setColor(Colors.Red)
-                .setDescription(`You are missing the following permissions to execute this button: \`${missingPermissions.join(', ')}\``),
+            components: [
+              new ContainerBuilder().setAccentColor(Colors.Red).addTextDisplayComponents(
+                new TextDisplayBuilder().setContent(
+                  t('interactions.permissions-user-missing', {
+                    lng,
+                    permissions: missingPermissions.map((p) => `\`${t(`permissions.${p}`, { lng })}\``).join(', '),
+                  }),
+                ),
+              ),
             ],
-            flags: [MessageFlags.Ephemeral],
+            flags: [MessageFlags.Ephemeral, MessageFlags.IsComponentsV2],
           })
-          .catch((e) => console.error('Error while replying to interaction', e));
+          .catch((err) => logger.error({ err }, 'Error while replying to interaction'));
       }
     }
 
@@ -106,14 +125,18 @@ export default new Event({
       if (now <= expirationTime) {
         const expiredTimestamp = Math.round(expirationTime / 1_000);
         return interaction.reply({
-          embeds: [
-            new EmbedBuilder()
-              .setColor(Colors.Red)
-              .setDescription(
-                `Please wait, you are on cooldown for \`${button.options.customId}\`.\nYou can use it again <t:${expiredTimestamp}:R>.`,
+          components: [
+            new ContainerBuilder().setAccentColor(Colors.Red).addTextDisplayComponents(
+              new TextDisplayBuilder().setContent(
+                t('interactions.cooldown', {
+                  lng,
+                  id: button.options.customId,
+                  timestamp: time(expiredTimestamp, TimestampStyles.RelativeTime),
+                }),
               ),
+            ),
           ],
-          flags: [MessageFlags.Ephemeral],
+          flags: [MessageFlags.Ephemeral, MessageFlags.IsComponentsV2],
         });
       }
     }
@@ -131,16 +154,30 @@ export default new Event({
       if (missingPermissions?.length) {
         await interaction
           .reply({
-            embeds: [
-              new EmbedBuilder()
-                .setColor(Colors.Red)
-                .setDescription(`I am missing the following permissions to execute this button: \`${missingPermissions.join(', ')}\``),
+            components: [
+              new ContainerBuilder().setAccentColor(Colors.Red).addTextDisplayComponents(
+                new TextDisplayBuilder().setContent(
+                  t('interactions.permissions-bot-missing', {
+                    lng,
+                    permissions: missingPermissions.map((p) => `\`${t(`permissions.${p}`, { lng })}\``).join(', '),
+                  }),
+                ),
+              ),
             ],
-            flags: [MessageFlags.Ephemeral],
+            flags: [MessageFlags.Ephemeral, MessageFlags.IsComponentsV2],
           })
-          .catch((e) => console.error('Error while replying to interaction', e));
+          .catch((err) => logger.error({ err }, 'Error while replying to interaction'));
         return;
       }
+    }
+
+    /**
+     * Making sure user and guild exist in the database
+     */
+
+    await getUserOrCreate(interaction.user.id);
+    if (interaction.inCachedGuild()) {
+      await getGuildOrCreate(interaction.guild.id);
     }
 
     /**
@@ -150,27 +187,32 @@ export default new Event({
     try {
       await button.options.execute(interaction);
     } catch (error) {
-      logger.error(error);
+      logger.error({ err: error }, 'Error while executing button');
 
       if (interaction.replied || interaction.deferred) {
         await interaction
           .editReply({
             content: '',
-            components: [],
+            components: [
+              new ContainerBuilder()
+                .setAccentColor(Colors.Red)
+                .addTextDisplayComponents(new TextDisplayBuilder().setContent(t('interactions.error', { lng }))),
+            ],
             files: [],
-            embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription('An error occurred while executing the button.')],
+            embeds: [],
           })
-          .catch((e) => console.error('Error while editing reply to interaction', e));
+          .catch((err) => logger.error({ err }, 'Error while editing reply to interaction'));
       } else if (!interaction.replied && !interaction.deferred) {
         await interaction
           .reply({
-            content: '',
-            components: [],
-            files: [],
-            embeds: [new EmbedBuilder().setColor(Colors.Red).setDescription('An error occurred while executing the button.')],
-            flags: [MessageFlags.Ephemeral],
+            components: [
+              new ContainerBuilder()
+                .setAccentColor(Colors.Red)
+                .addTextDisplayComponents(new TextDisplayBuilder().setContent(t('interactions.error', { lng }))),
+            ],
+            flags: [MessageFlags.Ephemeral, MessageFlags.IsComponentsV2],
           })
-          .catch((e) => console.error('Error while replying to interaction', e));
+          .catch((err) => logger.error({ err }, 'Error while replying to interaction'));
       }
     }
   },
