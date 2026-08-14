@@ -28,7 +28,9 @@
               {
                 "name": "option",
                 "description": "test string option",
-                "choices": ["choice"]
+                "choices": [
+                  "choice"
+                ]
               }
             ]
           }
@@ -43,12 +45,19 @@
       {
         "name": "difficulty",
         "description": "The difficulty of the trivia question",
-        "choices": ["easy", "medium", "hard"]
+        "choices": [
+          "easy",
+          "medium",
+          "hard"
+        ]
       },
       {
         "name": "type",
         "description": "The type of trivia question",
-        "choices": ["multiple choice", "single choice"]
+        "choices": [
+          "multiple choice",
+          "single choice"
+        ]
       },
       {
         "name": "category",
@@ -137,6 +146,42 @@
       {
         "name": "all",
         "description": "View all infractions in the guild"
+      }
+    ]
+  },
+  "tempvoice-setup": {
+    "name": "tempvoice-setup",
+    "description": "Setup temporary voice channels",
+    "options": [
+      {
+        "name": "start",
+        "description": "Start the setup process for temporary voice channels",
+        "options": [
+          {
+            "name": "category",
+            "description": "The category to create the temporary voice channels in"
+          },
+          {
+            "name": "voice-channel",
+            "description": "The voice channel users need to join to create temporary voice channels"
+          },
+          {
+            "name": "public-by-default",
+            "description": "Whether temporary voice channels are public by default"
+          }
+        ]
+      },
+      {
+        "name": "reset",
+        "description": "Deletes the temporary voice channel setup"
+      },
+      {
+        "name": "info",
+        "description": "Provides information about the temporary voice channel setup"
+      },
+      {
+        "name": "help",
+        "description": "Provides help for the temporary voice channel setup"
       }
     ]
   }

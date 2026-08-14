@@ -1,4 +1,5 @@
-import { MessageFlags, userMention } from 'discord.js';
+import { ActionRowBuilder, EmbedBuilder, LinkButtonBuilder, MessageFlags, userMention } from 'discord.js';
+import { t } from 'i18next';
 
 import { getTempVoiceByChannelId } from 'database/tempvoice';
 
@@ -13,10 +14,11 @@ export default new Modal({
   customId: 'tempvoice-invite',
   async execute(interaction) {
     if (!interaction.inCachedGuild() || !interaction.channel) return;
+    const lng = interaction.locale;
 
     if (!interaction.channel.isVoiceBased()) {
       return interaction.reply({
-        content: 'This can only be used in a temporary voice channel.',
+        content: t('tempvoice.common.no-voice-channel', { lng }),
         flags: [MessageFlags.Ephemeral],
       });
     }
@@ -24,14 +26,14 @@ export default new Modal({
     const tempVoiceChannel = await getTempVoiceByChannelId(interaction.guildId, interaction.channel.id);
     if (!tempVoiceChannel) {
       return interaction.reply({
-        content: 'This channel is not a temporary voice channel.',
+        content: t('tempvoice.common.no-voice-channel', { lng }),
         flags: [MessageFlags.Ephemeral],
       });
     }
 
     if (tempVoiceChannel.ownerId !== interaction.user.id) {
       return interaction.reply({
-        content: 'Only the owner of this temporary voice channel can invite users.',
+        content: t('tempvoice.common.owner-only', { lng }),
         flags: [MessageFlags.Ephemeral],
       });
     }
@@ -41,14 +43,14 @@ export default new Modal({
 
     if (!targetUserId) {
       return interaction.reply({
-        content: 'No user was selected to invite.',
+        content: t('tempvoice.invite.none', { lng }),
         flags: [MessageFlags.Ephemeral],
       });
     }
 
     if (targetUserId === interaction.user.id) {
       return interaction.reply({
-        content: 'You cannot invite yourself to your own channel.',
+        content: t('tempvoice.invite.self', { lng }),
         flags: [MessageFlags.Ephemeral],
       });
     }
@@ -57,7 +59,7 @@ export default new Modal({
 
     if (!success) {
       return interaction.reply({
-        content: 'Failed to invite user to the temporary voice channel.',
+        content: t('tempvoice.invite.failed', { lng }),
         flags: [MessageFlags.Ephemeral],
       });
     }
@@ -68,28 +70,43 @@ export default new Modal({
     let dmNote = '';
 
     if (wasRecentlyInvited) {
-      dmNote = '(DM skipped - an invite was already sent to this user in the last 10 minutes).';
+      dmNote = t('tempvoice.invite.dm-skipped', { lng });
     } else {
       const targetMember = await interaction.guild.members.fetch(targetUserId).catch(() => null);
 
       if (targetMember) {
         const dmSent = await targetMember
           .send({
-            content: `You have been invited to ${userMention(interaction.user.id)}'s voice channel: <#${interaction.channel.id}>`,
+            embeds: [
+              new EmbedBuilder().setTitle(t('tempvoice.invite.invite-title', { lng })).setDescription(
+                t('tempvoice.invite.invite-message', {
+                  channel: interaction.channel.toString(),
+                  guild: interaction.guild.name,
+                  inviter: interaction.user.toString(),
+                }),
+              ),
+            ],
+            components: [
+              new ActionRowBuilder().addComponents(
+                new LinkButtonBuilder().setLabel(t('tempvoice.invite.join-button', { lng })).setURL(interaction.channel.url),
+              ),
+            ],
           })
           .then(() => true)
           .catch(() => false);
 
         if (dmSent) {
-          dmNote = 'An invite message was sent to their DMs.';
+          dmNote = t('tempvoice.invite.dm-received', { lng });
           recentInvitesCache.add(cacheKey);
           setTimeout(() => recentInvitesCache.delete(cacheKey), TEN_MINUTES_MS);
+        } else {
+          dmNote = t('tempvoice.invite.dm-failed', { lng });
         }
       }
     }
 
     return interaction.reply({
-      content: `Granted access to <@${targetUserId}>.\n${dmNote}`,
+      content: t('tempvoice.invite.success', { lng, user: userMention(targetUserId) }) + `\n${dmNote}`,
       allowedMentions: { users: [] },
     });
   },

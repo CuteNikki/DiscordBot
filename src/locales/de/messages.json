@@ -157,5 +157,151 @@
       "not-implemented": "Diese Funktion ist noch nicht implementiert!"
     },
     "unknown-cmd": "Unbekannter Unterbefehl!"
+  },
+  "tempvoice": {
+    "common": {
+      "no-configuration": "Es sind keine temporären Sprachkanäle für diese Gilde konfiguriert!\nBitte führe den Befehl `/tempvoice-setup start` aus, um die Einrichtung zu starten.",
+      "no-voice-channel": "Du befindest dich nicht in einem temporären Sprachkanal!",
+      "owner-only": "Nur der Besitzer dieses temporären Sprachkanals kann diese Aktion ausführen!",
+      "invalid-subcommand": "Ungültiger Unterbefehl! Bitte verwende entweder `start`, `reset`, `info` oder `help`."
+    },
+    "info": {
+      "title": "Konfiguration des temporären Sprachkanals:",
+      "category": "Kategorienkanal: {{categoryChannel}}",
+      "voice-channel": "Sprachkanal: {{voiceChannel}}",
+      "public-by-default": "Standardmäßig öffentlich: {{publicByDefault}}",
+      "active-channels": "Aktive Kanäle: {{activeChannels}}",
+      "active-channel-item": "- {{channel}} (Besitzer: {{owner}})"
+    },
+    "help": {
+      "title": "Befehle für temporäre Sprachkanäle:",
+      "start": "- `/tempvoice-setup start` - Startet den Einrichtungsprozess für temporäre Sprachkanäle",
+      "reset": "- `/tempvoice-setup reset` - Löscht die Einrichtung der temporären Sprachkanäle",
+      "info": "- `/tempvoice-setup info` - Zeigt Informationen zur Einrichtung der temporären Sprachkanäle an",
+      "help": "- `/tempvoice-setup help` - Zeigt Hilfe zur Einrichtung der temporären Sprachkanäle an",
+      "managing": "Verwalten temporärer Sprachkanäle:\n- Verwende die Schaltflächen in den temporären Sprachkanälen, um sie zu verwalten."
+    },
+    "start": {
+      "updated": "Die Konfiguration des temporären Sprachkanals wurde erfolgreich aktualisiert!",
+      "created": "Die Konfiguration des temporären Sprachkanals wurde erfolgreich erstellt!",
+      "previous": "Vorherige Konfiguration:",
+      "new": "Neue Konfiguration:"
+    },
+    "reset": {
+      "success": "Die Konfiguration des temporären Sprachkanals wurde erfolgreich zurückgesetzt!"
+    },
+    "access": {
+      "modal": {
+        "title": "Zugriff auf den Sprachkanal verwalten",
+        "label": "Zugriff",
+        "private": "Privat",
+        "private-description": "Der Kanal ist nur für eingeladene Benutzer zugänglich",
+        "public": "Öffentlich",
+        "public-description": "Der Kanal ist für alle zugänglich"
+      },
+      "success": "Die Zugriffseinstellungen für den temporären Sprachkanal wurden erfolgreich aktualisiert!",
+      "private": "Der temporäre Sprachkanal ist jetzt privat und nur für eingeladene Benutzer zugänglich.",
+      "public": "Der temporäre Sprachkanal ist jetzt öffentlich und für alle zugänglich.",
+      "failed": "Die Zugriffseinstellungen für den temporären Sprachkanal konnten nicht aktualisiert werden!"
+    },
+    "ban": {
+      "modal": {
+        "title": "Benutzer aus dem Sprachkanal verbannen",
+        "label": "Benutzer",
+        "placeholder": "Wählen Sie einen Benutzer aus, der aus dem Kanal verbannt werden soll"
+      },
+      "none": "Es wurde kein Benutzer ausgewählt, der aus dem temporären Sprachkanal verbannt werden soll!",
+      "self": "Sie können sich nicht selbst aus dem temporären Sprachkanal verbannen!",
+      "success": "Der Benutzer {{user}} wurde erfolgreich aus dem temporären Sprachkanal verbannt!",
+      "failed": "Der Benutzer konnte nicht aus dem temporären Sprachkanal verbannt werden!"
+    },
+    "delete": {
+      "deleting": "Der temporäre Sprachkanal wird gelöscht..."
+    },
+    "invite": {
+      "modal": {
+        "title": "Benutzer zum Sprachkanal einladen",
+        "label": "Benutzer",
+        "placeholder": "Wählen Sie einen Benutzer aus, der zum Kanal eingeladen werden soll"
+      },
+      "none": "Es wurde kein Benutzer ausgewählt, der zum temporären Sprachkanal eingeladen werden soll!",
+      "self": "Sie können sich nicht selbst zu Ihrem eigenen temporären Sprachkanal einladen!",
+      "success": "Der Benutzer {{user}} wurde erfolgreich zum temporären Sprachkanal eingeladen!",
+      "failed": "Der Benutzer konnte nicht zum temporären Sprachkanal eingeladen werden!",
+      "dm-received": "DM erhalten: Eine Einladungsnachricht wurde an die Direktnachrichten des Benutzers gesendet.",
+      "dm-skipped": "DM übersprungen: Eine Einladungsnachricht wurde diesem Benutzer in den letzten 10 Minuten bereits gesendet.",
+      "dm-failed": "DM fehlgeschlagen: Die Einladungsnachricht konnte nicht an die Direktnachrichten des Benutzers gesendet werden.",
+      "invite-title": "Einladung zum Sprachkanal",
+      "invite-message": "Sie wurden von {{inviter}} eingeladen, dem Sprachkanal {{channel}} in **{{guild}}** beizutreten!",
+      "join-button": "Beitreten"
+    },
+    "kick": {
+      "modal": {
+        "title": "Benutzer aus dem Sprachkanal entfernen",
+        "label": "Benutzer",
+        "placeholder": "Wählen Sie einen Benutzer aus, der aus dem Kanal entfernt werden soll"
+      },
+      "none": "Es wurde kein Benutzer ausgewählt, der aus dem temporären Sprachkanal entfernt werden soll!",
+      "self": "Sie können sich nicht selbst aus Ihrem eigenen temporären Sprachkanal entfernen!",
+      "channel": "Dieser Benutzer befindet sich derzeit nicht in diesem Sprachkanal!",
+      "success": "Der Benutzer {{user}} wurde erfolgreich aus dem temporären Sprachkanal entfernt!",
+      "failed": "Der Benutzer konnte nicht aus dem temporären Sprachkanal entfernt werden!"
+    },
+    "limit": {
+      "modal": {
+        "title": "Benutzerlimit für den Sprachkanal festlegen",
+        "label": "Limit (0-99, 0=Unbegrenzt)",
+        "placeholder": "Geben Sie ein Benutzerlimit für den Kanal ein"
+      },
+      "invalid": "Bitte geben Sie eine gültige Zahl zwischen **0** und **99** ein (0 bedeutet kein Limit).",
+      "success": "Das Benutzerlimit für den Sprachkanal wurde auf {{limit}} gesetzt.",
+      "failed": "Das Benutzerlimit für den Sprachkanal konnte nicht aktualisiert werden!"
+    },
+    "ownership": {
+      "modal": {
+        "title": "Eigentum des Sprachkanals übertragen",
+        "label": "Neuer Eigentümer",
+        "placeholder": "Wählen Sie einen Benutzer aus, an den das Eigentum übertragen werden soll"
+      },
+      "none": "Es wurde kein Benutzer ausgewählt, an den das Eigentum übertragen werden soll!",
+      "self": "Sie sind bereits der Eigentümer dieses Sprachkanals!",
+      "not-found": "Dieses Mitglied konnte auf diesem Server nicht gefunden werden!",
+      "bot": "Sie können das Eigentum nicht an einen Bot übertragen!",
+      "success": "Das Eigentum an diesem Sprachkanal wurde an {{user}} übertragen.",
+      "failed": "Die Berechtigungen für den Eigentumsübergang des Kanals konnten nicht aktualisiert werden!"
+    },
+    "rename": {
+      "modal": {
+        "title": "Temporären Sprachkanal umbenennen",
+        "label": "Neuer Name",
+        "placeholder": "Geben Sie einen neuen Namen für den Kanal ein"
+      },
+      "success": "Der Sprachkanal wurde in `{{name}}` umbenannt.",
+      "failed": "Der Sprachkanal konnte nicht umbenannt werden!"
+    },
+    "unban": {
+      "modal": {
+        "title": "Benutzer vom Sprachkanal entbannen",
+        "label": "Benutzer",
+        "placeholder": "Wählen Sie einen Benutzer aus, der vom Kanal entbannt werden soll"
+      },
+      "none": "Es wurde kein Benutzer ausgewählt, der vom Sprachkanal entbannt werden soll!",
+      "self": "Sie können sich nicht selbst vom Sprachkanal entbannen!",
+      "success": "Der Benutzer {{user}} wurde erfolgreich vom Sprachkanal entbannt!",
+      "failed": "Der Benutzer konnte nicht vom Sprachkanal entbannt werden!"
+    },
+    "visibility": {
+      "modal": {
+        "title": "Sichtbarkeit des Sprachkanals verwalten",
+        "label": "Sichtbarkeit",
+        "visible": "Sichtbar",
+        "visible-description": "Der Kanal ist für alle Mitglieder des Servers sichtbar",
+        "hidden": "Versteckt",
+        "hidden-description": "Der Kanal ist für alle außer den eingeladenen Benutzern verborgen"
+      },
+      "visible": "Der Sprachkanal ist jetzt für alle Mitglieder des Servers sichtbar.",
+      "hidden": "Der Sprachkanal ist jetzt für alle außer den eingeladenen Benutzern verborgen.",
+      "failed": "Die Sichtbarkeitseinstellungen für den Sprachkanal konnten nicht aktualisiert werden!"
+    }
   }
 }

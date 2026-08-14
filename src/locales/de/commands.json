@@ -28,7 +28,9 @@
               {
                 "name": "option",
                 "description": "test textoption",
-                "choices": ["auswahl"]
+                "choices": [
+                  "auswahl"
+                ]
               }
             ]
           }
@@ -43,12 +45,19 @@
       {
         "name": "schwierigkeit",
         "description": "Die Schwierigkeit der Trivia-Frage",
-        "choices": ["Einfach", "Normal", "Schwierig"]
+        "choices": [
+          "Einfach",
+          "Normal",
+          "Schwierig"
+        ]
       },
       {
         "name": "typ",
         "description": "Die Art der Trivia -Frage",
-        "choices": ["Mehrfachauswahl", "Einzelauswahl"]
+        "choices": [
+          "Mehrfachauswahl",
+          "Einzelauswahl"
+        ]
       },
       {
         "name": "kategorie",
@@ -137,6 +146,42 @@
       {
         "name": "alle",
         "description": "Alle Verstöße des Servers anzeigen"
+      }
+    ]
+  },
+  "tempvoice-setup": {
+    "name": "tempvoice-setup",
+    "description": "Die temporären Sprachkanäle einrichten",
+    "options": [
+      {
+        "name": "start",
+        "description": "Starten Sie den Einrichtungsprozess für temporäre Sprachkanäle",
+        "options": [
+          {
+            "name": "kategorie",
+            "description": "Die Kategorie, in der die temporären Sprachkanäle erstellt werden sollen"
+          },
+          {
+            "name": "sprachkanal",
+            "description": "Der Sprachkanal, dem Benutzer beitreten müssen, um temporäre Sprachkanäle zu erstellen"
+          },
+          {
+            "name": "standardmäßig-öffentlich",
+            "description": "Ob temporäre Sprachkanäle standardmäßig öffentlich sind"
+          }
+        ]
+      },
+      {
+        "name": "zurücksetzen",
+        "description": "Setzt die Einrichtung der temporären Sprachkanäle zurück"
+      },
+      {
+        "name": "info",
+        "description": "Gibt Informationen über die Einrichtung der temporären Sprachkanäle"
+      },
+      {
+        "name": "hilfe",
+        "description": "Bietet Hilfe für die Einrichtung der temporären Sprachkanäle"
       }
     ]
   }

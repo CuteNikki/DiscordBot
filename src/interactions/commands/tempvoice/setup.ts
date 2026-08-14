@@ -1,4 +1,5 @@
-import { ChannelType, ChatInputCommandBuilder, PermissionsBitField } from 'discord.js';
+import { channelMention, ChannelType, ChatInputCommandBuilder, PermissionsBitField, userMention } from 'discord.js';
+import { t } from 'i18next';
 
 import { Command } from 'classes/base/command';
 
@@ -14,7 +15,7 @@ export default new Command({
   builder: new ChatInputCommandBuilder()
     .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageChannels)
     .setName('tempvoice-setup')
-    .setDescription('A demonstration of temporary voice channels')
+    .setDescription('Setup temporary voice channels')
     .addSubcommands((cmd) =>
       cmd
         .setName('start')
@@ -45,26 +46,33 @@ export default new Command({
 
     await interaction.deferReply();
 
+    const lng = interaction.locale;
     const subcommand = interaction.options.getSubcommand();
 
     if (subcommand === 'info') {
       const config = await getTempVoiceConfigurationByGuildId(interaction.guildId);
 
       if (!config) {
-        return interaction.editReply('No temporary voice channel configuration found for this server.');
+        return interaction.editReply(t('tempvoice.common.no-configuration', { lng }));
       }
 
       const voiceChannels = await getTempVoicesByGuildId(interaction.guildId);
 
       return interaction.editReply(
         [
-          'Temporary voice channel configuration:',
-          `Category Channel ID: ${config.categoryChannelId}`,
-          `Voice Channel ID: ${config.voiceChannelId}`,
-          `Public By Default: ${config.publicByDefault}`,
+          t('tempvoice.info.title', { lng }),
+          t('tempvoice.info.category', { lng, categoryChannel: channelMention(config.categoryChannelId) }),
+          t('tempvoice.info.voice-channel', { lng, voiceChannel: channelMention(config.voiceChannelId) }),
+          t('tempvoice.info.public-by-default', { lng, publicByDefault: config.publicByDefault }),
           '',
-          `Currently active channels: ${voiceChannels.length}`,
-          ...voiceChannels.map((vc) => `- ${vc.channelId} (Owner: ${vc.ownerId})`),
+          t('tempvoice.info.active-channels', { lng, activeChannels: voiceChannels.length }),
+          ...voiceChannels.map((vc) =>
+            t('tempvoice.info.active-channel-item', {
+              lng,
+              channel: channelMention(vc.channelId),
+              owner: userMention(vc.ownerId),
+            }),
+          ),
         ].join('\n'),
       );
     }
@@ -72,11 +80,12 @@ export default new Command({
     if (subcommand === 'help') {
       return interaction.editReply(
         [
-          'Temporary Voice Channel Commands:',
-          '`/tempvoice-setup start <category> <voice-channel> <public-by-default>` - Setup temporary voice channels.',
-          '`/tempvoice-setup reset` - Reset the temporary voice channel setup.',
-          '`/tempvoice-setup info` - Get information about the temporary voice channel setup.',
-          '`/tempvoice-setup help` - Show this help message.',
+          t('tempvoice.help.title', { lng }),
+          t('tempvoice.help.start', { lng }),
+          t('tempvoice.help.reset', { lng }),
+          t('tempvoice.help.info', { lng }),
+          t('tempvoice.help.help', { lng }),
+          t('tempvoice.help.managing', { lng }),
         ].join('\n'),
       );
     }
@@ -92,28 +101,28 @@ export default new Command({
         await updateTempVoiceConfiguration(interaction.guildId, categoryChannel.id, voiceChannel.id, publicByDefault);
         return await interaction.editReply(
           [
-            'Temporary voice channel configuration has been updated.',
+            t('tempvoice.start.updated', { lng }),
             '',
-            'Previous configuration:',
-            `Category Channel ID: ${existingConfig.categoryChannelId}`,
-            `Voice Channel ID: ${existingConfig.voiceChannelId}`,
-            `Public By Default: ${existingConfig.publicByDefault}`,
+            t('tempvoice.start.previous', { lng }),
+            t('tempvoice.info.category', { lng, categoryChannel: channelMention(existingConfig.categoryChannelId) }),
+            t('tempvoice.info.voice-channel', { lng, voiceChannel: channelMention(existingConfig.voiceChannelId) }),
+            t('tempvoice.info.public-by-default', { lng, publicByDefault: existingConfig.publicByDefault }),
             '',
-            'New configuration:',
-            `Category Channel ID: ${categoryChannel.id}`,
-            `Voice Channel ID: ${voiceChannel.id}`,
-            `Public By Default: ${publicByDefault}`,
+            t('tempvoice.start.new', { lng }),
+            t('tempvoice.info.category', { lng, categoryChannel: channelMention(categoryChannel.id) }),
+            t('tempvoice.info.voice-channel', { lng, voiceChannel: channelMention(voiceChannel.id) }),
+            t('tempvoice.info.public-by-default', { lng, publicByDefault }),
           ].join('\n'),
         );
       } else {
         await createTempVoiceConfiguration(interaction.guildId, categoryChannel.id, voiceChannel.id, publicByDefault);
         return await interaction.editReply(
           [
-            'Temporary voice channel configuration has been created.',
+            t('tempvoice.start.created', { lng }),
             '',
-            `Category Channel ID: ${categoryChannel.id}`,
-            `Voice Channel ID: ${voiceChannel.id}`,
-            `Public By Default: ${publicByDefault}`,
+            t('tempvoice.info.category', { lng, categoryChannel: channelMention(categoryChannel.id) }),
+            t('tempvoice.info.voice-channel', { lng, voiceChannel: channelMention(voiceChannel.id) }),
+            t('tempvoice.info.public-by-default', { lng, publicByDefault }),
           ].join('\n'),
         );
       }
@@ -123,13 +132,13 @@ export default new Command({
       const existingConfig = await getTempVoiceConfigurationByGuildId(interaction.guildId);
 
       if (!existingConfig) {
-        return interaction.editReply('No temporary voice channel configuration found for this server.');
+        return interaction.editReply(t('tempvoice.common.no-configuration', { lng }));
       }
 
       await deleteTempVoiceConfiguration(interaction.guildId);
-      return await interaction.editReply('Temporary voice channel setup has been reset.');
+      return await interaction.editReply(t('tempvoice.reset.success', { lng }));
     }
 
-    return interaction.editReply('Invalid subcommand. Please use either `start`, `reset`, `info`, or `help`.');
+    return interaction.editReply(t('tempvoice.common.invalid-subcommand', { lng }));
   },
 });

@@ -1,4 +1,5 @@
 import { LabelBuilder, ModalBuilder, UserSelectMenuBuilder } from 'discord.js';
+import { t } from 'i18next';
 
 import { Button } from 'classes/base/button';
 
@@ -6,19 +7,20 @@ export default new Button({
   customId: 'tempvoice-kick',
   execute: async (interaction) => {
     if (!interaction.inCachedGuild()) return;
+    const lng = interaction.locale;
 
     await interaction.showModal(
       new ModalBuilder()
         .setCustomId('tempvoice-kick')
-        .setTitle('Kick User from Voice Channel')
+        .setTitle(t('tempvoice.kick.modal.title', { lng }))
         .addLabelComponents(
           new LabelBuilder()
-            .setLabel('User to Kick')
+            .setLabel(t('tempvoice.kick.modal.label', { lng }))
             .setUserSelectMenuComponent(
               new UserSelectMenuBuilder()
                 .setCustomId('tempvoice-kick')
                 .setMaxValues(1)
-                .setPlaceholder('Select a user to kick from the channel'),
+                .setPlaceholder(t('tempvoice.kick.modal.placeholder', { lng })),
             ),
         ),
     );

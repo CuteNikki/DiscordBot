@@ -1,4 +1,5 @@
 import { MessageFlags } from 'discord.js';
+import { t } from 'i18next';
 
 import { Modal } from 'classes/base/modal';
 
@@ -10,10 +11,11 @@ export default new Modal({
   customId: 'tempvoice-visibility',
   async execute(interaction) {
     if (!interaction.inCachedGuild() || !interaction.channel) return;
+    const lng = interaction.locale;
 
     if (!interaction.channel.isVoiceBased()) {
       return interaction.reply({
-        content: 'This can only be used in a temporary voice channel.',
+        content: t('tempvoice.common.no-voice-channel', { lng }),
         flags: [MessageFlags.Ephemeral],
       });
     }
@@ -21,14 +23,14 @@ export default new Modal({
     const tempVoiceChannel = await getTempVoiceByChannelId(interaction.guildId, interaction.channel.id);
     if (!tempVoiceChannel) {
       return interaction.reply({
-        content: 'This channel is not a temporary voice channel.',
+        content: t('tempvoice.common.no-voice-channel', { lng }),
         flags: [MessageFlags.Ephemeral],
       });
     }
 
     if (tempVoiceChannel.ownerId !== interaction.user.id) {
       return interaction.reply({
-        content: 'Only the owner of this temporary voice channel can change its visibility settings.',
+        content: t('tempvoice.common.owner-only', { lng }),
         flags: [MessageFlags.Ephemeral],
       });
     }
@@ -40,11 +42,11 @@ export default new Modal({
 
     if (success) {
       return interaction.reply({
-        content: `Temporary voice channel is now **${isVisible ? 'Visible' : 'Hidden'}**.`,
+        content: t(`tempvoice.visibility.${isVisible ? 'visible' : 'hidden'}`, { lng }),
       });
     } else {
       return interaction.reply({
-        content: 'Failed to update visibility settings for the temporary voice channel.',
+        content: t('tempvoice.visibility.failed', { lng }),
         flags: [MessageFlags.Ephemeral],
       });
     }

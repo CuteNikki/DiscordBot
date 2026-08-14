@@ -157,5 +157,151 @@
       "not-implemented": "This functionality is not implemented yet!"
     },
     "unknown-cmd": "Unknown subcommand!"
+  },
+  "tempvoice": {
+    "common": {
+      "no-configuration": "There are no temporary voice channels configured for this guild!\nPlease run the `/tempvoice-setup start` command to set it up.",
+      "no-voice-channel": "You are not in a temporary voice channel!",
+      "owner-only": "Only the owner of this temporary voice channel can perform this action!",
+      "invalid-subcommand": "Invalid subcommand! Please use either `start`, `reset`, `info`, or `help`."
+    },
+    "info": {
+      "title": "Temporary Voice Channel Configuration:",
+      "category": "Category Channel: {{categoryChannel}}",
+      "voice-channel": "Voice Channel: {{voiceChannel}}",
+      "public-by-default": "Public by Default: {{publicByDefault}}",
+      "active-channels": "Active Channels: {{activeChannels}}",
+      "active-channel-item": "- {{channel}} (Owner: {{owner}})"
+    },
+    "help": {
+      "title": "Temporary Voice Channel Commands:",
+      "start": "- `/tempvoice-setup start` - Start the setup process for temporary voice channels",
+      "reset": "- `/tempvoice-setup reset` - Deletes the temporary voice channel setup",
+      "info": "- `/tempvoice-setup info` - Provides information about the temporary voice channel setup",
+      "help": "- `/tempvoice-setup help` - Provides help for the temporary voice channel setup",
+      "managing": "Managing Temporary Voice Channels:\n- Use the buttons in the temporary voice channels to manage them."
+    },
+    "start": {
+      "updated": "Temporary Voice Channel Configuration has been updated successfully!",
+      "created": "Temporary Voice Channel Configuration has been created successfully!",
+      "previous": "Previous Configuration:",
+      "new": "New Configuration:"
+    },
+    "reset": {
+      "success": "Temporary Voice Channel Configuration has been reset successfully!"
+    },
+    "access": {
+      "modal": {
+        "title": "Manage Access to Voice Channel",
+        "label": "Access",
+        "private": "Private",
+        "private-description": "Channel only accessible by invited users",
+        "public": "Public",
+        "public-description": "Channel accessible by everyone"
+      },
+      "success": "Access settings for the temporary voice channel have been updated successfully!",
+      "private": "The temporary voice channel is now private and only accessible by invited users.",
+      "public": "The temporary voice channel is now public and accessible by everyone.",
+      "failed": "Failed to update access settings for the temporary voice channel!"
+    },
+    "ban": {
+      "modal": {
+        "title": "Ban User from Voice Channel",
+        "label": "User",
+        "placeholder": "Select a user to ban from the channel"
+      },
+      "none": "No user was selected to ban from the temporary voice channel!",
+      "self": "You cannot ban yourself from the temporary voice channel!",
+      "success": "User {{user}} has been banned from the temporary voice channel successfully!",
+      "failed": "Failed to ban user from the temporary voice channel!"
+    },
+    "delete": {
+      "deleting": "Deleting temporary voice channel..."
+    },
+    "invite": {
+      "modal": {
+        "title": "Invite User to Voice Channel",
+        "label": "User",
+        "placeholder": "Select a user to invite to the channel"
+      },
+      "none": "No user was selected to invite to the voice channel!",
+      "self": "You cannot invite yourself to your own voice channel!",
+      "success": "User {{user}} has been granted access to the voice channel successfully!",
+      "failed": "Failed to invite user to the voice channel!",
+      "dm-received": "DM Received: an invite message has been sent to their direct messages.",
+      "dm-skipped": "DM Skipped: an invite message was already sent to this user in the last 10 minutes.",
+      "dm-failed": "DM Failed: failed to send an invite message to their direct messages.",
+      "invite-title": "Voice Channel Invite",
+      "invite-message": "You have been invited to join the voice channel {{channel}} in **{{guild}}** by {{inviter}}!",
+      "join-button": "Join"
+    },
+    "kick": {
+      "modal": {
+        "title": "Kick User from Voice Channel",
+        "label": "User",
+        "placeholder": "Select a user to kick from the channel"
+      },
+      "none": "No user was selected to kick from the voice channel!",
+      "self": "You cannot kick yourself from your own voice channel!",
+      "channel": "That user is not currently in this voice channel!",
+      "success": "User {{user}} has been kicked from the voice channel successfully!",
+      "failed": "Failed to kick user from the voice channel!"
+    },
+    "limit": {
+      "modal": {
+        "title": "Set User Limit for Voice Channel",
+        "label": "Limit (0-99, 0=Unlimited)",
+        "placeholder": "Enter a user limit for the channel"
+      },
+      "invalid": "Please enter a valid number between **0** and **99** (0 means no limit).",
+      "success": "Voice channel limit set to {{limit}}.",
+      "failed": "Failed to update the user limit for the voice channel!"
+    },
+    "ownership": {
+      "modal": {
+        "title": "Transfer Ownership of Voice Channel",
+        "label": "New Owner",
+        "placeholder": "Select a user to transfer ownership to"
+      },
+      "none": "No user was selected to transfer ownership to!",
+      "self": "You are already the owner of this voice channel!",
+      "not-found": "Could not find that member in this server!",
+      "bot": "You cannot transfer ownership to a bot!",
+      "success": "Ownership of this voice channel has been transferred to {{user}}.",
+      "failed": "Failed to update channel permissions for ownership transfer!"
+    },
+    "rename": {
+      "modal": {
+        "title": "Rename Temporary Voice Channel",
+        "label": "New Name",
+        "placeholder": "Enter a new name for the channel"
+      },
+      "success": "The voice channel has been renamed to `{{name}}`.",
+      "failed": "Failed to rename the voice channel!"
+    },
+    "unban": {
+      "modal": {
+        "title": "Unban User from Voice Channel",
+        "label": "User",
+        "placeholder": "Select a user to unban from the channel"
+      },
+      "none": "No user was selected to unban from the voice channel!",
+      "self": "You cannot unban yourself from the voice channel!",
+      "success": "User {{user}} has been unbanned from the voice channel successfully!",
+      "failed": "Failed to unban user from the voice channel!"
+    },
+    "visibility": {
+      "modal": {
+        "title": "Manage Visibility of Voice Channel",
+        "label": "Visibility",
+        "visible": "Visible",
+        "visible-description": "Channel is visible to everyone in the server",
+        "hidden": "Hidden",
+        "hidden-description": "Channel is hidden from everyone except invited users"
+      },
+      "visible": "The voice channel is now visible to everyone in the server.",
+      "hidden": "The voice channel is now hidden from everyone except invited users.",
+      "failed": "Failed to update visibility settings for the voice channel!"
+    }
   }
 }

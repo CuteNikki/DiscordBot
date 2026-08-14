@@ -1,4 +1,5 @@
 import { MessageFlags } from 'discord.js';
+import { t } from 'i18next';
 
 import { Modal } from 'classes/base/modal';
 
@@ -10,19 +11,20 @@ export default new Modal({
   customId: 'tempvoice-rename',
   execute: async (interaction) => {
     if (!interaction.inCachedGuild() || !interaction.channel) return;
+    const lng = interaction.locale;
 
     if (!interaction.channel.isVoiceBased()) {
-      return interaction.reply({ content: 'This can only be used in a temporary voice channel.', flags: [MessageFlags.Ephemeral] });
+      return interaction.reply({ content: t('tempvoice.common.no-voice-channel', { lng }), flags: [MessageFlags.Ephemeral] });
     }
 
     const tempVoiceChannel = await getTempVoiceByChannelId(interaction.guildId, interaction.channel.id);
     if (!tempVoiceChannel) {
-      return interaction.reply({ content: 'This channel is not a temporary voice channel.', flags: [MessageFlags.Ephemeral] });
+      return interaction.reply({ content: t('tempvoice.common.no-voice-channel', { lng }), flags: [MessageFlags.Ephemeral] });
     }
 
     if (tempVoiceChannel.ownerId !== interaction.user.id) {
       return interaction.reply({
-        content: 'Only the owner of this temporary voice channel can rename it.',
+        content: t('tempvoice.common.owner-only', { lng }),
         flags: [MessageFlags.Ephemeral],
       });
     }
@@ -31,9 +33,9 @@ export default new Modal({
     const success = await renameVoiceChannel(interaction.channel, newName);
 
     if (success) {
-      return interaction.reply({ content: `Temporary voice channel renamed to \`${newName}\`.` });
+      return interaction.reply({ content: t('tempvoice.rename.success', { lng, name: newName }) });
     } else {
-      return interaction.reply({ content: 'Failed to rename the temporary voice channel.', flags: [MessageFlags.Ephemeral] });
+      return interaction.reply({ content: t('tempvoice.rename.failed', { lng }), flags: [MessageFlags.Ephemeral] });
     }
   },
 });

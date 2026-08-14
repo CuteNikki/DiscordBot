@@ -1,4 +1,5 @@
-import { MessageFlags } from 'discord.js';
+import { MessageFlags, userMention } from 'discord.js';
+import { t } from 'i18next';
 
 import { Modal } from 'classes/base/modal';
 
@@ -10,10 +11,11 @@ export default new Modal({
   customId: 'tempvoice-ban',
   async execute(interaction) {
     if (!interaction.inCachedGuild() || !interaction.channel) return;
+    const lng = interaction.locale;
 
     if (!interaction.channel.isVoiceBased()) {
       return interaction.reply({
-        content: 'This can only be used in a temporary voice channel.',
+        content: t('tempvoice.common.no-voice-channel', { lng }),
         flags: [MessageFlags.Ephemeral],
       });
     }
@@ -21,14 +23,14 @@ export default new Modal({
     const tempVoiceChannel = await getTempVoiceByChannelId(interaction.guildId, interaction.channel.id);
     if (!tempVoiceChannel) {
       return interaction.reply({
-        content: 'This channel is not a temporary voice channel.',
+        content: t('tempvoice.common.no-voice-channel', { lng }),
         flags: [MessageFlags.Ephemeral],
       });
     }
 
     if (tempVoiceChannel.ownerId !== interaction.user.id) {
       return interaction.reply({
-        content: 'Only the owner of this temporary voice channel can ban members.',
+        content: t('tempvoice.common.owner-only', { lng }),
         flags: [MessageFlags.Ephemeral],
       });
     }
@@ -38,14 +40,14 @@ export default new Modal({
 
     if (!targetUserId) {
       return interaction.reply({
-        content: 'No user was selected to ban.',
+        content: t('tempvoice.ban.none', { lng }),
         flags: [MessageFlags.Ephemeral],
       });
     }
 
     if (targetUserId === interaction.user.id) {
       return interaction.reply({
-        content: 'You cannot ban yourself from your own channel.',
+        content: t('tempvoice.ban.self', { lng }),
         flags: [MessageFlags.Ephemeral],
       });
     }
@@ -54,11 +56,11 @@ export default new Modal({
 
     if (success) {
       return interaction.reply({
-        content: `Banned <@${targetUserId}> from the temporary voice channel.`,
+        content: t('tempvoice.ban.success', { lng, user: userMention(targetUserId) }),
       });
     } else {
       return interaction.reply({
-        content: 'Failed to ban the user from the temporary voice channel.',
+        content: t('tempvoice.ban.failed', { lng }),
         flags: [MessageFlags.Ephemeral],
       });
     }

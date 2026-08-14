@@ -13,16 +13,23 @@ import {
 import { Event } from 'classes/base/event';
 
 import { createTempVoice, getTempVoiceConfigurationByGuildId } from 'database/tempvoice';
+import { logger } from 'utility/logger';
 
 export default new Event({
   name: Events.VoiceStateUpdate,
   async execute(_client, _oldState, newState) {
     if (!newState.channelId || !newState.member) return;
 
-    const existingConfig = await getTempVoiceConfigurationByGuildId(newState.guild.id);
+    const existingConfig = await getTempVoiceConfigurationByGuildId(newState.guild.id).catch((err) => {
+      logger.error(err, 'Failed to fetch temporary voice configuration');
+      return null;
+    });
     if (!existingConfig || newState.channelId !== existingConfig.voiceChannelId) return;
 
-    const categoryChannel = await newState.guild.channels.fetch(existingConfig.categoryChannelId).catch(() => null);
+    const categoryChannel = await newState.guild.channels.fetch(existingConfig.categoryChannelId).catch((err) => {
+      logger.error(err, 'Failed to fetch category channel for temporary voice channel');
+      return null;
+    });
     if (!categoryChannel || categoryChannel.type !== ChannelType.GuildCategory) return;
 
     const tempVoiceChannel = await newState.guild.channels
@@ -60,23 +67,27 @@ export default new Event({
           },
         ],
       })
-      .catch((error) => {
-        console.error('Error creating temporary voice channel:', error);
+      .catch((err) => {
+        logger.error(err, 'Failed to create temporary voice channel');
         return null;
       });
 
     if (!tempVoiceChannel) return;
 
     if (!newState.member.voice.channelId) {
-      await tempVoiceChannel.delete('User disconnected during creation').catch(() => null);
+      await tempVoiceChannel
+        .delete('User disconnected during creation')
+        .catch((err) => logger.error(err, 'Failed to delete temporary voice channel after user disconnected'));
       return;
     }
 
     try {
       await newState.setChannel(tempVoiceChannel);
-    } catch (error) {
-      console.error('Failed to move user to temporary voice channel:', error);
-      await tempVoiceChannel.delete('Failed to move user').catch(() => null);
+    } catch (err) {
+      logger.error(err, 'Failed to move user to temporary voice channel');
+      await tempVoiceChannel
+        .delete('Failed to move user')
+        .catch((err) => logger.error(err, 'Failed to delete temporary voice channel after failed move'));
       return;
     }
 
@@ -110,6 +121,6 @@ export default new Event({
         embeds: [embed],
         components,
       })
-      .catch((err) => console.error('Failed to send control panel message:', err));
+      .catch((err) => logger.error(err, 'Failed to send control panel message'));
   },
 });
