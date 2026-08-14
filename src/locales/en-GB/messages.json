@@ -166,26 +166,33 @@
       "invalid-subcommand": "Invalid subcommand! Please use either `start`, `reset`, `info`, or `help`."
     },
     "info": {
-      "title": "Temporary Voice Channel Configuration:",
+      "title": "## Temporary Voice Channel Configuration",
       "category": "Category Channel: {{categoryChannel}}",
       "voice-channel": "Voice Channel: {{voiceChannel}}",
-      "public-by-default": "Public by Default: {{publicByDefault}}",
-      "active-channels": "Active Channels: {{activeChannels}}",
+      "public-by-default": "Default Channel Access: {{publicByDefault}}",
+      "public-true": "Public",
+      "public-false": "Private",
+      "active-channels_zero": "### No Active Channels",
+      "active-channels_one": "### 1 Active Channel",
+      "active-channels_other": "### {{count}} Active Channels",
       "active-channel-item": "- {{channel}} (Owner: {{owner}})"
     },
     "help": {
-      "title": "Temporary Voice Channel Commands:",
-      "start": "- `/tempvoice-setup start` - Start the setup process for temporary voice channels",
-      "reset": "- `/tempvoice-setup reset` - Deletes the temporary voice channel setup",
-      "info": "- `/tempvoice-setup info` - Provides information about the temporary voice channel setup",
-      "help": "- `/tempvoice-setup help` - Provides help for the temporary voice channel setup",
-      "managing": "Managing Temporary Voice Channels:\n- Use the buttons in the temporary voice channels to manage them."
+      "title": "## Temporary Voice Channel Help",
+      "start": "`/tempvoice-setup start` - Start the setup process for temporary voice channels",
+      "reset": "`/tempvoice-setup reset` - Deletes the temporary voice channel setup",
+      "info": "`/tempvoice-setup info` - Provides information about the temporary voice channel setup",
+      "help": "`/tempvoice-setup help` - Provides help for the temporary voice channel setup",
+      "managing-title": "### Managing Temporary Voice Channels",
+      "managing-description": "Use the buttons in the temporary voice channels to manage them."
     },
     "start": {
-      "updated": "Temporary Voice Channel Configuration has been updated successfully!",
-      "created": "Temporary Voice Channel Configuration has been created successfully!",
-      "previous": "Previous Configuration:",
-      "new": "New Configuration:"
+      "updated-title": "## Configuration Updated!",
+      "created-title": "## Configuration Created!",
+      "updated-description": "Temporary Voice Channel Configuration has been updated successfully",
+      "created-description": "Temporary Voice Channel Configuration has been created successfully",
+      "previous": "### Previous Configuration",
+      "new": "### New Configuration"
     },
     "reset": {
       "success": "Temporary Voice Channel Configuration has been reset successfully!"
