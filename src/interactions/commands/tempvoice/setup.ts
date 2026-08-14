@@ -1,4 +1,12 @@
-import { channelMention, ChannelType, ChatInputCommandBuilder, PermissionsBitField, userMention } from 'discord.js';
+import {
+  ApplicationIntegrationType,
+  channelMention,
+  ChannelType,
+  ChatInputCommandBuilder,
+  InteractionContextType,
+  PermissionsBitField,
+  userMention,
+} from 'discord.js';
 import { t } from 'i18next';
 
 import { Command } from 'classes/base/command';
@@ -14,6 +22,8 @@ import {
 export default new Command({
   builder: new ChatInputCommandBuilder()
     .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageChannels)
+    .setContexts(InteractionContextType.Guild)
+    .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
     .setName('tempvoice-setup')
     .setDescription('Setup temporary voice channels')
     .addSubcommands((cmd) =>
