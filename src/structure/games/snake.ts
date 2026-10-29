@@ -216,7 +216,7 @@ export class Snake {
   }
 
   private generateNewFood() {
-    let foodPosition = { x: 0, y: 0 };
+    let foodPosition: { x: number; y: number };
 
     do {
       foodPosition = {

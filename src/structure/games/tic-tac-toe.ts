@@ -123,7 +123,7 @@ export class TicTacToe extends Opponent {
     const user = interaction.user;
     const opponent = this.options.opponent;
 
-    let result: 'TIMEOUT' | 'TIE' | 'PLAYER' | 'OPPONENT' | null = null;
+    let result: 'TIMEOUT' | 'TIE' | 'PLAYER' | 'OPPONENT';
 
     if (!this.isWinner(1) && !this.isWinner(2) && this.board.includes(0)) result = 'TIMEOUT';
     else if (!this.isWinner(1) && !this.isWinner(2) && !this.board.includes(0)) result = 'TIE';

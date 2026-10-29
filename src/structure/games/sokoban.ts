@@ -314,7 +314,7 @@ export class Sokoban {
     const ny = py + dy;
 
     if (this.isValidMove(nx, ny)) {
-      let nextCell = this.board[ny][nx];
+      const nextCell = this.board[ny][nx];
 
       // Check if the next cell is a box (2) or a box on storage (5)
       if (nextCell === 2 || nextCell === 5) {
@@ -329,7 +329,6 @@ export class Sokoban {
           if (cellAfterBox === 0 || cellAfterBox === 3) {
             // Move the box to the cell after it
             this.board[by][bx] = cellAfterBox === 3 ? 5 : 2; // Box on storage if moved to a storage, otherwise normal box
-            nextCell = cellAfterBox;
           } else if (cellAfterBox === 2 || cellAfterBox === 5) {
             // Cannot push two boxes consecutively
             return;

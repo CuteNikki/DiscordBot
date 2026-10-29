@@ -60,7 +60,7 @@ export class RockPaperScissors extends Opponent {
       .setStyle(ButtonStyle.Primary);
     const row = new ActionRowBuilder<ButtonBuilder>().setComponents(rockButton, paperButton, scissorsButton);
 
-    let message = null;
+    let message;
 
     if (opponent) {
       message = await this.isApprovedByOpponent();
@@ -167,7 +167,7 @@ export class RockPaperScissors extends Opponent {
     const opponent = this.options.opponent;
     const client = interaction.client;
 
-    let result: 'TIMEOUT' | 'TIE' | 'PLAYER' | 'OPPONENT' | null = null;
+    let result: 'TIMEOUT' | 'TIE' | 'PLAYER' | 'OPPONENT';
 
     if (!this.playerPick || !this.opponentPick) result = 'TIMEOUT';
     else if (this.playerPick === this.opponentPick) result = 'TIE';

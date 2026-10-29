@@ -22,7 +22,7 @@ export default new Event({
   name: Events.InteractionCreate,
   async execute(client, interaction) {
     // We only want to run this event for commands
-    if (!interaction.isCommand()) return;
+    if (!interaction.isChatInputCommand() && !interaction.isContextMenuCommand()) return;
 
     const { banned, language } = (await getUser(interaction.user.id)) ?? { banned: false, language: supportedLanguages[0] };
 

@@ -202,7 +202,7 @@ export class Hangman {
     const interaction = this.options.interaction;
     const user = interaction.user;
 
-    let result: 'TIMEOUT' | 'WIN' | 'LOSE' | null = null;
+    let result: 'TIMEOUT' | 'WIN' | 'LOSE';
 
     if (reason === 'idle') result = 'TIMEOUT';
     else if (this.isGuessCorrect()) result = 'WIN';
