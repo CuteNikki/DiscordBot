@@ -80,7 +80,7 @@ export async function registerCommands() {
         de: t(`${cmd.name}.description`, { lng: 'de', ns: 'commands' })
       };
       // Translate the command options
-      if (cmd.options?.length) {
+      if ('options' in cmd && cmd.options?.length) {
         cmd.options.map((optionOne, indexOne) => {
           // Translate the option name
           optionOne.name_localizations = {
