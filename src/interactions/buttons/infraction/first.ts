@@ -27,8 +27,7 @@ export default new Button({
 
     // Helper function to fetch infractions and target data
     const fetchInfractionsAndTarget = async (guildId?: string) => {
-      let infractions: Infraction[] | null | void = null;
-      let target: { id: string; displayName: string; imageURL: () => string | undefined } | null = null;
+      let infractions: Infraction[] | null | void;
 
       if (guildId) {
         infractions = await getInfractionsByUserIdAndGuildId(targetId, guildId, sortBy, sortOrder).catch((err) =>
@@ -44,7 +43,7 @@ export default new Button({
 
       if (!targetUser) return { infractions, target: null };
 
-      target = {
+      const target = {
         id: targetId,
         displayName: targetUser.displayName,
         imageURL: () => targetUser.displayAvatarURL(),

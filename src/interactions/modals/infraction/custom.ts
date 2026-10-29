@@ -25,8 +25,7 @@ export default new Modal({
 
     // Helper function to fetch infractions and target
     const fetchInfractionsAndTarget = async (guildId?: string) => {
-      let infractions = null;
-      let target = null;
+      let infractions;
 
       // Fetch infractions based on guild ID or just user ID
       if (guildId) {
@@ -43,7 +42,7 @@ export default new Modal({
       const targetUser = await client.users.fetch(targetUserId).catch(() => null);
       if (!targetUser) return { infractions, target: null };
 
-      target = {
+      const target = {
         id: targetUserId,
         displayName: targetUser.username,
         imageURL: () => targetUser.displayAvatarURL(),

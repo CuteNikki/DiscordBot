@@ -26,8 +26,7 @@ export default new Button({
 
     // Helper function to fetch infractions and user data
     const fetchInfractionsAndTarget = async (guildId?: string) => {
-      let infractions = null;
-      let target = null;
+      let infractions;
 
       // Fetch infractions based on guild ID or just user ID
       if (guildId) {
@@ -44,7 +43,7 @@ export default new Button({
       const targetUser = await client.users.fetch(targetUserId).catch(() => null);
       if (!targetUser) return { infractions, target: null };
 
-      target = {
+      const target = {
         id: targetUserId,
         displayName: targetUser.displayName,
         imageURL: () => targetUser.displayAvatarURL(),
