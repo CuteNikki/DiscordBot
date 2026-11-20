@@ -28,8 +28,8 @@ type Part = {
 // Uses nothing from outside itself: the manager sends its source to each cluster, where nothing else from this file
 // exists
 const partOf = (client: Client): Part => {
-  // The cluster's shards, with servers or not: a list, or a collection by id
-  const ids = (client as Client & { cluster?: { ids: number[] | Map<number, unknown> } }).cluster?.ids ?? [];
+  // The cluster's shards, with servers or not
+  const shards = (client as Client & { cluster?: { shardList: number[] } }).cluster?.shardList ?? [];
   return {
     user: client.user
       ? {
@@ -41,7 +41,7 @@ const partOf = (client: Client): Part => {
       : null,
     uptime: client.uptime,
     ping: client.ping,
-    shards: Array.isArray(ids) ? ids : [...ids.keys()],
+    shards,
     servers: client.guilds.cache.map((guild) => ({
       name: guild.name,
       members: guild.memberCount,
