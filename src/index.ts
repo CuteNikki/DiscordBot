@@ -2,6 +2,7 @@ import { ClusterManager, HeartbeatManager } from 'discord-hybrid-sharding';
 
 import { KEYS } from 'utility/keys';
 import { logger } from 'utility/logger';
+import { serveStatus } from 'utility/status';
 
 const manager = new ClusterManager('src/bot.ts', {
   totalShards: 'auto',
@@ -24,3 +25,6 @@ manager.on('clusterCreate', (cluster) => logger.info(`Launched Cluster: ${cluste
 manager.on('clusterReady', (cluster) => logger.info(`Cluster Ready: ${cluster.id}`));
 
 manager.spawn({ timeout: -1 });
+
+// Its servers, members and ping, for dash
+serveStatus(manager);
